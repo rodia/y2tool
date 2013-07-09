@@ -1043,7 +1043,8 @@ class Video extends CI_Controller {
         $channel = $profile['username'];
         $page['playlistVideoFeed'] = $this->video_model->get_videos_by_playlist($user_id, $playlistId);
         $page['page_name'] = 'videolist';
-        $page['title'] = "Video list ($pl_title)";
+		$plalistDetail = $this->video_model->get_playlistDetail($user_id, $playlistId);
+        $page['title'] = "Video list ({$plalistDetail["title"]})";
         $page['videoFeedID'] = $playlistId;
         $page['user_id'] = $user_id;
         $page['channel'] = $channel;
