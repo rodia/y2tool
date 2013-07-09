@@ -32,7 +32,7 @@ if (!defined('BASEPATH'))
             <th class="table-header-repeat line-left minwidth-1" style="width: 130px;"><a href="">Options</a></th>
         </tr>
         <?php foreach ($playlistListFeed as $key => $playlistListEntry) : ?>
-            <tr <?php echo $key % 2 == 0 ? "class=\"alternate-row\"" : ""; ?>>
+            <tr<?php echo $key % 2 == 0 ? " class=\"alternate-row\"" : ""; ?>>
                 <td><?php echo $key +1; ?></td>
                 <td>
                     <p><?php echo $playlistListEntry["snippet"]["title"]; ?></p>

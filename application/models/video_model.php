@@ -563,7 +563,7 @@ class Video_model extends CI_Model {
 
 		if ($client->getAccessToken()) {
 			$_SESSION['token'] = $client->getAccessToken();
-echo "find;";
+
 			$data = array();
 			$i = 0;
 
