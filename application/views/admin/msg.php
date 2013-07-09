@@ -7,4 +7,8 @@ if (!defined('BASEPATH'))
 	<p>Sorry! The user Not enable your channel for this tools. please try with another user.</p>
 	<p><a href="<?php echo base_url(); ?>admin/users">Go back!</a></p>
 </div>
+<?php elseif ($type == "message") : ?>
+<div>
+	<?php echo $msg; ?>
+</div>
 <?php endif; ?>

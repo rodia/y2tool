@@ -365,7 +365,7 @@ $config['proxy_ips'] = '';
  |
  | Show item per page
  */
-$config["rp"] = 10;
+$config["rp"] = 50;
 
 /*
  * Show for auth user. This variable enable or disable show for user auth
@@ -373,6 +373,54 @@ $config["rp"] = 10;
  * 0 - for auth disable
  */
 $config["show_auth"] = 1;
+
+/*
+ * Common configurate for upload method
+ */
+$config["upload_path"] = "./uploads/"; /* Is requerid define with ./folder/ due to use in segment bellow */
+$config['allowed_types'] = 'gif|jpg|png';
+$config['max_size']	= '100';
+$config['max_width'] = '1024';
+$config['max_height'] = '768';
+
+/*
+ * Variable for config app Google Youtube 2.0
+ */
+//$config["OAUTH2_CLIENT_ID"] = '2323480957027.apps.googleusercontent.com';
+//$config["OAUTH2_CLIENT_SECRET"] = 'CKoygap5nJYOjLC6DLQ2yfEm';
+$config["OAUTH2_CLIENT_ID"] = '252114407242.apps.googleusercontent.com';
+$config["OAUTH2_CLIENT_SECRET"] = 'ZKALz2-TAPeXnowD4yb8dTWo';
+
+/*
+ * Set $DEVELOPER_KEY to the "API key" value from the "Access" tab of the
+ * Google APIs Console <http://code.google.com/apis/console#access>
+ */
+$config["DEVELOPER_KEY"] = 'AI39si6kLzUxB8Fdu2pIq3lGEeWL2X9z8XrjW6j_7adfkAMivtyF0PhIJ9BBGmR5_QKdd6hQunNmzDGf85rXSwFxQLlvZIjUZA';
+
+/*
+ * API KEY google
+ */
+$config["API_KEY"] = "AIzaSyBGq0QhSQPlqNVZNejkECtB0GvgtlovYXs";
+
+/*
+ * Set your client id, service account name, and the path to your private key.
+ * For more information about obtaining these keys, visit:
+ * https://developers.google.com/console/help/#service_accounts
+ */
+$config["CLIENT_ID"] = '352964961566.apps.googleusercontent.com';
+$config["SERVICE_ACCOUNT_NAME"] = 'Buzzmyvideos OAuth';
+
+/*
+ * Make sure you keep your key.p12 file in a secure location, and isn't
+ * readable by others.
+ */
+$config["KEY_FILE"] = '/home/buzzmy/public_html/access/oauth/indop345698CEDEP.p12';
+//$config["KEY_FILE"] = 'C:\xampp\htdocs\y2tool\oauth\7860d0dd2e8bebab00bf583b5a7d458b8bb02515-privatekey.p12';
+
+/*
+ * Youtube service
+ */
+$config["SERVICE_ACCOUNT_NAME"] = 'youtube';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

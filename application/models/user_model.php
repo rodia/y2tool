@@ -16,6 +16,11 @@ class User_model extends CI_Model {
         Zend_Loader::loadClass('Zend_Gdata_HttpClient');
         Zend_Loader::loadClass('Zend_Uri_Http');
         Zend_Loader::loadClass('Zend_Gdata_YouTube_PlaylistVideoEntry');
+
+		require_once 'google-api-php-client/src/Google_Client.php';
+		require_once 'google-api-php-client/src/contrib/Google_YouTubeService.php';
+		require_once 'google-api-php-client/src/contrib/Google_Oauth2Service.php';
+//		require_once 'google-api-php-client/src/contrib/Google_PlusService.php';
     }
 	/**
 	 *
@@ -34,22 +39,56 @@ class User_model extends CI_Model {
 		return $check;
 	}
 	/**
+	 * This funcion work in OAuth protocol.
+	 * The function return a array with information of user.
+	 *
+	 * ["title"] : Title of channel
+	 * ["channel_id"] : channel id, get of api V3
+	 * ["username"] : user name of Youtube.
+	 * ["subs"] : Subcriptions by user at channel
 	 *
 	 * @param int $user_id The user ID of database. table users
 	 * @return array Array of
 	 */
 	function getUserProfile($user_id) {
-        $yt = $this->getHttpClient($user_id);
-        $yt->setMajorProtocolVersion(2);
-        // to retrieve the currently authenticated user's profile
-        $profile = array();
-        $profile["title"] = $yt->getUserProfile("default")->title->text;
-        $profile["username"] = $yt->getUserProfile("default")->username->text;
-        $profile["subs"] = $yt->getUserProfile("default")->getFeedLink('http://gdata.youtube.com/schemas/2007#user.subscriptions')->countHint;
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->video_model->get_google_client();
+
+		$youtube = new Google_YoutubeService($client);
+		$profile = array();
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+				$channelsResponse = $youtube->channels->listChannels('id,snippet,contentDetails,statistics,topicDetails,invideoPromotion', array(
+						'mine' => 'true',
+				));
+
+				foreach ($channelsResponse["items"] as $channel) {
+					$profile["title"] = $channel["snippet"]["title"];
+					$profile["channel_id"] = $channel["id"];
+					$profile["username"] = $this->get_channel($user_id);
+					$profile["subs"] = $channel["statistics"]["subscriberCount"];
+				}
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+						htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+						htmlspecialchars($e->getMessage())));
+			}
+
+		}
         return $profile;
     }
 
 	/**
+	 * @deprecated since version 1
 	 *
 	 * @param int $user_id The user in database that contain the token id of youtube
 	 * @return Zend_Gdata_YouTube
@@ -167,6 +206,9 @@ class User_model extends CI_Model {
         return false;
     }
 	/**
+	 * This function retrieve the token for database for this system,
+	 *
+	 * if The token is stored in database, return token, otherwise return string empty
 	 *
 	 * @param type $user_id
 	 * @return string|array Return array of object
@@ -253,7 +295,7 @@ class User_model extends CI_Model {
 		return $query->result_array();
 	}
 	/**
-	 * Get all user with user_yt_token_auth if is not empty, this a meta key user
+	 * Get all user with token if is not empty, this a meta key user
 	 * Defined into system wordpress. The user enable auth for your videos
 	 *
 	 *
@@ -290,7 +332,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
-				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'user_yt_token_auth')" : "")
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
 				. " WHERE 1"
 				. ($username != "" ? " AND u1.user_login LIKE '%{$username}%'" : "")
 				. ($youtube != "" ? " AND m4.meta_value LIKE '%{$youtube}%'" : "")
@@ -331,7 +373,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
-				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'user_yt_token_auth')" : "")
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
 				. " WHERE 1"
 				. ($username != "" ? " AND u1.user_login LIKE '%{$username}%'" : "")
 				. ($youtube != "" ? " AND m4.meta_value LIKE '%{$youtube}%'" : "")
@@ -363,7 +405,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
-				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'user_yt_token_auth')" : "");
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "");
 
         $query = $this->db->query($sql);
 
@@ -395,7 +437,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
-				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'user_yt_token_auth')" : "")
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
 				. " WHERE CONCAT(m1.meta_value, ' ', m2.meta_value) LIKE '%{$q}%'"
 				. "
                 ORDER BY u1.id
@@ -473,7 +515,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
-				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'user_yt_token_auth')" : "")
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
 				. ($in_values != "" ? " WHERE u1.id in ({$in_values})" : "")
 				;
         $query_videos = $this->db->query($sql);
@@ -483,6 +525,43 @@ class User_model extends CI_Model {
             return "";
         }
     }
+	/**
+	 * This function get the username of youtube account for metadata user.
+	 *
+	 * The meta data user is a html tag a, due to is necessary get content of tag
+	 * and analyce the string for get channel.
+	 *
+	 * @param int $user_id User ID for wordpress system
+	 */
+	public function get_channel($user_id) {
+		$channel = $this->get_users_channel($user_id);
+
+		if ($channel != "") {
+			$this->load->helper('htmlsql_helper');
+
+			$wsql = new htmlsql();
+
+			if ( ! $wsql->connect( 'string', $channel[0]->youtube_channels ) ) {
+				error_log('Error while connecting: ' . $wsql->error);
+				return FALSE;
+			}
+
+			if ( ! $wsql->query( 'SELECT * FROM a' ) ) {
+				error_log("Query error: " . $wsql->error);
+				return FALSE;
+			}
+
+			foreach ($wsql->fetch_array() as $row) {
+				$channel = $row["href"];
+			}
+
+			if (is_string($channel) && $channel != "") {
+				$channel = substr($channel, strripos($channel, "/")+1);
+			}
+		}
+
+		return is_string($channel) ? $channel : "";
+	}
 	/**
 	 *
 	 * @return string
@@ -502,7 +581,7 @@ class User_model extends CI_Model {
                 LEFT JOIN 54_usermeta m2 ON (m2.user_id = u1.id AND m2.meta_key = 'last_name')
                 LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
                 LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')"
-				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'user_yt_token_auth')" : "");
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "");
         $query_videos = $this->db->query($sql);
         if ($query_videos->num_rows() > 0) {
             return $query_videos->result();
@@ -840,13 +919,87 @@ class User_model extends CI_Model {
 	 * @return array Array of categories for select dropbox
 	 */
 	public function get_categories_for_select() {
-		return array_merge(array(
-			'' => '-- Select --'),
+		return array_merge(
+			array('' => '-- Select --'),
 			$this->video_model->get_pair_values(
+				$this->video_model->get_all_categories(),
+				'category',
+				'display_category'
+			)
+		);
+	}
+	/**
+	 *
+	 * @return array Get categories with youtube id associate.
+	 */
+	public function get_youtube_categories() {
+		return $options = $this->video_model->get_pair_values(
 			$this->video_model->get_all_categories(),
-			'category',
+			'categoryId',
 			'display_category'
-		));
+		);
+	}
+	/**
+	 * Get token for database in wordpress system.
+	 *
+	 * @param type $user_id The user id for user that auth enabled
+	 * @return string Json string representation for token auth or false when token not enabled.
+	 */
+	public function getToken($user_id) {
+		$auth = $this->config->item('show_auth');
+		$this->db = $this->load->database('default', TRUE);
+        $sql = "SELECT
+                m9.meta_value AS user_yt_token_auth
+                FROM 54_users u1
+                LEFT JOIN 54_usermeta m1 ON (m1.user_id = u1.id AND m1.meta_key = 'first_name')
+                LEFT JOIN 54_usermeta m2 ON (m2.user_id = u1.id AND m2.meta_key = 'last_name')
+				LEFT JOIN 54_usermeta m3 ON (m3.user_id = u1.id AND m3.meta_key = 'sex')
+				LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
+				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
+				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
+				. sprintf(" WHERE m1.user_id = %d", $user_id)
+				;
+
+        $query = $this->db->query($sql);
+		$rows = $query->result();
+
+		return isset($rows[0]) ? $rows[0]->user_yt_token_auth : FALSE;
+	}
+	/**
+	 *
+	 * @param int $user_id
+	 * @param string $metaname
+	 * @param boolean $single
+	 * @return type
+	 */
+	public function get_user_meta($user_id, $metaname, $single) {
+		$auth = $this->config->item('show_auth');
+		$this->db = $this->load->database('default', TRUE);
+        $sql = "SELECT
+                m9.meta_value AS {$metaname}
+                FROM 54_users u1
+                LEFT JOIN 54_usermeta m1 ON (m1.user_id = u1.id AND m1.meta_key = 'first_name')
+                LEFT JOIN 54_usermeta m2 ON (m2.user_id = u1.id AND m2.meta_key = 'last_name')
+				LEFT JOIN 54_usermeta m3 ON (m3.user_id = u1.id AND m3.meta_key = 'sex')
+				LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
+				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
+				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = '{$metaname}')" : "")
+				. sprintf(" WHERE m1.user_id = %d", $user_id)
+				;
+
+        $query = $this->db->query($sql);
+		$rows = $query->result();
+
+		return isset($rows[0]) ? $rows[0]->$metaname : FALSE;
+	}
+	/**
+	 *
+	 * @param type $user_id
+	 */
+	public function wp_get_current_user($user_id) {
+
 	}
 
 }

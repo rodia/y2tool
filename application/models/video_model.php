@@ -1,5 +1,7 @@
 <?php
-
+/**
+ *
+ */
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -7,18 +9,14 @@ class Video_model extends CI_Model {
 
 	private $count_videos;
 	private $categories;
+	private $current_channel;
 
     public function __construct() {
         parent::__construct();
 
-		Zend_Loader::loadClass('Zend_Gdata_YouTube');
-		Zend_Loader::loadClass('Zend_Gdata_YouTube_CommentEntry');
-        Zend_Loader::loadClass('Zend_Gdata_YouTube_VideoQuery');
-        Zend_Loader::loadClass('Zend_Gdata_AuthSub');
-        Zend_Loader::loadClass('Zend_Gdata_ClientLogin');
-        Zend_Loader::loadClass('Zend_Gdata_HttpClient');
-        Zend_Loader::loadClass('Zend_Uri_Http');
-        Zend_Loader::loadClass('Zend_Gdata_YouTube_PlaylistVideoEntry');
+		require_once 'google-api-php-client/src/Google_Client.php';
+		require_once 'google-api-php-client/src/contrib/Google_YouTubeService.php';
+		require_once 'google-api-php-client/src/contrib/Google_Oauth2Service.php';
 
 		$this->load->model('user_model');
     }
@@ -34,6 +32,13 @@ class Video_model extends CI_Model {
 	 */
 	public function get_current_categories() {
 		return $this->categories;
+	}
+	/**
+	 *
+	 * @return string Return current channel of retrieve for get_videos_by_user()
+	 */
+	public function get_current_channel() {
+		return $this->current_channel;
 	}
 	/**
 	 *
@@ -59,8 +64,8 @@ class Video_model extends CI_Model {
 	/**
 	 * Enable a object of upload video
 	 *
-	 * @param string $userName User name of youtube account
-	 * @return Zend_Gdata_YouTube_VideoFeed
+	 * @param string $userName User name of youtube account.
+	 * @return Google_ChannelListResponse
 	 */
 	function getUserUploads($userName) {
         $youtube = new Zend_Gdata_YouTube();
@@ -85,7 +90,7 @@ class Video_model extends CI_Model {
 		} else {
 			$users_channels = $this->user_model->get_all_users_channel();
 		}
-        $videos = array();
+		$videos = array();
 		$categories = array();
         $i = 0;
         foreach ($users_channels as $channel) {
@@ -98,7 +103,7 @@ class Video_model extends CI_Model {
 				error_log($e->getMessage());
 				continue;
 			}
-            foreach ($all_videos as $videoEntry) {
+			foreach ($all_videos as $videoEntry) {
 				$current_category = $videoEntry->getVideoCategory();
 				if ($category != NULL && $category != $current_category) continue;
                 $videos[$i]["video_id"] = $videoEntry->getVideoId();
@@ -111,14 +116,546 @@ class Video_model extends CI_Model {
 				$categories[] = $current_category;
                 $videoThumbnails = $videoEntry->getVideoThumbnails();
                 $videoThumbnail = $videoThumbnails[$this->get_video_thumbnail_key($videos[$i]["video_id"])];
-                $videos[$i]["thumbnail"] = $videoThumbnail["url"];
+				$videos[$i]["thumbnail"] = $videoThumbnail["url"];
                 $i++;
-            }
+			}
         }
 		$this->categories = array_unique($categories);
 		$this->count_videos = count($videos);
         return array_slice($videos, $start, $rp);
     }
+	/**
+	 *
+	 * @param Google_Client $client
+	 * @return Google_YoutubeService
+	 */
+	public function get_google_youtubeService($client = NULL) {
+		if ($client == NULL) $client = new Google_Client();
+		$client->setDeveloperKey($this->config->item("API_KEY"));
+
+		return new Google_YoutubeService($client);
+	}
+	/**
+	 * Get youtube client for app.
+	 * @return Google_Client
+	 */
+	public function get_google_client() {
+		$client = new Google_Client();
+		$client->setClientId($this->config->item("OAUTH2_CLIENT_ID"));
+		$client->setClientSecret($this->config->item("OAUTH2_CLIENT_SECRET"));
+		$redirect = filter_var('https://www.buzzmyvideos.com/beta2/signup-oauth',
+			FILTER_SANITIZE_URL);
+		$client->setRedirectUri($redirect);
+		$client->addService('plus.login');
+		$client->addService('plus.me');
+
+		return $client;
+	}
+	/**
+	 *
+	 * @param string $q
+	 * @param int $maxResults
+	 * @return array
+	 */
+	public function search_videos($q, $maxResults = 20) {
+		$youtube = $this->get_google_youtubeService();
+
+		$videos = array();
+		$channels = array();
+		$playlists = array();
+		$i = 0;
+		$j = 0;
+		$k = 0;
+
+		try {
+			$searchResponse = $youtube->search->listSearch('id,snippet', array(
+				'q' => $q,
+				'maxResults' => $maxResults
+			));
+
+			foreach ($searchResponse['items'] as $searchResult) {
+				switch ($searchResult['id']['kind']) {
+				case 'youtube#video':
+					$videos[$i]["title"] = $searchResult['snippet']['title'];
+					$videos[$i++]["video_id"] = $searchResult['id']['videoId'];
+					break;
+				case 'youtube#channel':
+					$channels[$j]["title"] = $searchResult['snippet']['title'];
+					$channels[$j++]["channel_id"] = $searchResult['id']['channelId'];
+					break;
+				case 'youtube#playlist':
+					$playlists[$k]["title"] = $searchResult['snippet']['title'];
+					$playlists[$k++]["playlist_id"] = $searchResult['id']['playlistId'];
+					break;
+				}
+			}
+
+		} catch (Google_ServiceException $e) {
+			error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage())));
+		} catch (Google_Exception $e) {
+			error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage())));
+		}
+
+		return array (
+			"videos" => $videos,
+			"channels" => $channels,
+			"playlists" => $playlists
+		);
+	}
+	/**
+	 * @todo Esta función tiene un problema, que cuando se hace el llamado este solo retorna una parte de los videos obtenidos.
+	 *
+	 * @param type $channel_id ID CHANNEL for youtube
+	 * @return type
+	 */
+	public function get_videos_by_channel($channel_id) {
+		$youtube = $this->get_google_youtubeService();
+		$maxResults = $this->config->item("rp");
+		$data = array();
+
+		try {
+			$channelResponse = $youtube->channels->listChannels('id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+				'id' => $channel_id,
+				'maxResults' => $maxResults
+			));
+
+			foreach ($channelResponse['items'] as $channel) {
+				$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems('id, snippet,  contentDetails', array(
+					'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
+					'maxResults' => $maxResults
+				));
+
+				foreach ($playlistItemsResponse['items'] as $playlistItem) {
+					$videos = $youtube->videos->listVideos(
+						$playlistItem['contentDetails']['videoId'],
+						'snippet,contentDetails,status'
+					);
+
+					foreach ($videos['items'] as $video) {
+						if (isset($video['status']['uploadStatus']) &&
+							$video['status']['uploadStatus'] == 'rejected' &&
+							$video['status']['rejectionReason'] == 'copyright')
+						{
+							continue;
+						}
+						$data[] = $video;
+					}
+				}
+			}
+
+		} catch (Google_ServiceException $e) {
+			error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage())));
+		} catch (Google_Exception $e) {
+			error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage())));
+		}
+		return array (
+			"videos" => $videos
+		);
+	}
+	/**
+	 * OAuth
+	 * Get user videos of account in youtube by user regitered your oauth token.
+	 *
+	 * @param int $user_id
+	 * @param int $start
+	 * @return array
+	 */
+	public function get_videos_by_user($user_id, $category = NULL, $start = 0) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+		$rp = $this->config->item("rp");
+		$current_tags = array();
+		$categories = array();
+		$current_category = "";
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			$data = array();
+			$i = 0;
+
+			try {
+				$channelsResponse = $youtube->channels->listChannels(
+					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+						'mine' => 'true',
+				));
+
+				foreach ($channelsResponse['items'] as $channel) {
+//					var_dump($channel);
+//					echo '<br>';
+					$_SESSION['current_channel'] = $channel["snippet"]["title"];
+					$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
+						'id, snippet,contentDetails',
+						array(
+							'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
+							'maxResults' => $rp
+						)
+					);
+					foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
+//						var_dump($playlistItem);
+
+						$videos = $youtube->videos->listVideos(
+							$playlistItem['contentDetails']['videoId'],
+							'snippet,contentDetails,status,statistics'
+						);
+
+						foreach ($videos['items'] as $video) {
+//							var_dump($video);
+//							echo '<br>';
+							if (isset($video['status']['uploadStatus']) &&
+								$video['status']['uploadStatus'] == 'rejected' &&
+								$video['status']['rejectionReason'] == 'copyright')
+							{
+								continue;
+							}
+							$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category, $channel, $playlistItem);
+							$categories[] = $current_category;
+						}
+					}
+				}
+
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			}
+
+			$_SESSION['data_videos'] = $data;
+		}
+		$this->categories = array_unique($categories);
+		$this->count_videos = count($_SESSION['data_videos']);
+		$this->current_channel = $_SESSION['current_channel'];
+		return array_slice($_SESSION['data_videos'], $start, $rp);
+	}
+	/**
+	 *
+	 * @param string $video_id Youtube Id
+	 * @param type $user_id User Id for wordpress installation
+	 */
+	public function get_video($video_id, $user_id) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+		$i = 0;
+		$data = array();
+		$current_tags = array();
+		$current_category = "";
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			$videos = $youtube->videos->listVideos(
+				$video_id,
+				'snippet,contentDetails,status,statistics'
+			);
+
+			foreach ($videos['items'] as $video) {
+//				var_dump($video);
+//				echo '<br>';
+				if (isset($video['status']['uploadStatus']) &&
+					$video['status']['uploadStatus'] == 'rejected' &&
+					$video['status']['rejectionReason'] == 'copyright')
+				{
+					continue;
+				}
+
+				$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category);
+			}
+		}
+
+		return $data[0];
+	}
+	/**
+	 *
+	 * @param type $video_id
+	 * @param type $user_id
+	 * @param type $data
+	 */
+	public function edit_video($video_id, $user_id, $data) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+				$channelsResponse = $youtube->channels->listChannels(
+					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+						'mine' => 'true',
+				));
+
+				foreach ($channelsResponse['items'] as $channel) {
+					$content = new Google_Video();
+					$content->setId($video_id);
+					$snippet = new Google_VideoSnippet();
+					$snippet->setChannelId($channel["id"]);
+					$snippet->setTitle($data["video_title"]);
+					$snippet->setDescription($data["video_description"]);
+					$snippet->setCategoryId($data["category_id"]);
+					$snippet->setTags($data["video_tags"]);
+					$thumbnails = new Google_ThumbnailDetails();
+					$default = new Google_Thumbnail();
+					$default->setUrl($data["url"]);
+					$thumbnails->setDefault($default);
+					$snippet->setThumbnails($thumbnails);
+					$content->setSnippet($snippet);
+
+					$youtube->videos->update(
+						'snippet,status',
+						$content
+					);
+				}
+
+			} catch (Google_ServiceException $e) {
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			}
+		}
+	}
+	/**
+	 *
+	 * @param string $video_id video ID Youtube
+	 * @param int $user_id User ID for wordpress system
+	 * @param string $file_image (optional) The field name of file upload in the form
+	 * @return string The url of file img saved.
+	 */
+	public function set_thumbnails($video_id, $user_id, $file_image = "new-thumbnails") {
+		$video = $this->get_video($video_id, $user_id);
+		$file = $this->upload->do_upload($file_image);
+		$errors = $this->upload->display_errors();
+		if ("" != $errors) {
+			$this->load->helper('cookie_helper');
+			set_cookie("show_error", $errors, 300);
+		}
+		if (FALSE == $file) {
+			return $video["thumbnail"]["url"];
+		} else {
+			$this->load->helper('url');
+			$image = $this->upload->data();
+			$config['image_library'] = 'gd2';
+			$config['source_image']	= $image["full_path"];
+			$config['create_thumb'] = TRUE;
+			$config['maintain_ratio'] = TRUE;
+			$config['width']  = 75;
+			$config['height'] = 50;
+			$this->load->library('image_lib', $config);
+			$this->image_lib->resize();
+
+			return base_url() . substr($this->config->item("upload_path"), 2) . $image["file_name"];
+		}
+	}
+	/**
+	 *
+	 * @param type $video_id
+	 * @param type $user_id
+	 * @param type $data
+	 */
+	public function set_history($video_id, $user_id, $data) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			$channelsResponse = $youtube->channels->listChannels(
+				'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+					'mine' => 'true',
+			));
+
+			foreach ($channelsResponse["items"] as $channel) {
+				$videos = $youtube->videos->listVideos(
+					$video_id,
+					'snippet,contentDetails,status,statistics'
+				);
+
+				foreach ($videos['items'] as $video) {
+					if (isset($video['status']['uploadStatus']) &&
+						$video['status']['uploadStatus'] == 'rejected' &&
+						$video['status']['rejectionReason'] == 'copyright')
+					{
+						continue;
+					}
+
+					if ( ! $this->video_model->exists_video($video_id)) {
+						$v_id = $this->video_model->insert_video(array(
+							"youtube_id" => $video_id,
+							"channel" => $data["channel"],
+							"title" => $video["snippet"]["title"]
+						));
+					} else {
+						$row = $this->get_db_id_video($video_id);
+						$v_id = $row[0]->id;
+					}
+
+					$dbdata = array(
+						"registered_date" => date("Y-m-d H:i:s"),
+						"admin_id" => $this->session->userdata('user_id'),
+						"video_id" => $v_id,
+						"video_likes" => $video["statistics"]["likeCount"],
+						"video_views" => $video["statistics"]["viewCount"],
+						"channel_subs" => $channel["statistics"]["subscriberCount"],
+						"task_id" => $data["task_id"],
+						"who" => $this->session->userdata('name')
+					);
+					$this->video_model->insert_history($dbdata);
+
+					$this->video_model->db_update_video(array(
+						"title" => $video["snippet"]["title"],
+						"channel" => $data["channel"],
+						"video_thumbnail_key" => 0
+					), $video_id);
+				}
+			}
+		}
+	}
+	/**
+	 *
+	 * @param int $user_id
+	 * @param type $playlistId
+	 * @param type $start
+	 * @return type
+	 */
+	public function get_videos_by_playlist($user_id, $playlistId, $start = 0) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+		$rp = $this->config->item("rp");
+		$current_tags = array();
+		$categories = array();
+		$current_category = "";
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+echo "find;";
+			$data = array();
+			$i = 0;
+
+			try {
+				$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
+					'id, snippet,contentDetails',
+					array(
+						'playlistId' => $playlistId,
+						'maxResults' => $rp
+					)
+				);
+				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
+					$videos = $youtube->videos->listVideos(
+						$playlistItem['contentDetails']['videoId'],
+						'snippet,contentDetails,status,statistics'
+					);
+
+					foreach ($videos['items'] as $video) {
+						if (isset($video['status']['uploadStatus']) &&
+							$video['status']['uploadStatus'] == 'rejected' &&
+							$video['status']['rejectionReason'] == 'copyright')
+						{
+							continue;
+						}
+						$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category);
+						$categories[] = $current_category;
+					}
+				}
+
+			} catch (Google_ServiceException $e) {
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			}
+		}
+		var_dump($data);
+		$this->categories = array_unique($categories);
+		$this->count_videos = count($_SESSION['data_videos']);
+		return array_slice($_SESSION['data_videos'], $start, $rp);
+	}
+	/**
+	 *
+	 * @param type $video_id
+	 * @return type
+	 */
+	public function get_db_id_video($video_id) {
+		$this->db_my_db = $this->load->database('my_db', TRUE);
+		$this->db_my_db->select('yt_video.id');
+		$this->db_my_db->join('yt_history', 'yt_video.id = yt_history.video_id', 'LEFT');
+		$this->db_my_db->where('youtube_id', $video_id);
+		$query = $this->db_my_db->get('yt_video');
+		return $query->result();
+	}
+
+	/**
+	 * Put data into variable $data.
+	 *
+	 * @param array $data
+	 * @param array $video
+	 * @param int $user_id
+	 * @param int $i
+	 * @param array $current_tags
+	 * @param array $current_category
+	 * @param array $channel
+	 * @param array $playlist
+	 */
+	public function put_data(& $data, $video, $user_id, & $i, & $current_tags, & $current_category, $channel = NULL, $playlist = NULL) {
+		/**
+		 * @todo This not is the category is an tags. search for solutions.
+		 */
+		$current_tags = isset($video["snippet"]["tags"]) ? $video["snippet"]["tags"] : array();
+		$current_category = $video["snippet"]["categoryId"];
+		$data[$i]["video_id"] = $video["id"];
+		$data[$i]["title"] = $video["snippet"]["title"];
+		$data[$i]["category"] = $current_category = $this->get_youtube_category($current_category);
+		$data[$i]["categoryId"] = $video["snippet"]["categoryId"];
+		$data[$i]["description"] = $video["snippet"]["description"];
+		$data[$i]["tags"] = $current_tags;
+		$data[$i]["view_count"] = $video["statistics"]["viewCount"];
+		$data[$i]["like_count"] = $video["statistics"]["likeCount"];
+		$data[$i]["dislike_count"] = $video["statistics"]["dislikeCount"];
+		$data[$i]["favorite_count"] = $video["statistics"]["favoriteCount"];
+		$data[$i]["comment_count"] = $video["statistics"]["commentCount"];
+		$data[$i]["channel"] = "";
+		$data[$i]["channel_id"] = $channel != NULL ? $channel["id"] : "";
+		$data[$i]["user_id"] = $user_id;
+
+		$data[$i++]["thumbnail"]["url"] = $video["snippet"]["thumbnails"]["default"]["url"];
+	}
+
 	/**
 	 *
 	 * @param int $user_id
@@ -225,6 +762,28 @@ class Video_model extends CI_Model {
 //		echo $query->queryUrl . "\n";
 		return $yt->getVideoFeed($query);
 	}
+	/**
+	 *
+	 * @param int $categoryId Categories ID
+	 * @return string Categories names of list of $categoryId
+	 */
+	public function get_youtube_category($categoryId) {
+//		$youtube = $this->get_google_youtubeService();
+//		$categoryResponse = $youtube->videoCategories->listVideoCategories('id,snippet',array('id'=>$categoryId));
+//		foreach($categoryResponse['items'] as $cat)
+//		{
+//			$category = $cat['snippet']['title'];
+//		}
+//		return $category;
+
+		$this->db_my_db = $this->load->database('my_db', TRUE);
+		$this->db_my_db->select(array('category', 'display_category', 'categoryId'));
+		$this->db_my_db->where('categoryId', $categoryId);
+		$query = $this->db_my_db->get('yt_category');
+
+		$row = $query->first_row();
+		return $row->display_category;
+	}
 
 	/**
 	 *
@@ -305,6 +864,7 @@ class Video_model extends CI_Model {
 	}
 
 	/**
+	 * This function retrieve the user name or youtube name of url youtube.
 	 *
 	 * @param string $url
 	 * @return string
@@ -339,9 +899,10 @@ class Video_model extends CI_Model {
 	 */
 	public function get_all_categories() {
 		$this->db_my_db = $this->load->database('my_db', TRUE);
-		$this->db_my_db->select(array('category', 'display_category'));
+		$this->db_my_db->select(array('category', 'display_category', 'categoryId'));
 		$this->db_my_db->order_by("id", "ASC");
 		$query = $this->db_my_db->get('yt_category');
+
 		return $query->result();
 	}
 	/**
@@ -398,11 +959,11 @@ class Video_model extends CI_Model {
 	/**
 	 *
 	 * @param array $values Values into cols and value pairs
-	 * @param type $viedo_id youtuve id
+	 * @param type $video_id youtuve id
 	 */
-	public function set_video($values, $viedo_id) {
+	public function db_update_video($values, $video_id) {
 		$this->db_my_db = $this->load->database('my_db', TRUE);
-		$this->db_my_db->update('yt_video', $values, "youtube_id = '{$viedo_id}'");
+		$this->db_my_db->update('yt_video', $values, "youtube_id = '{$video_id}'");
 	}
     /**
      * INSERT VIDEOS
@@ -875,85 +1436,57 @@ class Video_model extends CI_Model {
 		}
 		return;
 	}
+	/**
+	 * OAuth
+	 *
+	 * This function get list of play list by user selected
+	 *
+	 * @param int $user_id
+	 * @return array
+	 */
+    public function get_playlist($user_id) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
-	function showPlaylist($userName = "castrorojasjaime") {
-        $yt = new Zend_Gdata_YouTube();
-//        $yt = $this->user_model->getHttpClient();
-        // optionally set version to 2 to retrieve a version 2 feed
-        $yt->setMajorProtocolVersion(2);
-        $playlistListFeed = $yt->getPlaylistListFeed($userName);
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+		$rp = $this->config->item("rp");
+		$playlist = array();
 
-        $this->printPlaylistListFeed($playlistListFeed, $showPlaylistContents = true);
-    }
-
-    function printPlaylistListFeed($playlistListFeed, $showPlaylistContents) {
-        $count = 1;
-        foreach ($playlistListFeed as $playlistListEntry) {
-            echo 'Entry # ' . $count . "\n";
-            // This function is defined in the next section
-            $this->printPlaylistListEntry($playlistListEntry, $showPlaylistContents);
-            echo "<br>";
-            $count++;
-        }
-    }
-
-	function printPlaylistListEntry($playlistListEntry, $showPlaylistContents = false)
-	{
-	  echo 'Playlist: ' . $playlistListEntry->title->text . "\n";
-	  echo "\tDescription: " . $playlistListEntry->description->text .
-	"\n";
-	  if ($showPlaylistContents === true) {
-		$this->getAndPrintPlaylistVideoFeed($playlistListEntry, "\t\t");
-	  }
-	}
-
-	function getAndPrintPlaylistVideoFeed($playlistListEntry)
-	{
-		$yt = new Zend_Gdata_YouTube();
-		$playlistVideoFeed = $yt->getPlaylistVideoFeed($playlistListEntry->getPlaylistVideoFeedUrl());
-		foreach ($playlistVideoFeed as $playlistVideoEntry) {
-			$this->printVideoEntry($playlistVideoEntry);
+		if (isset($token)) {
+			$client->setAccessToken($token);
 		}
-	}
 
-	function printVideoEntry($videoEntry)
-	{
-		// the videoEntry object contains many helper functions that access the underlying mediaGroup object
-		echo 'Video: ' . $videoEntry->getVideoTitle() . "\n";
-		echo 'Video ID: ' . $videoEntry->getVideoId() . "\n";
-		echo 'Updated: ' . $videoEntry->getUpdated() . "\n";
-		echo 'Description: ' . $videoEntry->getVideoDescription() . "\n";
-		echo 'Category: ' . $videoEntry->getVideoCategory() . "\n";
-		echo 'Tags: ' . implode(", ", $videoEntry->getVideoTags()) . "\n";
-		echo 'Watch page: ' . $videoEntry->getVideoWatchPageUrl() . "\n";
-		echo 'Flash Player Url: ' . $videoEntry->getFlashPlayerUrl() . "\n";
-		echo 'Duration: ' . $videoEntry->getVideoDuration() . "\n";
-		echo 'View count: ' . $videoEntry->getVideoViewCount() . "\n";
-		echo 'Rating: ' . $videoEntry->getVideoRatingInfo() . "\n";
-		echo 'Geo Location: ' . $videoEntry->getVideoGeoLocation() . "\n";
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
 
-		// see the paragraph above this function for more information on the 'mediaGroup' object
-		// here we are using the mediaGroup object directly to its 'Mobile RSTP link' child
+			try {
+				$channelsResponse = $youtube->channels->listChannels(
+					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+						'mine' => 'true',
+				));
 
-		echo "Thumbnails:\n";
-		$videoThumbnails = $videoEntry->getVideoThumbnails();
-
-		foreach($videoThumbnails as $videoThumbnail) {
-			echo $videoThumbnail['time'] . ' - ' . $videoThumbnail['url'];
-			echo ' height=' . $videoThumbnail['height'];
-			echo ' width=' . $videoThumbnail['width'] . "\n";
+				foreach ($channelsResponse['items'] as $channel) {
+					$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
+						'id, snippet,contentDetails',
+						array(
+							'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
+							'maxResults' => $rp
+						)
+					);
+					foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
+						$playlist[] = $playlistItem;
+					}
+				}
+				return $playlist;
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			}
 		}
-	}
-
-    function getPlaylistListFeed($playlistListFeed, $showPlaylistContents) {
-        $count = 1;
-        foreach ($playlistListFeed as $playlistListEntry) {
-            echo 'Entry # ' . $count . "\n";
-            // This function is defined in the next section
-            $this->printPlaylistListEntry($playlistListEntry, $showPlaylistContents);
-            echo "<br>";
-            $count++;
-        }
+		return $playlist;
     }
 	/**
 	 * Enable the field change of video entry defined
@@ -962,7 +1495,7 @@ class Video_model extends CI_Model {
 	 * @param string $value
 	 * @param string $field
 	 */
-	public function set_value_edit($videoEntry, $value, $field) {
+	public function set_value_edit(& $videoEntry, $value, $field) {
 		if ($field == "title") {
 			$videoEntry->setVideoTitle($value);
 		} else if ($field == "description") {

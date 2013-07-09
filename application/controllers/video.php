@@ -940,7 +940,6 @@ class Video extends CI_Controller {
         $page['msg'] = $this->lang->line('form_msg');
         $page['play_title'] = "";
         $page['play_description'] = "";
-//        $page['account_info'] = $this->user_model->retrieve_admin();
         $this->load->view('admin/index', $page);
     }
 
@@ -1013,19 +1012,19 @@ class Video extends CI_Controller {
             }
         }
     }
-
-    function playlist($user_id = "") {
-//        $yt = new Zend_Gdata_YouTube();
+	/**
+	 * OAuth
+	 *
+	 * This function get and show the playlist for user id selected
+	 *
+	 * @param type $user_id
+	 */
+    function playlist($user_id) {
         $profile = $this->user_model->getUserProfile($user_id);
         $channel = $profile['username'];
-        $title = $profile['title'];
-        $yt = $this->user_model->getHttpClient($user_id);
-        // optionally set version to 2 to retrieve a version 2 feed
-        $yt->setMajorProtocolVersion(2);
-        $playlistListFeed = $yt->getPlaylistListFeed($channel);
 
 //        $this->printPlaylistListFeed($playlistListFeed, $showPlaylistContents = true);
-        $page['playlistListFeed'] = $yt->getPlaylistListFeed($channel);
+        $page['playlistListFeed'] = $this->video_model->get_playlist($user_id);
         $page['msg'] = "";
         $page['page_name'] = 'playlist';
         $page['title'] = "Playlist (channel: " . $channel . ")";
@@ -1033,17 +1032,16 @@ class Video extends CI_Controller {
         $page['channel'] = $channel;
         $this->load->view('admin/index', $page);
     }
-
-    function videolist($user_id, $playlistId) {
+	/**
+	 * Oauth
+	 *
+	 * @param type $user_id
+	 * @param type $playlistId
+	 */
+	public function videolist($user_id, $playlistId) {
         $profile = $this->user_model->getUserProfile($user_id);
         $channel = $profile['username'];
-        $feedUrl = "http://gdata.youtube.com/feeds/api/playlists/$playlistId";
-//        $yt = $this->user_model->getHttpClient();
-        $pl_title = $this->getPlaylistTitle($playlistId, $channel, $user_id);
-        $yt = new Zend_Gdata_YouTube();
-        $yt->setMajorProtocolVersion(2);
-        $pl_title = str_replace("%20", " ", $pl_title);
-        $page['playlistVideoFeed'] = $yt->getPlaylistVideoFeed($feedUrl);
+        $page['playlistVideoFeed'] = $this->video_model->get_videos_by_playlist($user_id, $playlistId);
         $page['page_name'] = 'videolist';
         $page['title'] = "Video list ($pl_title)";
         $page['videoFeedID'] = $playlistId;
@@ -1068,18 +1066,62 @@ class Video extends CI_Controller {
 	 * @param string $video_id
 	 * @param int $user_id
 	 */
-    function edit_video($video_id, $user_id) {
-        $yt = $this->user_model->getHttpClient($user_id);
-        $page['videoEntry'] = $yt->getVideoEntry($video_id);
+//    function edit_video($video_id, $user_id) {
+//        $yt = $this->user_model->getHttpClient($user_id);
+//        $page['videoEntry'] = $yt->getVideoEntry($video_id);
+//        $page['page_name'] = 'edit_video';
+//		$page["category_options"] = $this->user_model->get_categories_for_select();
+//        $page['msg'] = $this->lang->line('form_msg');
+//        $page['title'] = "Video edit";
+//        $page['user_id'] = $user_id;
+//        $page['video_id'] = $video_id;
+//		$page["videoThumbnailKey"] = $this->video_model->get_video_thumbnail_key($video_id);
+//        $this->load->view('admin/index', $page);
+//    }
+	/**
+	 *
+	 * @param type $video_id Youtube ID Video
+	 * @param type $user_id User Id for wordpress installation.
+	 */
+	public function edit_video($video_id, $user_id) {
+		$config['upload_path'] = $this->config->item("upload_path");;
+		$config['allowed_types'] = $this->config->item("allowed_types");
+		$config['max_size']	= $this->config->item("max_size");
+		$config['max_width'] = $this->config->item("max_width");
+		$config['max_height'] = $this->config->item("max_height");
+
+		$this->load->library('upload', $config);
+
+		$this->upload->initialize($config);
+		if ($this->input->post("submit")) {
+
+			$file = $this->video_model->set_thumbnails($video_id, $user_id);
+
+			$this->video_model->edit_video($video_id, $user_id, array(
+				"video_id" => $this->input->post('video_id'),
+				"video_title" => $this->input->post('video_title'),
+				"video_description" => $this->input->post('video_description'),
+				"category_id" => $this->input->post('category_id'),
+				"video_tags" => explode(",", $this->input->post('video_tags')),
+				"url" => $file
+			));
+			$this->video_model->set_history($video_id, $user_id, array(
+				"channel" => $this->user_model->get_channel($user_id),
+				"task_id" => 1
+			));
+		}
+        $page['videoEntry'] = $this->video_model->get_video($video_id, $user_id);
         $page['page_name'] = 'edit_video';
-		$page["category_options"] = $this->user_model->get_categories_for_select();
+		$page["category_options"] = $this->user_model->get_youtube_categories();
+		$page["selected"] = $page['videoEntry']['categoryId'];
         $page['msg'] = $this->lang->line('form_msg');
         $page['title'] = "Video edit";
         $page['user_id'] = $user_id;
         $page['video_id'] = $video_id;
-		$page["videoThumbnailKey"] = $this->video_model->get_video_thumbnail_key($video_id);
+        $page['post_form'] = "edit_video";
         $this->load->view('admin/index', $page);
-    }
+	}
+
 	/**
 	 * Ajax request
 	 *
@@ -1136,7 +1178,7 @@ class Video extends CI_Controller {
 				);
 				$this->video_model->insert_history($dbdata);
 
-				$this->video_model->set_video(array(
+				$this->video_model->db_update_video(array(
 					"title" => $video_title,
 					"video_thumbnail_key" => $this->video_model->get_video_thumbnail_key($video_id)
 				), $video_id);
@@ -1218,7 +1260,7 @@ class Video extends CI_Controller {
                             );
                             $this->video_model->insert_history($dbdata);
 
-							$this->video_model->set_video(array(
+							$this->video_model->db_update_video(array(
 								"title" => $video_title,
 								"video_thumbnail_key" => $videoThumbnailKey
 							), $video_id);
@@ -1360,50 +1402,88 @@ class Video extends CI_Controller {
 //        redirect("admin/users");
         redirect("video/bulk");
     }
-	/**
-	 *
-	 * @param int $user
-	 * @param string $category
-	 */
-    function videos($user, $category = "all") {
+
+	public function result() {
+		$videos = array();
+		$q = $this->input->get('q') ? $this->input->get('q') : "";
+		$max = $this->input->get('maxResults') ? $this->input->get('maxResults') : "";
+		if ($q != "" && $max != "") {
+			$request = $this->video_model->get_videos($q, $max);
+
+			$videos = $request["videos"];
+		}
+
+		$page["videos"] = $videos;
+		$page['page_name'] = 'videos';
+		$page['title'] = "Upload a new video";
+		$this->load->view('admin/index', $page);
+	}
+
+	public function videos($user_id, $category = "all") {
+
 		$this->load->library('pagination');
 
 		$opcions = array();
 		$start = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
 
 		$opcions['per_page'] = $this->config->item("rp");
-		$opcions['base_url'] = base_url() . "video/videos/{$user}/{$category}";
-		try {
-        $profile = $this->user_model->getUserProfile($user);
-		} catch (Zend_Gdata_App_HttpException $e) {
-			error_log($e->getMessage());
-		}
-        $channel = $profile["username"];
-        // $page['videos'] = $this->video_model->getUserUploads($channel);
-		// optionally specify version 2 to retrieve a v2 feed
+		$opcions['base_url'] = base_url() . "video/videos/{$user_id}/{$category}";
 
-        if ($user != "all" && $category == "all") {
-			$page['videos'] = $this->video_model->all_videos(array($user), NULL, $start);
-		} else if ($user != "all" && $category != "all") {
-			$page['videos'] = $this->video_model->all_videos(array($user), $category, $start);
-		} else if ($user == "all" && $category != "all") {
-			$page['videos'] = $this->video_model->all_videos(NULL, $category, $start);
-		} else {
-			$page['videos'] = $this->video_model->all_videos(NULL, NULL, $start);
-		}
+		$page['videos'] = $this->video_model->get_videos_by_user($user_id, NULL, $start);
 		$opcions['total_rows'] = $this->video_model->get_count_videos();
+		$channel = $this->user_model->get_channel($user_id);
 		$opcions['uri_segment'] = 5;
 		$this->pagination->initialize($opcions);
 		$page['pagination'] = $this->pagination->create_links();
         $page['users'] = $this->user_model->get_all_users();
         $page['msg'] = "";
         $page['page_name'] = 'videos';
-        $page['title'] = "Videos (Channel: $channel)";
+        $page['title'] = "Report Videos (Channel: $channel)";
         $page['channel'] = $channel;
-        $page['owner'] = $user;
+        $page['owner'] = $user_id;
 		$page["video_model"] = $this->video_model;
         $this->load->view('admin/index', $page);
-    }
+	}
+
+	/**
+	 *
+	 * @param int $user
+	 * @param string $category
+	 */
+//    function videos($user, $category = "all") {
+//		$this->load->library('pagination');
+//
+//		$opcions = array();
+//		$start = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+//
+//		$opcions['per_page'] = $this->config->item("rp");
+//		$opcions['base_url'] = base_url() . "video/videos/{$user}/{$category}";
+//
+//        // $page['videos'] = $this->video_model->getUserUploads($channel);
+//		// optionally specify version 2 to retrieve a v2 feed
+//
+//        if ($user != "all" && $category == "all") {
+//			$page['videos'] = $this->video_model->all_videos(array($user), NULL, $start);
+//		} else if ($user != "all" && $category != "all") {
+//			$page['videos'] = $this->video_model->all_videos(array($user), $category, $start);
+//		} else if ($user == "all" && $category != "all") {
+//			$page['videos'] = $this->video_model->all_videos(NULL, $category, $start);
+//		} else {
+//			$page['videos'] = $this->video_model->all_videos(NULL, NULL, $start);
+//		}
+//		$opcions['total_rows'] = $this->video_model->get_count_videos();
+//		$opcions['uri_segment'] = 5;
+//		$this->pagination->initialize($opcions);
+//		$page['pagination'] = $this->pagination->create_links();
+//        $page['users'] = $this->user_model->get_all_users();
+//        $page['msg'] = "";
+//        $page['page_name'] = 'videos';
+//        $page['title'] = "Videos (Channel: $channel)";
+//        $page['channel'] = $channel;
+//        $page['owner'] = $user;
+//		$page["video_model"] = $this->video_model;
+//        $this->load->view('admin/index', $page);
+//    }
 
     function comment() {
         $rules = $this->config->item('video_id_and_comment');
@@ -1499,8 +1579,14 @@ class Video extends CI_Controller {
         $page['user_id'] = $user_id;
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 *
+	 * @param string $video_id
+	 */
     function share($video_id) {
+		if ($this->input->post("submit")) {
+
+		}
         $page['page_name'] = 'message';
         $page['msg'] = '';
         $page['message'] = '';
@@ -1712,14 +1798,18 @@ class Video extends CI_Controller {
 	 */
 	public function get_ajax_videos() {
 		header('Content-type: application/json; charset=utf-8');
-
 		$users_id = $this->input->post("users");
-
 		$category = $this->input->post("category");
-
 		$videos = $this->video_model->all_videos($users_id, $category);
-
 		die(json_encode($videos));
+	}
+
+	public function php() {
+		phpinfo();
+	}
+
+	public function path() {
+		echo __FILE__;
 	}
 
 }

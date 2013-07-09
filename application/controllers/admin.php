@@ -26,7 +26,7 @@ class Admin extends CI_Controller {
 	 * By default, video dashboard is showed to logged in admin
 	 */
     function index() {
-        //$this->dashboard();
+		//$this->dashboard();
 //		redirect("admin/users");
 		redirect("video/bulk");
     }

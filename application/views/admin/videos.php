@@ -71,42 +71,35 @@ if (!defined('BASEPATH'))
             <th class="table-header-repeat line-left" width="100"><a href="">Options</a></th>
 
         </tr>
-        <?php
-        $c = 0;
-        foreach ($videos as $row) {
-			$video_id = $row["video_id"];
-            $c++;
-            ?>
-            <tr<?php echo ($c % 2) ? " class=\"alternate-row\"" : ""; ?>>
-                <td><input type="checkbox" name="videos_ids[]" id="videos_ids" value="<?php echo $video_id; ?>" />  </td>
-                <td><?php echo $row["title"]; ?></td>
-                <td><?php echo str_replace("<", "", substr($row["description"], 0, 100)); ?></td>
-                <td align="center"><?php echo $row["category"]; ?></td>
+        <?php foreach ($videos as $key => $video) : ?>
+            <tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
+                <td><input type="checkbox" name="videos_ids[]" id="videos_ids" value="<?php echo $video["video_id"]; ?>" />  </td>
+                <td><?php echo $video["title"]; ?></td>
+                <td><?php echo str_replace("<", "", substr($video["description"], 0, 100)); ?></td>
+                <td align="center"><?php echo $video["category"]; ?></td>
                 <td align="center">
-                    <img src="<?php echo $row["thumbnail"]; ?>" class="borderPhoto" style="height:100px;width:150px;"  />
+                    <img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;"  />
 
                     <h3></h3>
                     <!-- AddThis Button BEGIN -->
                     <div class="addthis_toolbox addthis_default_style ">
-                        <a class="addthis_button_preferred_1" addthis:url="https://www.youtube.com/watch?v=<?php echo $video_id; ?>" addthis:title="<?php echo $row["title"]; ?>"></a>
-                        <a class="addthis_button_preferred_2" addthis:url="https://www.youtube.com/watch?v=<?php echo $video_id; ?>" addthis:title="<?php echo $row["title"]; ?>"></a>
-                        <a class="addthis_button_preferred_3" addthis:url="https://www.youtube.com/watch?v=<?php echo $video_id; ?>" addthis:title="<?php echo $row["title"]; ?>"></a>
-                        <a class="addthis_button_preferred_4" addthis:url="https://www.youtube.com/watch?v=<?php echo $video_id; ?>" addthis:title="<?php echo $row["title"]; ?>"></a>
+                        <a class="addthis_button_preferred_1" addthis:url="https://www.youtube.com/watch?v=<?php echo $video["video_id"]; ?>" addthis:title="<?php echo $video["title"]; ?>"></a>
+                        <a class="addthis_button_preferred_2" addthis:url="https://www.youtube.com/watch?v=<?php echo $video["video_id"]; ?>" addthis:title="<?php echo $video["title"]; ?>"></a>
+                        <a class="addthis_button_preferred_3" addthis:url="https://www.youtube.com/watch?v=<?php echo $video["video_id"]; ?>" addthis:title="<?php echo $video["title"]; ?>"></a>
+                        <a class="addthis_button_preferred_4" addthis:url="https://www.youtube.com/watch?v=<?php echo $video["video_id"]; ?>" addthis:title="<?php echo $video["title"]; ?>"></a>
                     </div>
                     <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js?domready=1#pubid=/*Your pubid*/"></script>
                     <!-- AddThis Button END -->
                 </td>
-                <td><?php echo $row["view_count"]; ?></td>
+                <td><?php echo $video["view_count"]; ?></td>
                 <td class="">
-                    <a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $channel; ?>?video_id=<?php echo $video_id; ?>" ><b>Report</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/edit_video/<?php echo $video_id; ?>/<?php echo $owner; ?>" ><b>Edit video</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/share/<?php echo $video_id; ?>" ><b>Share</b></a><br/>
+                    <a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $channel; ?>?video_id=<?php echo $video["video_id"]; ?>" ><b>Report</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/edit_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" ><b>Edit video</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/share/<?php echo $video["video_id"]; ?>" ><b>Share</b></a><br/>
                 </td>
 
             </tr>
-            <?php
-        }
-        ?>
+            <?php endforeach; ?>
     </table>
 	<div class="pagination">
 	<?php echo $pagination; ?>

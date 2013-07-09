@@ -2,18 +2,15 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
-<script type="text/javascript" src="<?php echo base_url(); ?>css/admin/imageselect/imageselect.js"></script>
-
-<link href="<?php echo base_url(); ?>css/admin/imageselect/imageselect.css" media="screen" rel="stylesheet" type="text/css" />
 <div id="related-link">
 	<ul>
 		<li><a href="<?php echo base_url(); ?>admin/users">Dashboard</a></li>
 		<li><a href="<?php echo base_url(); ?>video/videos/<?php echo $user_id; ?>">Videos</a></li>
-		<li>Video edit</li>
+		<li>Edit Video</li>
 	</ul>
 </div>
 <center>
-    <form enctype="multipart/form-data" action="<?php echo base_url(); ?>video/edit" method="post">
+	<?php echo form_open("video/" . implode( "/", array($post_form, $video_id, $user_id)), array("enctype" => "multipart/form-data", "method" => "post")); ?>
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
             <tbody>
                 <tr>
@@ -27,24 +24,10 @@ if (!defined('BASEPATH'))
                         <h2>Video</h2>
                     </td>
                     <td>
-                        <?php
-                        $videoThumbnails = $videoEntry->getVideoThumbnails();
-                        $videoThumbnail = $videoThumbnails[$videoThumbnailKey];
-                        ?>
-<!--                        <p><a href="<?php echo base_url(); ?>video/view/<?php echo $videoEntry->getVideoId(); ?>" >
-                            <img src="<?php echo $videoThumbnail["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;"  />
-							</a></p>-->
-						<p><select name="videoThumbnailKey" id="videoThumbnail">
-						<?php foreach ($videoThumbnails as $key => $item):?>
-						<option value="<?php echo $key;?>"<?php echo $key == $videoThumbnailKey ? " selected=\"selected\"" : ""; ?>><?php echo $item["url"];?></option>
-						<?php endforeach;?>
-							</select></p>
-
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('select[name=videoThumbnailKey]').ImageSelect({dropdownWidth:225});
-	});
-</script>
+                        <p><a href="<?php echo base_url(); ?>video/view/<?php echo $videoEntry["video_id"]; ?>" >
+                            <img src="<?php echo $videoEntry["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;"  />
+							</a></p>
+							<p><?php echo form_input(array("name" => "thumbnail", "class" => "inp-form", "size" => "60px", "value" => $videoEntry["thumbnail"]["url"], "disabled" => "disabled")); ?> <?php echo form_upload("new-thumbnails"); ?></p>
                     </td>
                 </tr>
                 <tr>
@@ -52,7 +35,7 @@ if (!defined('BASEPATH'))
                         <h2>Title *</h2>
                     </td>
                     <td>
-                        <input class="inp-form" size="60px" type="text" name="video_title" id="video_title" value="<?php echo $videoEntry->getVideoTitle(); ?>"/>
+						<?php echo form_input(array("name" => "video_title", "id" => "video_title", "value" => $videoEntry["title"], "class" => "inp-form", "size" => "60px")); ?>
                         <span><?php echo form_error('video_title'); ?></span>
                     </td>
                 </tr>
@@ -61,7 +44,8 @@ if (!defined('BASEPATH'))
                         <h2>Description *</h2>
                     </td>
                     <td>
-                        <textarea class="form-textarea" name="video_description"><?php echo $videoEntry->getVideoDescription(); ?></textarea>
+<!--                        <textarea class="form-textarea" name="video_description"><?php echo $videoEntry["description"]; ?></textarea>-->
+						<?php echo form_textarea(array("name" => "video_description", "value" => $videoEntry["description"], "class" => "form-textarea")); ?>
                         <span><?php echo form_error('video_description'); ?></span>
                     </td>
                 </tr>
@@ -70,28 +54,7 @@ if (!defined('BASEPATH'))
                         <h2>Category *</h2>
                     </td>
                     <td>
-                        <?php
-//                        $category_options = array(
-//                            '' => 'Choose category',
-//                            'Autos' => 'Autos &amp; Vehicles',
-//                            'Comedy' => 'Comedy',
-//                            'Education' => 'Education',
-//                            'Entertainment' => 'Entertainment',
-//                            'Film' => 'Film &amp; Animation',
-//                            'Games' => 'Gaming',
-//                            'Howto' => 'Howto &amp; Style',
-//                            'Music' => 'Music',
-//                            'News' => 'News &amp; Politics',
-//                            'Nonprofit' => 'Nonprofits &amp; Activism',
-//                            'People' => 'People &amp; Blogs',
-//                            'Animals' => 'Pets &amp; Animals',
-//                            'Tech' => 'Science &amp; Technology',
-//                            'Sports' => 'Sports',
-//                            'Travel' => 'Travel &amp; Events'
-//                        );
-                        $selected = ($this->input->post('category_name')) ? $this->input->post('category_name') : $videoEntry->getVideoCategory();
-                        echo form_dropdown('category_name', $category_options, $selected, 'class="select_style"');
-                        ?>
+                        <?php echo form_dropdown('category_id', $category_options, $selected, 'class="select_style"'); ?>
                     </td>
                 </tr>
                 <tr>
@@ -99,18 +62,19 @@ if (!defined('BASEPATH'))
                         <h2>Tags *</h2>
                     </td>
                     <td>
-                        <input class="inp-form" size="60px" type="text" name="video_tags" id="video_tags" value="<?php echo implode(", ", $videoEntry->getVideoTags()); ?>"/>
+						<?php echo form_input(array("name" => "video_tags", "id" => "video_tags", "value" => implode(", ", $videoEntry["tags"]), "class" => "inp-form", "size" => "60px")); ?>
                         <span><?php echo form_error('video_tags'); ?></span>
                     </td>
                 </tr>
                 <tr>
                     <td align="center" colspan="2">
-                        <input type="hidden" name="user_id" value="<?php echo $user_id; ?>"/>
-                        <input type="hidden" name="video_id" value="<?php echo $videoEntry->getVideoId(); ?>"/>
-                        <input type="submit" class="form-submit" value="Update" name="submit" id="button">
+						<?php echo form_hidden("user_id", $user_id); ?>
+						<?php echo form_hidden("video_id", $videoEntry["video_id"]); ?>
+
+						<?php echo form_submit(array("name" => "submit", "id" => "button", "class" => "form-submit", "value" => "Update")); ?>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </form>
+    <?php echo form_close(); ?>
 </center>
