@@ -351,6 +351,7 @@ $(document).ready(function(){
 			data: {users: user_id, category: null},
 			type: "post",
 			success: function(data) {
+				alert(data);
 				$("#content-dinamic-show-videos").html("");
 				$("#content-dinamic-show-videos").append("<table width=\"800\">" +
 					"<thead>" +
