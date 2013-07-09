@@ -1801,7 +1801,8 @@ class Video extends CI_Controller {
 		$users_id = $this->input->post("users");
 		$category = $this->input->post("category");
 		$videos = $this->video_model->all_videos($users_id, $category);
-		die(json_encode($videos));
+		echo json_encode($videos);
+		//die(json_encode($videos));
 	}
 
 	public function php() {
