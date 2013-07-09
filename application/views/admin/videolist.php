@@ -75,18 +75,13 @@ if (!defined('BASEPATH'))
                     <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js?domready=1#pubid=/*Your pubid*/"></script>
                     <!-- AddThis Button END -->
                 </td>
-                <td><?php echo $videoEntry->getVideoViewCount(); ?></td>
+                <td><?php echo $videoEntry["view_count"]; ?></td>
 
                 <td class="">
-                    <a href="<?php echo base_url(); ?>video/share/<?php echo $videoEntry->getVideoId(); ?>" ><b>Share</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/delvideo/<?php echo $user_id; ?>/<?php echo $videoFeedID; ?>/<?php echo $videoEntry->getVideoId(); ?>" ><b>Remove Video</b></a>
+                    <a href="<?php echo base_url(); ?>video/share/<?php echo $videoEntry["video_id"]; ?>" ><b>Share</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/delvideo/<?php echo $user_id; ?>/<?php echo $videoFeedID; ?>/<?php echo $videoEntry["video_id"]; ?>" ><b>Remove Video</b></a>
                 </td>
             </tr>
 		<?php endforeach; ?>
     </table>
-    <input type="hidden" id="user_id" name="user_id" value="<?php echo $user_id; ?>" />
-    <input type="hidden" id="user_id" name="playlist_id" value="<?php echo $videoFeedID; ?>" />
-    <input type="hidden" id="user_id" name="channel" value="<?php echo $channel; ?>" />
-    <?php echo form_close(); ?>
-
 </center>
