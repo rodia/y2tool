@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
 ?>
 
 <center>
-	<?php echo form_open("video/new_playlist", array("method" => "post")); ?>
+	<?php echo form_open("video/new_playlist/{$user_id}/{$channel}", array("method" => "post")); ?>
 	<!--video/newplay-->
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
             <tbody>
@@ -16,7 +16,7 @@ if (!defined('BASEPATH'))
                 </tr>
                 <tr>
                     <td align="right">
-                        <h2>Title:</h2>
+                        <h2>Title: <span style="color: red;">*</span></h2>
                     </td>
                     <td>
 						<?php echo form_input(array("name" => "play_title", "id" => "play_tilte", "value" => $play_title, "class" => "inp-form", "size" => "60px")); ?>

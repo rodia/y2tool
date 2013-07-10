@@ -291,8 +291,6 @@ class Video_model extends CI_Model {
 				));
 
 				foreach ($channelsResponse['items'] as $channel) {
-//					var_dump($channel);
-//					echo '<br>';
 					$current_channel = $channel["snippet"]["title"];
 					$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
 						'id, snippet,contentDetails',
@@ -302,16 +300,12 @@ class Video_model extends CI_Model {
 						)
 					);
 					foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
-//						var_dump($playlistItem);
-
 						$videos = $youtube->videos->listVideos(
 							$playlistItem['contentDetails']['videoId'],
 							'snippet,contentDetails,status,statistics'
 						);
 
 						foreach ($videos['items'] as $video) {
-//							var_dump($video);
-//							echo '<br>';
 							if (isset($video['status']['uploadStatus']) &&
 								$video['status']['uploadStatus'] == 'rejected' &&
 								$video['status']['rejectionReason'] == 'copyright')
@@ -744,6 +738,7 @@ class Video_model extends CI_Model {
 		return $entry;
 	}
 	/**
+	 * @deprecated since version 1.0
 	 *
 	 * @param string $channel
 	 * @return Zend_Gdata_YouTube_PlaylistListFeed
@@ -1034,8 +1029,73 @@ class Video_model extends CI_Model {
         $this->db_my_db->insert('yt_playlist', $data);
         return $this->db_my_db->insert_id();
     }
+	/**
+	 * OAuth
+	 *
+	 * This function create a new playlist into channel of user.
+	 *
+	 * @param int $user_id
+	 * @param string $channel
+	 * @param array $data
+	 * @return boolean True if create is success, false otherwise.
+	 */
+	public function oauth_insert_playlist($user_id, $channel, $data) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
-    /**
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+				$postBody = new Google_Playlist();
+				$snippet = new Google_PlaylistSnippet();
+				$snippet->setTitle($data["play_title"]);
+				$snippet->setDescription($data["play_description"]);
+				$postBody->setSnippet($snippet);
+
+				$playlist = $youtube->playlists->insert(
+					"snippet",
+					$postBody
+				);
+
+				var_dump($playlist);
+
+				$data = array(
+					"channel" => $channel,
+					"title" => $data["play_title"],
+					"playlist" => $playlist["snippet"]["playlistId"]
+				);
+				$play_id = $this->video_model->insert_playlist($data);
+
+				$dbdata = array(
+					"registered_date" => date("Y-m-d H:i:s"),
+					"admin_id" => $this->session->userdata('user_id'),
+					"video_id" => "",
+					"task_id" => 8,
+					"playlist_id" => $play_id,
+					"who" => $this->session->userdata('name')
+				);
+				$this->video_model->insert_history($dbdata);
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			}
+		}
+		return TRUE;
+	}
+
+	/**
      * CHECK VIDEOS
 	 *
 	 * @param string $video_id youtube user name

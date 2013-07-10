@@ -949,8 +949,15 @@ class Video extends CI_Controller {
             $this->form_validation->set_rules($rules);
 
             if ($this->form_validation->run() != FALSE) {
-				$play_title = $this->input->post('play_title');
-				$play_description = $this->input->post('play_description');
+
+				if ($this->video_model->oauth_insert_playlist($user_id, $channel, array(
+					"play_title" => $this->input->post('play_title'),
+					"play_description" => $this->input->post('play_description')
+				))) {
+
+				}
+
+				redirect("video/playlist/" . $user_id);
 			}
 		}
 
