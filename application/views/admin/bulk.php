@@ -220,6 +220,15 @@ $(document).ready(function(){
 			});
 			$(this).removeAttr("disabled");
 		}
+		else if (action == "featured-channel") {
+			$('#bulk-form').validate({
+				rules: {
+					"featured_ids[]": {required: true}
+				},
+				submitHandler: function(form) {form.submit();}
+			});
+			$(this).removeAttr("disabled");
+		}
 
 		return false;
 	});
@@ -541,6 +550,7 @@ jQuery.extend(jQuery.validator.prototype, {
 			<button title="comment-video" class="pre-action">Comment on Videos</button>
 			<button title="favorite-video" class="pre-action">Favorite Videos</button>
 			<button title="share-video" class="pre-action">Share Videos</button>
+			<button title="featured-channel" class="pre-action">Featured Channel</button>
 <!--			<button title="like-video" class="pre-action" disabled="disabled">Like Videos</button>
 			<button title="comment-video" class="pre-action" disabled="disabled">Comment on Videos</button>
 			<button title="favorite-video" class="pre-action" disabled="disabled">Favorite Videos</button>
@@ -677,6 +687,53 @@ jQuery.extend(jQuery.validator.prototype, {
 			</tr>
 
 		</table>
+	</div>
+	
+	<div id="featured-channel" class="step-video" style="display: none">
+	
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
+							<tr>
+								<th class="table-header-repeat line-left" width="20"><input type="checkbox" id="checkAll"></th>
+								<th class="table-header-repeat line-left"><a href="">Username</a></th>
+								<th class="table-header-repeat line-left"><a href="">Youtube Channel</a></th>				
+							</tr>
+							<?php if (!empty($users)): ?>
+								<?php foreach ($users as $key => $row) : ?>
+								<?php //$checked = in_array($row->id, $hold_users); ?>
+								<?php $hold_username[$row->id] = $row->user_login; ?>
+									<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
+										<td><input type="checkbox" name="ids[]" value="<?php echo $row->id ?>" title="<?php echo $row->id; ?>"></td>
+										<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
+										<td><?php echo $row->youtube_channels; ?></td>
+									</tr>
+								<?php endforeach; ?>
+							<?php endif; ?>
+							</table>
+							
+		<!-- <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
+			<tr>
+				<th colspan="2" class="table-header-repeat line-left"><a href="#">Input Videos for Share</a></th>
+			</tr>
+
+			<tr class="alternate-row">
+
+				<td  colspan="2">
+
+					<div id="featured_inputs"> 
+						<p>
+						
+						</p>
+					 </div>
+					<h2><a href="#" class="addInput" rel="featured_inputs" style="color:#0093F0">Add another input box</a></h2>
+				</td>
+			</tr>
+			<tr>
+				<td align="center" colspan="2">
+					<a href="#" class="go-back-user">Cancel</a>
+					<input class="form-submit" type="submit" value="Process" name="submit"/>
+				</td>
+			</tr>
+		</table>-->
 	</div>
 
 	<div id="show-common-videos" class="step-video" style="display: none;">
