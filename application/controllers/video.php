@@ -951,7 +951,7 @@ class Video extends CI_Controller {
 
             if ($this->form_validation->run() != FALSE) {
 
-				if (!$this->video_model->oauth_insert_playlist($user_id, $channel, array(
+				if ( ! $this->video_model->oauth_insert_playlist($user_id, $channel, array(
 					"play_title" => $this->input->post('play_title'),
 					"play_description" => $this->input->post('play_description')
 				))) {

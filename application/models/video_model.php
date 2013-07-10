@@ -532,6 +532,24 @@ class Video_model extends CI_Model {
 			}
 		}
 	}
+
+	public function set_history_playlist($playlist, $task = 8) {
+
+		$play_id = $this->video_model->insert_playlist(array(
+			"channel" => $playlist["channel"],
+			"title" => $playlist["play_title"],
+			"playlist" => $playlist["snippet"]["channelId"]
+		));
+
+		$this->video_model->insert_history(array(
+			"registered_date" => date("Y-m-d H:i:s"),
+			"admin_id" => $this->session->userdata('user_id'),
+			"video_id" => "",
+			"task_id" => $task,
+			"playlist_id" => $play_id, // Id of database row.
+			"who" => $this->session->userdata('name')
+		));
+	}
 	/**
 	 * OAuth
 	 *
@@ -1060,28 +1078,17 @@ class Video_model extends CI_Model {
 				$postBody->setSnippet($snippet);
 
 				$playlist = $youtube->playlists->insert(
-					"snippet",
+					"snippet,status",
 					$postBody
 				);
 
-				var_dump($playlist);
-
-				$data = array(
+				$this->insert_history_playlist(array(
 					"channel" => $channel,
-					"title" => $data["play_title"],
-					"playlist" => $playlist["snippet"]["playlistId"]
-				);
-				$play_id = $this->video_model->insert_playlist($data);
-
-				$dbdata = array(
-					"registered_date" => date("Y-m-d H:i:s"),
-					"admin_id" => $this->session->userdata('user_id'),
-					"video_id" => "",
-					"task_id" => 8,
-					"playlist_id" => $play_id,
-					"who" => $this->session->userdata('name')
-				);
-				$this->video_model->insert_history($dbdata);
+					"play_title" => $playlist["snippet"]["title"],
+					"snippet" => array(
+						"channelId" => $playlist["snippet"]["channelId"]
+					)
+				));
 			} catch (Google_ServiceException $e) {
 				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
@@ -1570,14 +1577,15 @@ class Video_model extends CI_Model {
 			try {
 				$channelsResponse = $youtube->channels->listChannels(
 					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
-						'mine' => 'true',
+					'mine' => 'true',
 				));
 
 				foreach ($channelsResponse['items'] as $channel) {
 					$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
 						'id, snippet,contentDetails',
 						array(
-							'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
+							'channelId' => "UCY7JWf_Jsw_R9dUElYNzBbw",
+							// 'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
 							'maxResults' => $rp
 						)
 					);
