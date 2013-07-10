@@ -690,7 +690,27 @@ jQuery.extend(jQuery.validator.prototype, {
 	</div>
 	
 	<div id="featured-channel" class="step-video" style="display: none">
-		<table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
+	
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
+							<tr>
+								<th class="table-header-repeat line-left" width="20"><input type="checkbox" id="checkAll"></th>
+								<th class="table-header-repeat line-left"><a href="">Username</a></th>
+								<th class="table-header-repeat line-left"><a href="">Youtube Channel</a></th>				
+							</tr>
+							<?php if (!empty($users)): ?>
+								<?php foreach ($users as $key => $row) : ?>
+								<?php //$checked = in_array($row->id, $hold_users); ?>
+								<?php $hold_username[$row->id] = $row->user_login; ?>
+									<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
+										<td><input type="checkbox" name="ids[]" value="<?php echo $row->id ?>" title="<?php echo $row->id; ?>"></td>
+										<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
+										<td><?php echo $row->youtube_channels; ?></td>
+									</tr>
+								<?php endforeach; ?>
+							<?php endif; ?>
+							</table>
+							
+		<!-- <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
 			<tr>
 				<th colspan="2" class="table-header-repeat line-left"><a href="#">Input Videos for Share</a></th>
 			</tr>
@@ -699,47 +719,21 @@ jQuery.extend(jQuery.validator.prototype, {
 
 				<td  colspan="2">
 
-					<div id="featured_inputs">
+					<div id="featured_inputs"> 
 						<p>
-						<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
-							<tr>
-								<th class="table-header-repeat line-left" width="20"><input type="checkbox" id="checkAll"></th>
-								<th class="table-header-repeat line-left"><a href="">Task</a></th>
-								<th class="table-header-repeat line-left"><a href="">Username</a></th>
-								<th class="table-header-repeat line-left"><a href="">Youtube Channel</a></th>
-			
-				
-							</tr>
-							<?php if (!empty($users)): ?>
-								<?php foreach ($users as $key => $row) : ?>
-								<?php //$checked = in_array($row->id, $hold_users); ?>
-								<?php $hold_username[$row->id] = $row->user_login; ?>
-									<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
-										<td><input type="checkbox" name="ids[]" value="<?php echo $row->id ?>" title="<?php echo $row->id; ?>"></td>
-										<td>
-										<a href="<?php echo base_url(); ?>video/videos/<?php echo $row->id; ?>" ><b>Show videos</b></a><br/>
-										<a href="<?php echo base_url(); ?>video/playlist/<?php echo $row->id; ?>" ><b>Show playlist</b></a><br/>
-										<a href="<?php echo base_url(); ?>admin/upload/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/></td>
-										<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
-										<td><?php echo $row->youtube_channels; ?></td>
-									</tr>
-								<?php endforeach; ?>
-							<?php endif; ?>
-							</table>
+						
 						</p>
-					</div>
+					 </div>
 					<h2><a href="#" class="addInput" rel="featured_inputs" style="color:#0093F0">Add another input box</a></h2>
 				</td>
 			</tr>
-
 			<tr>
 				<td align="center" colspan="2">
 					<a href="#" class="go-back-user">Cancel</a>
 					<input class="form-submit" type="submit" value="Process" name="submit"/>
 				</td>
 			</tr>
-
-		</table>
+		</table>-->
 	</div>
 
 	<div id="show-common-videos" class="step-video" style="display: none;">
