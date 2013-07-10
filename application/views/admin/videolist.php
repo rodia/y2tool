@@ -62,11 +62,10 @@ if (!defined('BASEPATH'))
 
                 <td align="center">
                     <a href="<?php echo base_url(); ?>video/view/<?php echo $videoEntry["video_id"]; ?>" >
-                        <img src="<?php echo $videoEntry["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;"  />
+                        <img src="<?php echo $videoEntry["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
                     </a>
-                    <h3></h3>
                     <!-- AddThis Button BEGIN -->
-                    <div class="addthis_toolbox addthis_default_style ">
+                    <div class="addthis_toolbox addthis_default_style">
                         <a class="addthis_button_preferred_1" addthis:url="https://www.youtube.com/watch?v=<?php echo $videoEntry["video_id"]; ?>" addthis:title="<?php echo $videoEntry["title"]; ?>"></a>
                         <a class="addthis_button_preferred_2" addthis:url="https://www.youtube.com/watch?v=<?php echo $videoEntry["video_id"]; ?>" addthis:title="<?php echo $videoEntry["title"]; ?>"></a>
                         <a class="addthis_button_preferred_3" addthis:url="https://www.youtube.com/watch?v=<?php echo $videoEntry["video_id"]; ?>" addthis:title="<?php echo $videoEntry["title"]; ?>"></a>
@@ -75,11 +74,10 @@ if (!defined('BASEPATH'))
                     <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js?domready=1#pubid=/*Your pubid*/"></script>
                     <!-- AddThis Button END -->
                 </td>
-                <td><?php echo $videoEntry["view_count"]; ?></td>
-
-                <td class="">
-                    <a href="<?php echo base_url(); ?>video/share/<?php echo $videoEntry["video_id"]; ?>" ><b>Share</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/delvideo/<?php echo $user_id; ?>/<?php echo $videoFeedID; ?>/<?php echo $videoEntry["video_id"]; ?>" ><b>Remove Video</b></a>
+                <td class="align-left"><?php echo $videoEntry["view_count"]; ?></td>
+                <td>
+                    <a href="<?php echo base_url(); ?>video/share/<?php echo $videoEntry["video_id"]; ?>"><b>Share</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/delvideo/<?php echo $user_id; ?>/<?php echo $videoFeedID; ?>/<?php echo $videoEntry["video_id"]; ?>"><b>Remove Video</b></a>
                 </td>
             </tr>
 		<?php endforeach; ?>

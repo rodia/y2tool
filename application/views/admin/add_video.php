@@ -4,7 +4,8 @@ if (!defined('BASEPATH'))
 ?>
 
 <center>
-    <form method="post" action="<?php echo base_url(); ?>video/addvideo" >
+	<?php echo form_open("video/add_video", array("method" => "post")); ?>
+	<!--video/addvideo-->
         <table border="0" width="800" cellpadding="0" cellspacing="0" id="product-table">
             <tr>
                 <th class="table-header-repeat line-left" colspan="2"><a href="#">Add video to Playlist</a></th>
@@ -17,21 +18,21 @@ if (!defined('BASEPATH'))
                     <h2>Youtube video id:</h2>
                 </td>
                 <td>
-                    <input class="inp-form" size="60" type="text" name="video_id" value="" placeholder="Enter youtube video id" />
+					<?php echo form_input(array("name" => "video_id", "placeholder" => "Enter youtube video id", "class" => "inp-form", "size" => 60)); ?>
                     <span><?php echo form_error('video_id'); ?></span><br/>
                     <span class="url-demo">e.g. http://www.youtube.com/watch?v=</span><b><i>HcTrHo4dk4Q</i></b>
-                    
-                    <input type="hidden" name="type" value="youtube"  />
-                    <input type="hidden" name="videoFeedID" value="<?php echo $videoFeedID; ?>"  />
-                    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>"  />
-                    <input type="hidden" name="channel" value="<?php echo $channel; ?>"  />
+
+					<?php echo form_hidden("type", "youtube"); ?>
+					<?php echo form_hidden("videoFeedID", $videoFeedID); ?>
+					<?php echo form_hidden("user_id", $user_id); ?>
+					<?php echo form_hidden("channel", $channel); ?>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <input class="form-submit" type="submit" value="Add video" id="button" name="submit" />
+					<?php echo form_submit(array("name" => "submit", "id" => "button", "class" => "form-submit"), "Add video"); ?>
                 </td>
             </tr>
         </table>
-    </form>
+    <?php echo form_close(); ?>
 </center>

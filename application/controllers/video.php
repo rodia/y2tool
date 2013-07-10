@@ -862,7 +862,10 @@ class Video extends CI_Controller {
         $page['channel'] = $channel;
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1
+	 *
+	 */
     function newplay() {
         $user_id = $this->input->post('user_id');
         $channel = $this->input->post('channel');
@@ -931,12 +934,30 @@ class Video extends CI_Controller {
             }
         }
     }
+	/**
+	 * OAuth
+	 *
+	 * Controller Add new playlist
+	 *
+	 * @param int $user_id ID of user for wordpress system.
+	 * @param string $channel User name of youtube channel.
+	 */
+    public function new_playlist($user_id, $channel = "") {
+		if ($this->input->post("submit")) {
+			$page['msg'] = $this->lang->line('form_msg');
+			$rules = $this->config->item('rule_for_title');
+            $this->form_validation->set_rules($rules);
 
-    function new_playlist() {
+            if ($this->form_validation->run() != FALSE) {
+				$play_title = $this->input->post('play_title');
+				$play_description = $this->input->post('play_description');
+			}
+		}
+
         $page['page_name'] = 'new_playlist';
         $page['title'] = "Add Video to Playlist";
-        $page['user_id'] = $this->input->post('user_id');
-        $page['channel'] = $this->input->post('channel');
+        $page['user_id'] = $user_id;
+        $page['channel'] = $channel;
         $page['msg'] = $this->lang->line('form_msg');
         $page['play_title'] = "";
         $page['play_description'] = "";
@@ -1022,8 +1043,6 @@ class Video extends CI_Controller {
     function playlist($user_id) {
         $profile = $this->user_model->getUserProfile($user_id);
         $channel = $profile['username'];
-
-//        $this->printPlaylistListFeed($playlistListFeed, $showPlaylistContents = true);
         $page['playlistListFeed'] = $this->video_model->get_playlist($user_id);
         $page['msg'] = "";
         $page['page_name'] = 'playlist';
@@ -1063,23 +1082,7 @@ class Video extends CI_Controller {
         return "";
     }
 	/**
-	 *
-	 * @param string $video_id
-	 * @param int $user_id
-	 */
-//    function edit_video($video_id, $user_id) {
-//        $yt = $this->user_model->getHttpClient($user_id);
-//        $page['videoEntry'] = $yt->getVideoEntry($video_id);
-//        $page['page_name'] = 'edit_video';
-//		$page["category_options"] = $this->user_model->get_categories_for_select();
-//        $page['msg'] = $this->lang->line('form_msg');
-//        $page['title'] = "Video edit";
-//        $page['user_id'] = $user_id;
-//        $page['video_id'] = $video_id;
-//		$page["videoThumbnailKey"] = $this->video_model->get_video_thumbnail_key($video_id);
-//        $this->load->view('admin/index', $page);
-//    }
-	/**
+	 * OAuth
 	 *
 	 * @param type $video_id Youtube ID Video
 	 * @param type $user_id User Id for wordpress installation.
