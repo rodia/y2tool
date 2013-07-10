@@ -2,17 +2,14 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
-
 <center>
 
     <table>
         <tr>
             <td valign="top">
-                <form action="<?php echo base_url(); ?>video/new_playlist" method="post" name="form1" id="form1">
-                    <input  type="hidden" name="channel" value="<?php echo $channel; ?>"/>
-                    <input  type="hidden" name="user_id" value="<?php echo $user_id; ?>"/>
-                    <input  class="form-submit" type="submit" value="Create Playlist"/>
-                </form>
+				<?php echo form_open("video/new_playlist/{$user_id}/{$channel}", array("method" => "post", "name" => "form1", "id" => "form1")); ?>
+					<?php echo form_submit(array("class" => "form-submit"), "Create Playlist"); ?>
+                <?php echo form_close(); ?>
             </td>
             <td width="50"></td>
         </tr>
@@ -56,6 +53,5 @@ if (!defined('BASEPATH'))
             </tr>
             <?php endforeach; ?>
     </table>
-
 
 </center>

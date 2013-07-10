@@ -609,7 +609,7 @@ class Video_model extends CI_Model {
 	}
 	/**
 	 * OAuth
-	 * 
+	 *
 	 * @param int $user_id
 	 * @param string $playlistId
 	 * @return array
@@ -642,7 +642,7 @@ class Video_model extends CI_Model {
 					$data["title"] = $playlistItem["snippet"]["title"];
 					$data["description"] = $playlistItem["snippet"]["description"];
 					$data["channelId"] = $playlistItem["snippet"]["channelId"];
-					$data["thumbnails"]["url"] = $playlistItem["snippet"]["thumbnails"]["url"];
+					$data["thumbnails"]["url"] = $playlistItem["snippet"]["thumbnails"]["default"]["url"];
 				}
 			} catch (Google_ServiceException $e) {
 				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
