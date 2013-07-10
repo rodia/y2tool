@@ -581,14 +581,18 @@ class Video_model extends CI_Model {
 			$i = 0;
 
 			try {
+				/**
+				 * @todo The function not sure that return all videos of play list.
+				 * @todo In addition the retrieve data must be for pagination method.
+				 */
 				$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
-					'id, snippet,contentDetails',
+					'id,snippet,contentDetails',
 					array(
 						'playlistId' => $playlistId,
 						'maxResults' => $rp
 					)
 				);
-				var_dump($playlistItemsResponse);
+				$this->count_videos = $playlistItemsResponse["pageInfo"]["totalResults"];
 				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 					$videos = $youtube->videos->listVideos(
 						$playlistItem['contentDetails']['videoId'],
@@ -617,7 +621,7 @@ class Video_model extends CI_Model {
 		}
 
 		$this->categories = array_unique($categories);
-		$this->count_videos = count($data);
+
 		return array_slice($data, $start, $rp);
 	}
 	/**
@@ -643,14 +647,15 @@ class Video_model extends CI_Model {
 			$_SESSION['token'] = $client->getAccessToken();
 
 			try {
-				$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
+				$playlistsResponse = $youtube->playlists->listPlaylists(
 					'id, snippet,contentDetails',
 					array(
-						'playlistId' => $playlistId,
+						'id' => $playlistId,
 						'maxResults' => $rp
 					)
 				);
-				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
+				var_dump($playlistsResponse);
+				foreach ($playlistsResponse['items'] as $key => $playlistItem) {
 					$data["playlistId"] = $playlistItem["snippet"]["playlistId"];
 					$data["title"] = $playlistItem["snippet"]["title"];
 					$data["description"] = $playlistItem["snippet"]["description"];
