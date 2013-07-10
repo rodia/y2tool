@@ -3,7 +3,6 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
 <center>
-
     <table>
         <tr>
             <td valign="top">
@@ -35,20 +34,20 @@ if (!defined('BASEPATH'))
                     <p><?php echo $playlistListEntry["snippet"]["title"]; ?></p>
                     <!-- AddThis Button BEGIN -->
                     <div class="addthis_toolbox addthis_default_style ">
-                        <a class="addthis_button_preferred_1" addthis:url="https://www.youtube.com/playlist?list=<?php echo $playlistListEntry["snippet"]["playlistId"]; ?>" addthis:title="<?php echo $playlistListEntry["snippet"]["title"]; ?>"></a>
-                        <a class="addthis_button_preferred_2" addthis:url="https://www.youtube.com/playlist?list=<?php echo $playlistListEntry["snippet"]["playlistId"]; ?>" addthis:title="<?php echo $playlistListEntry["snippet"]["title"]; ?>"></a>
-                        <a class="addthis_button_preferred_3" addthis:url="https://www.youtube.com/playlist?list=<?php echo $playlistListEntry["snippet"]["playlistId"]; ?>" addthis:title="<?php echo $playlistListEntry["snippet"]["title"]; ?>"></a>
-                        <a class="addthis_button_preferred_4" addthis:url="https://www.youtube.com/playlist?list=<?php echo $playlistListEntry["snippet"]["playlistId"]; ?>" addthis:title="<?php echo $playlistListEntry["snippet"]["title"]; ?>"></a>
+                        <a class="addthis_button_preferred_1" addthis:url="https://www.youtube.com/playlist?list=<?php echo $playlistListEntry["id"]; ?>" addthis:title="<?php echo $playlistListEntry["snippet"]["title"]; ?>"></a>
+                        <a class="addthis_button_preferred_2" addthis:url="https://www.youtube.com/playlist?list=<?php echo $playlistListEntry["id"]; ?>" addthis:title="<?php echo $playlistListEntry["snippet"]["title"]; ?>"></a>
+                        <a class="addthis_button_preferred_3" addthis:url="https://www.youtube.com/playlist?list=<?php echo $playlistListEntry["id"]; ?>" addthis:title="<?php echo $playlistListEntry["snippet"]["title"]; ?>"></a>
+                        <a class="addthis_button_preferred_4" addthis:url="https://www.youtube.com/playlist?list=<?php echo $playlistListEntry["id"]; ?>" addthis:title="<?php echo $playlistListEntry["snippet"]["title"]; ?>"></a>
                     </div>
                     <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js?domready=1#pubid=/*Your pubid*/"></script>
                     <!-- AddThis Button END -->
                 </td>
                 <td><?php echo $playlistListEntry["snippet"]["description"]; ?></td>
                 <td class="">
-                    <a href="<?php echo base_url(); ?>video/videolist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["snippet"]["playlistId"]; ?>" ><b>Show videos</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/add_video2/<?php echo $user_id; ?>/<?php echo $playlistListEntry["snippet"]["playlistId"]; ?>" ><b>Add video</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/edit_playlist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["snippet"]["playlistId"]; ?>" ><b>Edit playlist</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/delplaylist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["snippet"]["playlistId"]; ?>" ><b>Remove playlist</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/videolist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Show videos</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/add_video2/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Add video</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/edit_playlist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Edit playlist</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/delplaylist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Remove playlist</b></a><br/>
                 </td>
             </tr>
             <?php endforeach; ?>

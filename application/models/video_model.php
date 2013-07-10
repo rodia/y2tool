@@ -588,6 +588,7 @@ class Video_model extends CI_Model {
 						'maxResults' => $rp
 					)
 				);
+				var_dump($playlistItemsResponse);
 				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 					$videos = $youtube->videos->listVideos(
 						$playlistItem['contentDetails']['videoId'],
@@ -1559,13 +1560,13 @@ class Video_model extends CI_Model {
 	 * @param int $user_id
 	 * @return array
 	 */
-    public function get_playlist($user_id) {
+    public function oauth_get_playlist($user_id) {
 		$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
 		$client = $this->get_google_client();
 		$youtube = new Google_YoutubeService($client);
 		$rp = $this->config->item("rp");
-		$playlist = array();
+		$playlists = array();
 
 		if (isset($token)) {
 			$client->setAccessToken($token);
@@ -1581,19 +1582,18 @@ class Video_model extends CI_Model {
 				));
 
 				foreach ($channelsResponse['items'] as $channel) {
-					$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
+					$playlistsResponse = $youtube->playlists->listPlaylists(
 						'id, snippet,contentDetails',
 						array(
-							'channelId' => "UCY7JWf_Jsw_R9dUElYNzBbw",
-							// 'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
+							'channelId' => $channel["id"],
 							'maxResults' => $rp
 						)
 					);
-					foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
-						$playlist[] = $playlistItem;
+					foreach ($playlistsResponse['items'] as $key => $playlist) {
+						$playlists[$key] = $playlist;
 					}
 				}
-				return $playlist;
+				return $playlists;
 			} catch (Google_ServiceException $e) {
 				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));

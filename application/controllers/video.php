@@ -1051,10 +1051,10 @@ class Video extends CI_Controller {
     function playlist($user_id) {
         $profile = $this->user_model->getUserProfile($user_id);
         $channel = $profile['username'];
-        $page['playlistListFeed'] = $this->video_model->get_playlist($user_id);
+        $page['playlistListFeed'] = $this->video_model->oauth_get_playlist($user_id);
         $page['msg'] = "";
         $page['page_name'] = 'playlist';
-        $page['title'] = "Playlist (channel: " . $channel . ")";
+        $page['title'] = "Playlist (channel: {$channel})";
         $page['user_id'] = $user_id;
         $page['channel'] = $channel;
         $this->load->view('admin/index', $page);
