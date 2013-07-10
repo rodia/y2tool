@@ -943,6 +943,7 @@ class Video extends CI_Controller {
 	 * @param string $channel User name of youtube channel.
 	 */
     public function new_playlist($user_id, $channel = "") {
+		$page['msg'] = $this->lang->line('form_msg');
 		if ($this->input->post("submit")) {
 			$page['msg'] = $this->lang->line('form_msg');
 			$rules = $this->config->item('rule_for_title');
@@ -950,14 +951,15 @@ class Video extends CI_Controller {
 
             if ($this->form_validation->run() != FALSE) {
 
-				if ($this->video_model->oauth_insert_playlist($user_id, $channel, array(
+				if (!$this->video_model->oauth_insert_playlist($user_id, $channel, array(
 					"play_title" => $this->input->post('play_title'),
 					"play_description" => $this->input->post('play_description')
 				))) {
-
+					$page['msg'] = "Error when try insert playlist.";
+				} else {
+					redirect("video/playlist/" . $user_id);
+					return;
 				}
-
-				redirect("video/playlist/" . $user_id);
 			}
 		}
 
@@ -965,7 +967,6 @@ class Video extends CI_Controller {
         $page['title'] = "Add Video to Playlist";
         $page['user_id'] = $user_id;
         $page['channel'] = $channel;
-        $page['msg'] = $this->lang->line('form_msg');
         $page['play_title'] = "";
         $page['play_description'] = "";
         $this->load->view('admin/index', $page);
