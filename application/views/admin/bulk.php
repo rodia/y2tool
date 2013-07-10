@@ -712,7 +712,8 @@ jQuery.extend(jQuery.validator.prototype, {
 								<?php endforeach; ?>
 							<?php endif; ?>
 							</table>
-							
+							<a href="#" class="go-back-user">Cancel</a>
+					<input class="form-submit" type="submit" value="Process" name="submit"/>
 		<!-- <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
 			<tr>
 				<th colspan="2" class="table-header-repeat line-left"><a href="#">Input Videos for Share</a></th>
