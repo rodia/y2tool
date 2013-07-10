@@ -157,7 +157,7 @@ $(document).ready(function(){
 
 		set_button(obj, checked);
 //		$(".pre-action").removeAttr("disabled");
-		if($(this).attr("name")!="feature_ids")
+		if($(this).attr("name")!="feature_ids[]")
 		set_username(obj, checked);
 	});
 
