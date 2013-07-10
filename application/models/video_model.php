@@ -607,13 +607,20 @@ class Video_model extends CI_Model {
 		$this->count_videos = count($data);
 		return array_slice($data, $start, $rp);
 	}
-
+	/**
+	 * OAuth
+	 * 
+	 * @param int $user_id
+	 * @param string $playlistId
+	 * @return array
+	 */
 	public function get_playlistDetail($user_id, $playlistId) {
 		$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
 		$client = $this->get_google_client();
 		$youtube = new Google_YoutubeService($client);
 		$rp = $this->config->item("rp");
+		$data = array();
 
 		if (isset($token)) {
 			$client->setAccessToken($token);
@@ -631,7 +638,11 @@ class Video_model extends CI_Model {
 					)
 				);
 				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
-					var_dump($playlistItem);
+					$data["playlistId"] = $playlistItem["snippet"]["playlistId"];
+					$data["title"] = $playlistItem["snippet"]["title"];
+					$data["description"] = $playlistItem["snippet"]["description"];
+					$data["channelId"] = $playlistItem["snippet"]["channelId"];
+					$data["thumbnails"]["url"] = $playlistItem["snippet"]["thumbnails"]["url"];
 				}
 			} catch (Google_ServiceException $e) {
 				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
@@ -641,7 +652,7 @@ class Video_model extends CI_Model {
 				htmlspecialchars($e->getMessage())));
 			}
 		}
-		return array("id" => "", "title" => "");
+		return $data;
 	}
 	/**
 	 *
