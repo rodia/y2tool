@@ -157,6 +157,7 @@ $(document).ready(function(){
 
 		set_button(obj, checked);
 //		$(".pre-action").removeAttr("disabled");
+		if($(this).attr("name")!="feature_ids")
 		set_username(obj, checked);
 	});
 
@@ -704,7 +705,7 @@ jQuery.extend(jQuery.validator.prototype, {
 								?>
 								<?php $hold_username[$row->id] = $row->user_login; ?>
 									<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
-										<td><input type="checkbox" name="ids[]" value="<?php echo $row->id ?>" title="<?php echo $row->id; ?>"></td>
+										<td><input type="checkbox" name="feature_ids[]" value="<?php echo $row->id ?>" title="<?php echo $row->id; ?>"></td>
 										<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
 										<td><?php echo $row->youtube_channels; ?></td>
 									</tr>
