@@ -1799,6 +1799,9 @@ class Video extends CI_Controller {
 			delete_cookie("hold-users");
 			redirect("video/select/" . implode("-", $users));
 			return;
+		} else if ($action == 'featured-channel'){
+			$channel_usrs = $this->input->post("feature_ids");
+			
 		}
 		delete_cookie("hold-users");
 		redirect("video/bulk" . (!empty($msg) ? "?msg=" . $msg : ""));
