@@ -978,7 +978,7 @@ class Video extends CI_Controller {
 	 * @param int $user_id Id user for wordpress system
 	 */
 	public function add_video($user_id, $playlistId) {
-		redirect("video/add_video_playlsit/{$user_id}/{$playlistId}");
+		redirect("video/add_video_playlist/{$user_id}/{$playlistId}");
 	}
 	/**
 	 * Outh
@@ -1007,9 +1007,9 @@ class Video extends CI_Controller {
 		}
         $page['page_name'] = 'add_video';
         $page['msg'] = $this->lang->line('form_msg');
-        $page['videoFeedID'] = $this->input->post('videoFeedID');
-        $page['user_id'] = $this->input->post('user_id');
-        $page['channel'] = $this->input->post('channel');
+        $page['videoFeedID'] = $playlistId;
+        $page['user_id'] = $user_id;
+        $page['channel'] = $this->user_model->get_channel($user_id);
         $page['title'] = "Add Video to Playlist";
         $this->load->view('admin/index', $page);
     }

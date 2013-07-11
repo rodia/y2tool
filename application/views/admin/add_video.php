@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
 ?>
 
 <center>
-	<?php echo form_open("video/add_video/{$user_id}/{$videoFeedID}", array("method" => "post")); ?>
+	<?php echo form_open("video/add_video_playlist/{$user_id}/{$videoFeedID}", array("method" => "post")); ?>
 	<!--video/addvideo-->
         <table border="0" width="800" cellpadding="0" cellspacing="0" id="product-table">
             <tr>
