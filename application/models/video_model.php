@@ -1127,31 +1127,56 @@ class Video_model extends CI_Model {
 			$_SESSION['token'] = $client->getAccessToken();
 
 			try {
-				// insert($part, Google_PlaylistItem $postBody,
-				$postBody = new Google_PlaylistItem();
-				$postBody->setId($playlistId);
-				$snippet = new Google_PlaylistItemSnippet();
-				$resource = new Google_ResourceId();
-				$resource->setPlaylistId($playlistId);
-				$resource->setVideoId($data["videoId"]);
-				$snippet->setResourceId($resource);
-				$postBody->setSnippet($snippet);
+				$channelsResponse = $youtube->channels->listChannels(
+					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+						'mine' => 'true',
+				));
 
-				$video = $youtube->playlistItems->insert(
-					'snippet',
-					$postBody
-				);
+				foreach ($channelsResponse['items'] as $channel) {
+					$video_id = $this->get_id_by_url($data["videoId"]);
+
+					$postBody = new Google_PlaylistItem();
+
+					$resource = new Google_ResourceId();
+					$resource->setVideoId($video_id);
+					// $resource->setChannelId($channel["id"]);
+					// $resource->setPlaylistId($playlistId);
+
+					$snippet = new Google_PlaylistItemSnippet();
+					$snippet->setResourceId($resource);
+					$snippet->setPlaylistId($playlistId);
+					// $snippet->setChannelId($channel["id"]);
+					$postBody->setSnippet($snippet);
+
+					$video = $youtube->playlistItems->insert(
+						'snippet',
+						$postBody
+					);
+				}
+
+
+				var_dump($video);
 
 			} catch (Google_ServiceException $e) {
-				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			} catch (Google_Exception $e) {
-				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			}
 		}
+	}
+	/**
+	 *
+	 * @param string $url it's a url from youtube
+	 * @return string Video Id parsed into url.
+	 */
+	public function get_id_by_url($url) {
+		$my_array_of_vars = array();
+		parse_str(parse_url($url, PHP_URL_QUERY), $my_array_of_vars);
+		return isset($my_array_of_vars['v']) ? $my_array_of_vars['v'] : $url;
 	}
 	/**
      * CHECK VIDEOS
