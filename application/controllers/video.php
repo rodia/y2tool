@@ -851,7 +851,12 @@ class Video extends CI_Controller {
             $this->load->view('admin/index', $page);
         }
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 *
+	 * @param string $video_id
+	 * @param string $channel
+	 */
     function like_video($video_id, $channel) {
         $yt = new Zend_Gdata_YouTube();
 //        $videoEntry = $yt->getVideoEntry($video_id);
@@ -863,7 +868,7 @@ class Video extends CI_Controller {
         $this->load->view('admin/index', $page);
     }
 	/**
-	 * @deprecated since version 1
+	 * @deprecated since version 1.0
 	 *
 	 */
     function newplay() {
@@ -955,7 +960,7 @@ class Video extends CI_Controller {
 					"play_title" => $this->input->post('play_title'),
 					"play_description" => $this->input->post('play_description')
 				))) {
-					$page['msg'] = "Error when try insert playlist.";
+					$page['msg'] = $this->lang->line("error_playlist");
 				} else {
 					redirect("video/playlist/" . $user_id);
 					return;
@@ -964,7 +969,7 @@ class Video extends CI_Controller {
 		}
 
         $page['page_name'] = 'new_playlist';
-        $page['title'] = "Add Video to Playlist";
+        $page['title'] = $this->lang->line("title_new_playlist");
         $page['user_id'] = $user_id;
         $page['channel'] = $channel;
         $page['play_title'] = "";
@@ -998,7 +1003,7 @@ class Video extends CI_Controller {
 				if ( ! $this->video_model->oauth_insert_video_playlist($user_id, $playlistId, array(
 					"videoId" => $this->input->post("video_id")
 				))) {
-					$page['msg'] = "Error when try insert video into playlist.";
+					$page['msg'] = $this->lang->line("error_video_playlist");
 				} else {
 					redirect("video/playlist/" . $user_id);
 					return;
@@ -1010,7 +1015,7 @@ class Video extends CI_Controller {
         $page['videoFeedID'] = $playlistId;
         $page['user_id'] = $user_id;
         $page['channel'] = $this->user_model->get_channel($user_id);
-        $page['title'] = "Add Video to Playlist";
+        $page['title'] = $this->lang->line("title_add_video_playlist");
         $this->load->view('admin/index', $page);
     }
 	/**
@@ -1801,7 +1806,7 @@ class Video extends CI_Controller {
 			return;
 		} else if ($action == 'featured-channel'){
 			$channel_usrs = $this->input->post("feature_ids");
-			
+
 		}
 		delete_cookie("hold-users");
 		redirect("video/bulk" . (!empty($msg) ? "?msg=" . $msg : ""));

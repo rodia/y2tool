@@ -25,4 +25,9 @@ $lang['profile_msg']='You can edit your profile here';
 $lang['update_success']='The user was updated';
 $lang['update_failed']='Could not update your profile';
 $lang['update_error']='an error occured while updating the admin';
-?>
+
+
+$lang["error_playlist"] = "Error when try insert playlist.";
+$lang["error_video_playlist"] = "Error when try insert video into playlist.";
+$lang["title_add_video_playlist"] = "Add Video to Playlist";
+$lang["title_new_playlist"] = "Add Playlist";

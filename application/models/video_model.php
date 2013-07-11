@@ -464,9 +464,9 @@ class Video_model extends CI_Model {
 	}
 	/**
 	 *
-	 * @param type $video_id
-	 * @param type $user_id
-	 * @param type $data
+	 * @param string $video_id Id youtube
+	 * @param int $user_id Id user for wordpress system.
+	 * @param array $data The data of insert
 	 */
 	public function set_history($video_id, $user_id, $data) {
 		$token = $this->user_model->get_user_meta($user_id, 'token', true);
@@ -483,7 +483,7 @@ class Video_model extends CI_Model {
 
 			$channelsResponse = $youtube->channels->listChannels(
 				'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
-					'mine' => 'true',
+				'mine' => 'true',
 			));
 
 			foreach ($channelsResponse["items"] as $channel) {
@@ -532,7 +532,11 @@ class Video_model extends CI_Model {
 			}
 		}
 	}
-
+	/**
+	 *
+	 * @param string $playlist
+	 * @param int $task
+	 */
 	public function set_history_playlist($playlist, $task = 8) {
 
 		$play_id = $this->video_model->insert_playlist(array(
@@ -743,7 +747,7 @@ class Video_model extends CI_Model {
 		return $likes;
 	}
 	/**
-	 *
+	 * @deprecated since version 1.0
 	 * @param string $videoId Id of youtube video
 	 * @return Zend_Gdata_YouTube_VideoEntry Entry of video youtube
 	 */
@@ -1415,6 +1419,8 @@ class Video_model extends CI_Model {
 		return count($subscribers) > 0 ? $subscribers[0]->total_sub : 0;
 	}
 	/**
+	 * OAuth
+	 *
 	 * Set like a videos
 	 *
 	 * @param string $video_id Youtube video id. Can be an url for video.
@@ -1422,52 +1428,56 @@ class Video_model extends CI_Model {
 	 * @return boolean
 	 */
 	public function like($video_id, $user_id) {
-		if (!empty($video_id))
-			$video_id = trim($video_id);
-		if (strlen($video_id) > 11 && strpos($video_id, "=") !== false) {
-			$aux = explode("=", $video_id);
-			$video_id = $aux[1];
+		$video_id = $this->get_id_by_url($video_id);
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
 		}
 
-		$yt = $this->user_model->getHttpClient($user_id);
-		$yt->setMajorProtocolVersion(2);
-		$videoEntryToRate = $yt->getVideoEntry($video_id);
-		$videoEntryToRate->setVideoRating(5);
-		$ratingUrl = $videoEntryToRate->getVideoRatingsLink()->getHref();
-		$profile = $this->user_model->getUserProfile($user_id);
-		$channel = $profile["username"];
-		$title = $profile["title"];
-		try {
-			$yt->insertEntry($videoEntryToRate, $ratingUrl, 'Zend_Gdata_YouTube_VideoEntry');
-			$videoEntry = $yt->getVideoEntry($video_id);
-			$views = $videoEntry->getVideoViewCount();
-			$video_title = $videoEntry->getVideoTitle();
-			$rating = $videoEntry->getVideoRatingInfo();
-			$likes = $rating['numRaters'];
-			$video = $this->video_model->exists_video($video_id);
-			$v_id = $video["id"];
-			if (!$video) {
-				$data = array(
-					"youtube_id" => $video_id,
-					"channel" => '',
-					"title" => $video_title
-				);
-				$v_id = $this->video_model->insert_video($data);
-			}
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
 
-			$dbdata = array(
-				"registered_date" => date("Y-m-d H:i:s"),
-				"admin_id" => $this->session->userdata('user_id'),
-				"video_id" => $v_id,
-				"video_likes" => $likes,
-				"video_views" => $views,
-				"task_id" => 3,
-				"who" => $channel . " ($title)"
-			);
-			$this->video_model->insert_history($dbdata);
-			return TRUE;
-		} catch (Zend_Gdata_App_HttpException $httpException) {
-			error_log($httpException->getRawResponseBody());
+			try {
+				$youtube->videos->rate($video_id, "like");
+
+				$videos = $youtube->videos->listVideos($video_id,
+					"id,snippet,statistics,contentDetails"
+				);
+				var_dump($videos);
+				foreach ($videos["items"] as $video) {
+					$video = $this->video_model->exists_video($video_id);
+					$v_id = $video["id"];
+					if ( ! $video) {
+						$v_id = $this->video_model->insert_video(array(
+							"youtube_id" => $video_id,
+							"channel" => '',
+							"title" => $video["snippet"]["title"]
+						));
+					}
+
+					$dbdata = array(
+						"registered_date" => date("Y-m-d H:i:s"),
+						"admin_id" => $this->session->userdata('user_id'),
+						"video_id" => $v_id,
+						"video_likes" => $video["statistics"]["likeCount"],
+						"video_views" => $video["statistics"]["viewCount"],
+						"task_id" => 3,
+						"who" => $this->user_model->get_channel($user_id) . " ({$video["snippet"]["title"]})"
+					);
+					$this->video_model->insert_history($dbdata);
+				}
+				return TRUE;
+			} catch (Google_ServiceException $e) {
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			}
 		}
 		return FALSE;
     }
