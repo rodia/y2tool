@@ -972,6 +972,15 @@ class Video extends CI_Controller {
         $this->load->view('admin/index', $page);
     }
 	/**
+	 * OAuth
+	 * This function redirect to add_video_playlist controller
+	 *
+	 * @param int $user_id Id user for wordpress system
+	 */
+	public function add_video($user_id, $playlistId) {
+		redirect("video/add_video_playlsit/{$user_id}/{$playlistId}");
+	}
+	/**
 	 * Outh
 	 *
 	 * This function capture the post request for form Add Video.
@@ -979,7 +988,7 @@ class Video extends CI_Controller {
 	 * @param int $user_id ID of user for wordpress system
 	 * @param string $playlistId ID of playlist from Youtube API
 	 */
-	public function add_video($user_id, $playlistId) {
+	public function add_video_playlist($user_id, $playlistId) {
 		if ($this->input->post("submit")) {
 			$page['msg'] = $this->lang->line('form_msg');
 			$rules = $this->config->item('video_id_rule');
@@ -1004,7 +1013,12 @@ class Video extends CI_Controller {
         $page['title'] = "Add Video to Playlist";
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 *
+	 * @param type $user_id
+	 * @param type $playlistId
+	 */
     function add_video2($user_id, $playlistId) {
         $yt = $this->user_model->getHttpClient($user_id);
         $profile = $this->user_model->getUserProfile($user_id);

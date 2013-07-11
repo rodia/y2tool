@@ -45,7 +45,7 @@ if (!defined('BASEPATH'))
                 <td><?php echo $playlistListEntry["snippet"]["description"]; ?></td>
                 <td class="">
                     <a href="<?php echo base_url(); ?>video/videolist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Show videos</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/add_video2/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Add video</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/add_video_playlist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Add video</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/edit_playlist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Edit playlist</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/delplaylist/<?php echo $user_id; ?>/<?php echo $playlistListEntry["id"]; ?>" ><b>Remove playlist</b></a><br/>
                 </td>
