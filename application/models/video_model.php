@@ -1131,36 +1131,24 @@ class Video_model extends CI_Model {
 			$_SESSION['token'] = $client->getAccessToken();
 
 			try {
-				$channelsResponse = $youtube->channels->listChannels(
-					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
-						'mine' => 'true',
-				));
+				$video_id = $this->get_id_by_url($data["videoId"]);
 
-				foreach ($channelsResponse['items'] as $channel) {
-					$video_id = $this->get_id_by_url($data["videoId"]);
+				$postBody = new Google_PlaylistItem();
 
-					$postBody = new Google_PlaylistItem();
+				$resource = new Google_ResourceId();
+				$resource->setVideoId($video_id);
+				$resource->setKind("youtube#video");
 
-					$resource = new Google_ResourceId();
-					$resource->setVideoId($video_id);
-					// $resource->setChannelId($channel["id"]);
-					// $resource->setPlaylistId($playlistId);
+				$snippet = new Google_PlaylistItemSnippet();
+				$snippet->setResourceId($resource);
+				$snippet->setPlaylistId($playlistId);
+				$postBody->setSnippet($snippet);
 
-					$snippet = new Google_PlaylistItemSnippet();
-					$snippet->setResourceId($resource);
-					$snippet->setPlaylistId($playlistId);
-					// $snippet->setChannelId($channel["id"]);
-					$postBody->setSnippet($snippet);
-
-					$video = $youtube->playlistItems->insert(
-						'snippet',
-						$postBody
-					);
-				}
-
-
-				var_dump($video);
-
+				$video = $youtube->playlistItems->insert(
+					'snippet',
+					$postBody
+				);
+				return TRUE;
 			} catch (Google_ServiceException $e) {
 				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
@@ -1171,6 +1159,7 @@ class Video_model extends CI_Model {
 				return FALSE;
 			}
 		}
+		return FALSE;
 	}
 	/**
 	 *
