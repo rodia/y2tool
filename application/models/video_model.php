@@ -1447,7 +1447,7 @@ class Video_model extends CI_Model {
 				$videos = $youtube->videos->listVideos($video_id,
 					"id,snippet,statistics,contentDetails"
 				);
-				var_dump($videos);
+
 				foreach ($videos["items"] as $video) {
 					$video = $this->video_model->exists_video($video_id);
 					$v_id = $video["id"];
