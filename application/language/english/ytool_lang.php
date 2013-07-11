@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$lang['form_msg']='Fill this form. Fields marked in <font color="red">*</font> are mandatory';
+$lang['form_msg']='Fill this form. Fields marked in <span style="color: red;">*</span> are mandatory';
 $lang['form_error']='An error occured while submitting your data. Please check again.';
 $lang['form_success']='New account has been created';
 $lang['form_comm_success']='New comment has been send';

@@ -88,7 +88,7 @@ class User_model extends CI_Model {
     }
 
 	/**
-	 * @deprecated since version 1
+	 * @deprecated since version 1.0
 	 *
 	 * @param int $user_id The user in database that contain the token id of youtube
 	 * @return Zend_Gdata_YouTube

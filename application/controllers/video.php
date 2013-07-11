@@ -971,9 +971,31 @@ class Video extends CI_Controller {
         $page['play_description'] = "";
         $this->load->view('admin/index', $page);
     }
+	/**
+	 * Outh
+	 *
+	 * This function capture the post request for form Add Video.
+	 *
+	 * @param int $user_id ID of user for wordpress system
+	 * @param string $playlistId ID of playlist from Youtube API
+	 */
+	public function add_video($user_id, $playlistId) {
+		if ($this->input->post("submit")) {
+			$page['msg'] = $this->lang->line('form_msg');
+			$rules = $this->config->item('video_id_rule');
+			$this->form_validation->set_rules($rules);
 
-    function add_video() {
-        $yt = $this->user_model->getHttpClient($this->input->post('user_id'));
+            if ($this->form_validation->run() != FALSE) {
+				if ( ! $this->video_model->oauth_insert_video_playlist($user_id, $playlistId, array(
+					"videoId" => $this->input->post("video_id")
+				))) {
+					$page['msg'] = "Error when try insert video into playlist.";
+				} else {
+					redirect("video/playlist/" . $user_id);
+					return;
+				}
+			}
+		}
         $page['page_name'] = 'add_video';
         $page['msg'] = $this->lang->line('form_msg');
         $page['videoFeedID'] = $this->input->post('videoFeedID');
@@ -994,7 +1016,9 @@ class Video extends CI_Controller {
         $page['title'] = "Add Video to Playlist";
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function addvideo() {
         $videoFeedID = $this->input->post("videoFeedID");
         $user_id = $this->input->post("user_id");

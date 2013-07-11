@@ -28,7 +28,7 @@ if (!defined('BASEPATH'))
     <table>
         <tr>
             <td valign="top">
-				<?php echo form_open("video/add_video", array("method" => "post", "name" => "form1", "id" => "form1")); ?>
+				<?php echo form_open("video/add_video/{$user_id}/{$videoFeedID}", array("method" => "post", "name" => "form1", "id" => "form1")); ?>
 				<?php echo form_hidden("channel", $channel); ?>
 				<?php echo form_hidden("user_id", $user_id); ?>
 				<?php echo form_hidden("videoFeedID", $videoFeedID); ?>

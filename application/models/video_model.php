@@ -376,9 +376,9 @@ class Video_model extends CI_Model {
 	}
 	/**
 	 *
-	 * @param type $video_id
-	 * @param type $user_id
-	 * @param type $data
+	 * @param string $video_id Youtube ID
+	 * @param int $user_id ID for wordpress system
+	 * @param array $data
 	 */
 	public function edit_video($video_id, $user_id, $data) {
 		$token = $this->user_model->get_user_meta($user_id, 'token', true);
@@ -1107,7 +1107,52 @@ class Video_model extends CI_Model {
 		}
 		return TRUE;
 	}
+	/**
+	 *
+	 * @param int $user_id
+	 * @param string $playlistId
+	 * @param array $data
+	 */
+	public function oauth_insert_video_playlist($user_id, $playlistId, $data) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+				// insert($part, Google_PlaylistItem $postBody,
+				$postBody = new Google_PlaylistItem();
+				$postBody->setId($playlistId);
+				$snippet = new Google_PlaylistItemSnippet();
+				$resource = new Google_ResourceId();
+				$resource->setPlaylistId($playlistId);
+				$resource->setVideoId($data["videoId"]);
+				$snippet->setResourceId($resource);
+				$postBody->setSnippet($snippet);
+
+				$video = $youtube->playlistItems->insert(
+					'snippet',
+					$postBody
+				);
+
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			}
+		}
+	}
 	/**
      * CHECK VIDEOS
 	 *
