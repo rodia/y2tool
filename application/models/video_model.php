@@ -648,15 +648,15 @@ class Video_model extends CI_Model {
 
 			try {
 				$playlistsResponse = $youtube->playlists->listPlaylists(
-					'id, snippet,contentDetails',
+					'id,snippet,contentDetails',
 					array(
 						'id' => $playlistId,
 						'maxResults' => $rp
 					)
 				);
-				var_dump($playlistsResponse);
+
 				foreach ($playlistsResponse['items'] as $key => $playlistItem) {
-					$data["playlistId"] = $playlistItem["snippet"]["playlistId"];
+					$data["playlistId"] = $playlistId;
 					$data["title"] = $playlistItem["snippet"]["title"];
 					$data["description"] = $playlistItem["snippet"]["description"];
 					$data["channelId"] = $playlistItem["snippet"]["channelId"];
