@@ -1562,6 +1562,55 @@ class Video_model extends CI_Model {
 		return FALSE;
 	}
 	/**
+	 * Set favorite videos
+	 *
+	 * @param string $user_channel User Youtube ID of channel
+	 * @param int $user_id User ID with enable auth
+	 * @return boolean
+	 */
+	public function featured_channel($user_channel,$user_id){
+
+		/*$token = $this->user_model->get_user_meta($user_id, 'token', true);
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}	
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+		
+			try {
+				$video_id = $this->get_id_by_url($data["videoId"]);
+		
+				$postBody = new Google_PlaylistItem();
+		
+				$resource = new Google_ResourceId();
+				$resource->setVideoId($video_id);
+				$resource->setKind("youtube#video");
+		
+				$snippet = new Google_PlaylistItemSnippet();
+				$snippet->setResourceId($resource);
+				$snippet->setPlaylistId($playlistId);
+				$postBody->setSnippet($snippet);
+		
+				$video = $youtube->playlistItems->insert(
+						'snippet',
+						$postBody
+				);
+				return TRUE;
+			} catch (Google_ServiceException $e) {
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+						htmlspecialchars($e->getMessage())));
+				return FALSE;
+			} catch (Google_Exception $e) {
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+						htmlspecialchars($e->getMessage())));
+				return FALSE;
+			}
+		}
+		return FALSE;*/
+	}
+	/**
 	 *
 	 * @param string $video_id Youtube video ID
 	 * @param string $message Message for sharing
