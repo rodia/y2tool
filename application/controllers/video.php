@@ -458,10 +458,10 @@ class Video extends CI_Controller {
 	 * @param string $videoId
 	 */
     function delvideo($user_id, $videoFeedID, $videoId) {
-		$this->video_model->oauth_delete_video_playlist($user_id, $videoFeedID, array(
-			"video_id" => $videoId
-		));
-		redirect("video/videolist/{$user_id}/{$videoFeedID}?success=del");
+		redirect("video/videolist/{$user_id}/{$videoFeedID}?success=" .
+			($this->video_model->oauth_delete_video_playlist($user_id, $videoFeedID, array(
+				"video_id" => $videoId
+		)) ? "true" : "false"));
     }
 
     function edit_playlist($user_id, $playlistId) {

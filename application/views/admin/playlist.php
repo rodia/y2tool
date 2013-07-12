@@ -2,6 +2,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	$title
+)); ?>
 <center>
 	<?php if (isset($success) && $success === TRUE) : ?>
 	<div class="success">

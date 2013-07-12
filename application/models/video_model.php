@@ -1185,16 +1185,16 @@ class Video_model extends CI_Model {
 					$data["video_id"]
 				);
 
+				return TRUE;
 			} catch (Google_ServiceException $e) {
-				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
-				return FALSE;
 			} catch (Google_Exception $e) {
-				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
-				return FALSE;
 			}
 		}
+		return FALSE;
 	}
 	/**
 	 *

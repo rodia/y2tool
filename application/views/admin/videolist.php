@@ -33,6 +33,10 @@ if (!defined('BASEPATH'))
 	<div class="success">
 		<p>The video(s) has been deleted with success.</p>
 	</div>
+	<?php elseif (isset($success) && $success == "false") : ?>
+	<div class="error">
+		<p>The video(s) not was removed. Service Google </p>
+	</div>
 	<?php endif; ?>
     <table>
         <tr>

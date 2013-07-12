@@ -2,13 +2,19 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
-<div id="related-link">
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	"video/videos/{$user_id}" => "Videos",
+	$title
+)); ?>
+<!--<div id="related-link">
 	<ul>
 		<li><a href="<?php echo base_url(); ?>admin/users">Dashboard</a></li>
 		<li><a href="<?php echo base_url(); ?>video/videos/<?php echo $user_id; ?>">Videos</a></li>
 		<li>Edit Video</li>
 	</ul>
-</div>
+</div>-->
 <center>
 	<?php echo form_open("video/" . implode( "/", array($post_form, $video_id, $user_id)), array("enctype" => "multipart/form-data", "method" => "post")); ?>
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
