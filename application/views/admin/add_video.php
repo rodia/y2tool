@@ -15,7 +15,7 @@ if (!defined('BASEPATH'))
 			var inputsDiv = $('#' + select_action);
 			var i = $('#' + select_action + ' p').size() + 1;
 			var name_field = select_action.replace("_inputs", "");
-			$('<p><label for="video_id"><span>Video ID ' + i + ' * </span><input type="text" class="inp-form" size="50" name="' + name_field + '_ids[]" id="video_ids_' + i + '" value="" placeholder="Enter youtube video id" /></label> <span><a href="#" class="remInput" rel="' + select_action + '" style="color:#0093F0">Remove</a></span></p>').appendTo(inputsDiv);
+			$('<p><label for="video_id"><span>Video ID ' + i + ' * </span><input type="text" class="inp-form" size="60" name="' + name_field + '_ids[]" id="video_ids_' + i + '" value="" placeholder="Enter youtube video id" /></label> <span><a href="#" class="remInput" rel="' + select_action + '" style="color:#0093F0">Remove</a></span></p>').appendTo(inputsDiv);
 			$(inputsDiv).attr("title", i);
 			return false;
 		});
@@ -43,20 +43,21 @@ if (!defined('BASEPATH'))
             </tr>
             <tr>
                 <td>
-                    <h2>Youtube video id:</h2>
+                    <h2>Youtube video ids:<br/> <span class="sized">(It's can an url the video)</span></h2>
                 </td>
                 <td>
-					<div id="like_inputs" title="1">
-						<p><?php echo form_input(array("name" => "video_id", "placeholder" => "Enter youtube video id", "class" => "inp-form", "size" => 60)); ?>
+					<div id="video" title="1">
+						<p>Video ID 1 * <?php echo form_input(array("name" => "video_ids[]", "placeholder" => "Enter youtube video id", "class" => "inp-form", "size" => 60)); ?>
 						<span><?php echo form_error('video_id'); ?></span><br/>
 						<span class="url-demo">e.g. http://www.youtube.com/watch?v=</span><b><i>HcTrHo4dk4Q</i></b>
 						</p>
 					</div>
-					<h2><a href="#" class="addInput" rel="like_inputs" style="color:#0093F0">Add another input box</a></h2>
+					<h2><a href="#" class="addInput" rel="video" style="color:#0093F0">Add another input box</a></h2>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
+					<a href="/video/videolist/<?php echo $user_id; ?>/<?php echo $videoFeedID; ?>" class="go-back-user">Cancel</a>
 					<?php echo form_hidden("type", "youtube"); ?>
 					<?php echo form_hidden("videoFeedID", $videoFeedID); ?>
 					<?php echo form_hidden("user_id", $user_id); ?>

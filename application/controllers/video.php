@@ -1000,14 +1000,14 @@ class Video extends CI_Controller {
 			$this->form_validation->set_rules($rules);
 
             if ($this->form_validation->run() != FALSE) {
-				if ( ! $this->video_model->oauth_insert_video_playlist($user_id, $playlistId, array(
-					"videoId" => $this->input->post("video_id")
-				))) {
-					$page['msg'] = $this->lang->line("error_video_playlist");
-				} else {
-					redirect("video/playlist/" . $user_id);
-					return;
+				$video_ids = $this->input->post("video_ids");
+				foreach ($video_ids as $video_id) {
+					$this->video_model->oauth_insert_video_playlist($user_id, $playlistId, array(
+						"videoId" => $video_id
+					));
 				}
+				redirect("video/playlist/" . $user_id);
+				return;
 			}
 		}
         $page['page_name'] = 'add_video';

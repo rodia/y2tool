@@ -55,11 +55,11 @@ $config['register_rules'] = array(
         'field' => 'email',
         'label' => 'Email',
         'rules' => 'trim|required|is_unique[yt_admin_user.email]|xss_clean'//valid_email
-    )    
-    
+    )
+
 );
 $config['edit_rules'] = array(
-    
+
     array(
         'field' => 'password',
         'label' => 'Password',
@@ -77,17 +77,17 @@ $config['edit_rules'] = array(
     ),
     array(
         'field' => 'email',
-        'label' => 'Email',        
+        'label' => 'Email',
         'rules' => 'trim|required|xss_clean|callback_check_unique_pass'//valid_email
-    )    
-    
+    )
+
 );
 $config['video_id_rule'] = array(
     array(
-        'field' => 'video_id',
+        'field' => 'video_ids',
         'label' => 'Video ID',
         'rules' => 'trim|required|min_length[11]|max_length[60]|xss_clean'
-    )       
+    )
 );
 $config['video_id_and_comment'] = array(
     array(
@@ -101,7 +101,7 @@ $config['video_id_and_comment'] = array(
         'rules' => 'trim|required'
     )
 );
-$config['message_rule'] = array(    
+$config['message_rule'] = array(
     array(
         'field' => 'message',
         'label' => 'Message',
@@ -147,7 +147,7 @@ $config['rule_for_title'] = array(
         'field' => 'play_title',
         'label' => 'Title',
         'rules' => 'trim|required'
-    )        
+    )
 );
 
 /*
@@ -377,7 +377,7 @@ $config['countrys_list'] = array(
     "Cocos (Keeling) Islands" => "Cocos (Keeling) Islands",
     "Colombia" => "Colombia",
     "Comoros" => "Comoros",
-    "Congo" => "Congo",    
+    "Congo" => "Congo",
     "Cook Islands" => "Cook Islands",
     "Costa Rica" => "Costa Rica",
     "Cote D'Ivoire" => "Cote D'Ivoire",
