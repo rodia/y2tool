@@ -46,3 +46,16 @@ function get_link_relates(array $links) {
 </div>
 <?php
 }
+/**
+ *
+ * @param array $users List of user admin from the database.
+ * @return array
+ */
+function get_user_dropbox($users) {
+	$users_options = array();
+	foreach ($users as $row) {
+		$users_options[$row->id] = $row->lastname . " " . $row->firstname;
+	}
+
+	return $users_options;
+}

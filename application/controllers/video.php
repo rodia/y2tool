@@ -1472,7 +1472,6 @@ class Video extends CI_Controller {
 	}
 
 	public function videos($user_id, $category = "all") {
-
 		$this->load->library('pagination');
 
 		$opcions = array();
@@ -1493,6 +1492,11 @@ class Video extends CI_Controller {
         $page['title'] = "Report Videos (Channel: $channel)";
         $page['channel'] = $channel;
         $page['owner'] = $user_id;
+		$page['selected'] = ($this->input->post('user_id')) ? $this->input->post('user_id') : '';
+		$page['tasks_options'] = array(
+			"liking_videos" => "Liking videos"
+		);
+		$page['selected2'] = ($this->input->post('video_opt')) ? $this->input->post('video_opt') : '';
 		$page["video_model"] = $this->video_model;
         $this->load->view('admin/index', $page);
 	}

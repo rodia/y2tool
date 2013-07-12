@@ -30,33 +30,19 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
-    <?php
-    $attributes = array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm');
-    echo form_open('video/videoActions', $attributes);
-    ?>
+    <?php echo form_open('video/videoActions', array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm')); ?>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 
         <tr>
 
-            <th class="table-header-repeat line-left minwidth-1"><a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $channel; ?>"><b>Report Current Channel</b></a></th>
-            <th class="table-header-repeat line-left" width="300"><?php
-        echo "<a>Bulk Actions:</a>";
-        $users_options = array();
-        foreach ($users as $row) {
-            $users_options[$row->id] = $row->lastname . " " . $row->firstname;
-        }
-        $selected2 = ($this->input->post('user_id')) ? $this->input->post('user_id') : '';
-        echo form_dropdown('user_id', $users_options, $selected2, 'class="select_style"');
-        ?></th>
+            <th class="table-header-repeat line-left minwidth-1"><a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $owner; ?>"><b>Report Current Channel</b></a></th>
+            <th class="table-header-repeat line-left" width="300">
+				<a>Bulk Actions:</a>
+				<?php $this->load->helper("views_helper"); ?>
+				<?php echo form_dropdown('user_id', get_user_dropbox($users), $selected, 'class="select_style"'); ?></th>
             <th class="table-header-repeat line-left" width="220">
-                <?php
-                $tasks_options = array(
-                    "liking_videos" => "Liking videos",
-                );
-                $selected2 = ($this->input->post('video_opt')) ? $this->input->post('video_opt') : '';
-                echo form_dropdown('video_opt', $tasks_options, $selected2, 'class="select_style"');
-                echo form_submit('mysubmit', 'Process');
-                ?>
+                <?php echo form_dropdown('video_opt', $tasks_options, $selected2, 'class="select_style"'); ?>
+				<?php echo form_submit('mysubmit', 'Process'); ?>
             </th>
         </tr>
     </table>
@@ -98,7 +84,7 @@ if (!defined('BASEPATH'))
                 </td>
                 <td><?php echo $video["view_count"]; ?></td>
                 <td class="">
-                    <a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $channel; ?>?video_id=<?php echo $video["video_id"]; ?>" ><b>Report</b></a><br/>
+                    <a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $owner; ?>?video_id=<?php echo $video["video_id"]; ?>" ><b>Report</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/edit_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" ><b>Edit video</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/share/<?php echo $video["video_id"]; ?>" ><b>Share</b></a><br/>
                 </td>

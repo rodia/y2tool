@@ -798,7 +798,7 @@ class Video_model extends CI_Model {
 		return array_unique($for_select);
 	}
 	/**
-	 *
+	 * @deprecated since version 1.0
 	 * @param string $user
 	 * @return Zend_Gdata_YouTube_UserProfileEntry
 	 */
@@ -816,7 +816,7 @@ class Video_model extends CI_Model {
 		return $userProfile;
 	}
 	/**
-	 *
+	 * @deprecated since version 1.0
 	 * @param array|string $category
 	 * @return Zend_Gdata_YouTube_VideoFeed
 	 */
@@ -920,18 +920,60 @@ class Video_model extends CI_Model {
 		}
 		echo "\n";
 	}
+	/**
+	 * OAuth
+	 *
+	 * @param int $user_id
+	 * @return array
+	 */
+	public function get_subscriptors($user_id) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
-	public function get_subscriptors($username) {
-		$yt = new Zend_Gdata_YouTube();
-        $yt->setMajorProtocolVersion(2);
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+		$rp = $this->config->item("rp");
+		$current_tags = array();
+		$categories = array();
+		$current_category = "";
 
-		$userProfile = $yt->getUserProfile($username);
-        // to retrieve the currently authenticated user's profile
-        $profile = array();
-        $profile["title"] = $userProfile->title->text;
-        $profile["username"] = $userProfile->username->text;
-        $profile["subs"] = $userProfile->getFeedLink('http://gdata.youtube.com/schemas/2007#user.subscriptions')->countHint;
-        return $profile;
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+				$channelsResponse = $youtube->channels->listChannels(
+					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+						'mine' => 'true',
+				));
+
+				var_dump($channelsResponse);
+
+				foreach ($channelsResponse["items"] as $channel) {
+					$activities = $youtube->activities->list(
+						"id,snippet",
+						$channel["id"]
+					);
+
+					var_dump($activities);
+				}
+
+				$profile = array();
+				$profile["title"] = "";
+				$profile["username"] = "";
+				$profile["subs"] = 0;
+				return $profile;
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			}
+		}
+		return array("subs" => 0);
 	}
 
 	/**

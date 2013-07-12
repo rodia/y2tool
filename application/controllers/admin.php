@@ -287,15 +287,17 @@ class Admin extends CI_Controller {
 	 *
 	 * This function get a report of channel selected.
 	 *
+	 * @param int $user_id
 	 * @param string $channel
 	 */
-	public function channel_report($channel) {
+	public function channel_report($user_id = "") {
 		$page["current_admin_name"] = $admin_name = $this->input->get('admin_name') ? $this->input->get('admin_name') : '';
 		$page["current_video_id"] = $video_id = $this->input->get('video_id') ? $this->input->get('video_id') : '';
 		$page["current_action_taken"] = $action_taken = $this->input->get('action_taken') ? $this->input->get('action_taken') : '';
 
-		$subscriptors = $this->video_model->get_subscriptors($channel);
+		$subscriptors = $this->video_model->get_subscriptors($user_id);
 		$total_sub = $subscriptors["subs"];
+		$channel = $this->user_model->get_channel($user_id);
 		$page['page_name'] = 'channel_logs';
         $page['title'] = "Reports for: {$channel} | Current Number of Subscribers: {$total_sub}";
 
