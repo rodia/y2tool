@@ -1186,11 +1186,11 @@ class Video_model extends CI_Model {
 				);
 
 			} catch (Google_ServiceException $e) {
-				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			} catch (Google_Exception $e) {
-				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			}
@@ -1610,24 +1610,24 @@ class Video_model extends CI_Model {
 		$youtube = new Google_YoutubeService($client);
 		if (isset($token)) {
 			$client->setAccessToken($token);
-		}	
+		}
 		if ($client->getAccessToken()) {
 			$_SESSION['token'] = $client->getAccessToken();
-		
+
 			try {
 				$video_id = $this->get_id_by_url($data["videoId"]);
-		
+
 				$postBody = new Google_PlaylistItem();
-		
+
 				$resource = new Google_ResourceId();
 				$resource->setVideoId($video_id);
 				$resource->setKind("youtube#video");
-		
+
 				$snippet = new Google_PlaylistItemSnippet();
 				$snippet->setResourceId($resource);
 				$snippet->setPlaylistId($playlistId);
 				$postBody->setSnippet($snippet);
-		
+
 				$video = $youtube->playlistItems->insert(
 						'snippet',
 						$postBody

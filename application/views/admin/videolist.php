@@ -25,7 +25,7 @@ if (!defined('BASEPATH'))
     });
 </script>
 <center>
-	<?php if (isset($success) && is_bool($success)) : ?>
+	<?php if (isset($success) && $success === TRUE) : ?>
 	<div class="success">
 		<p>The video(s) has been added with success.</p>
 	</div>

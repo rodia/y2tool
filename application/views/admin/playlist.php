@@ -3,7 +3,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
 <center>
-	<?php if (isset($success) && $success) : ?>
+	<?php if (isset($success) && $success === TRUE) : ?>
 	<div class="success">
 		<p>The playlist has been added with success.</p>
 	</div>
