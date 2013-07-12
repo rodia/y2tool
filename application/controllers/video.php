@@ -1802,7 +1802,12 @@ class Video extends CI_Controller {
 			redirect("video/select/" . implode("-", $users));
 			return;
 		} else if ($action == 'featured-channel'){
-			$channel_usrs = $this->input->post("feature_ids");
+			$channels_usrs = $this->input->post("featured_ids");
+			foreach ($users as $user) {
+				foreach ($channels_usrs as $channel_usr) {
+					$this->video_model->featured_channel($channel_usr, $user);
+				}
+			}
 
 		}
 		delete_cookie("hold-users");
