@@ -3,9 +3,9 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
 <center>
-	<?php if (isset($success)) : ?>
+	<?php if (isset($success) && $success) : ?>
 	<div class="success">
-		<p>The video(s) has been added with success.</p>
+		<p>The playlist has been added with success.</p>
 	</div>
 	<?php endif; ?>
     <table>

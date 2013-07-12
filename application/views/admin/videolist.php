@@ -25,6 +25,15 @@ if (!defined('BASEPATH'))
     });
 </script>
 <center>
+	<?php if (isset($success) && is_bool($success)) : ?>
+	<div class="success">
+		<p>The video(s) has been added with success.</p>
+	</div>
+	<?php elseif (isset($success) && $success == "del") :?>
+	<div class="success">
+		<p>The video(s) has been deleted with success.</p>
+	</div>
+	<?php endif; ?>
     <table>
         <tr>
             <td valign="top">
@@ -77,7 +86,7 @@ if (!defined('BASEPATH'))
                 <td class="align-left"><?php echo $videoEntry["view_count"]; ?></td>
                 <td>
                     <a href="<?php echo base_url(); ?>video/share/<?php echo $videoEntry["video_id"]; ?>"><b>Share</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/delvideo/<?php echo $user_id; ?>/<?php echo $videoFeedID; ?>/<?php echo $videoEntry["video_id"]; ?>"><b>Remove Video</b></a>
+                    <a href="<?php echo base_url(); ?>video/delvideo/<?php echo $user_id; ?>/<?php echo $videoFeedID; ?>/<?php echo $videoEntry["video_id"]; ?>" onclick="return confirm('Are you sure to remove this video?');"><b>Remove Video</b></a>
                 </td>
             </tr>
 		<?php endforeach; ?>

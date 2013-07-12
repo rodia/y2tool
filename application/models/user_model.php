@@ -531,7 +531,8 @@ class User_model extends CI_Model {
 	 * The meta data user is a html tag a, due to is necessary get content of tag
 	 * and analyce the string for get channel.
 	 *
-	 * @param int $user_id User ID for wordpress system
+	 * @param int $user_id ID for wordpress system
+	 * @return boolean|string The username of user, FALSE otherwise.
 	 */
 	public function get_channel($user_id) {
 		$channel = $this->get_users_channel($user_id);

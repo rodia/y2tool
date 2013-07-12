@@ -395,7 +395,13 @@ class Video extends CI_Controller {
 //        $this->load->view('admin/index', $page);
 		redirect("video/videos/{$owner}");
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 *
+	 * @param string $video_id
+	 * @param int $user_id
+	 * @param int $owner
+	 */
     function like2($video_id, $user_id, $owner) {
         $profile = $this->user_model->getUserProfile($owner);
         $channel = $profile['username'];
@@ -444,32 +450,18 @@ class Video extends CI_Controller {
             echo $httpException->getRawResponseBody();
         }
     }
-
+	/**
+	 * OAuth
+	 *
+	 * @param int $user_id
+	 * @param string $videoFeedID
+	 * @param string $videoId
+	 */
     function delvideo($user_id, $videoFeedID, $videoId) {
-        $feedUrl = "http://gdata.youtube.com/feeds/api/playlists/$videoFeedID";
-        $playlistId = $videoFeedID;
-        $yt = $this->user_model->getHttpClient($user_id);
-        $profile = $this->user_model->getUserProfile($user_id);
-        $channel = $profile['username'];
-//        $yt = new Zend_Gdata_YouTube();
-        $yt->setMajorProtocolVersion(2);
-
-        $playlistVideoFeed = $yt->getPlaylistVideoFeed($feedUrl);
-        foreach ($playlistVideoFeed as $videoEntry) {
-            if ($videoEntry->getVideoId() == $videoId)
-                $videoEntry->delete();
-        }
-
-        $pl_title = $this->getPlaylistTitle($playlistId, $channel, $user_id);
-        $pl_title = str_replace("%20", " ", $pl_title);
-        $page['playlistVideoFeed'] = $yt->getPlaylistVideoFeed($feedUrl);
-        $page['page_name'] = 'videolist';
-        $page['title'] = "Video list ($pl_title)";
-        $page['videoFeedID'] = $playlistId;
-        $page['msg'] = $this->lang->line('form_rm_success');
-        $page['user_id'] = $user_id;
-        $page['channel'] = $channel;
-        $this->load->view('admin/index', $page);
+		$this->video_model->oauth_delete_video_playlist($user_id, $videoFeedID, array(
+			"video_id" => $videoId
+		));
+		redirect("video/videolist/{$user_id}/{$videoFeedID}?success=del");
     }
 
     function edit_playlist($user_id, $playlistId) {
@@ -1118,7 +1110,14 @@ class Video extends CI_Controller {
         $page['channel'] = $channel;
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 *
+	 * @param type $playlistId
+	 * @param type $channel
+	 * @param type $user_id
+	 * @return string
+	 */
     function getPlaylistTitle($playlistId, $channel, $user_id) {
         $yt = $this->user_model->getHttpClient($user_id);
         $yt->setMajorProtocolVersion(2);
