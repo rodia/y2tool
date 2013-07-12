@@ -996,19 +996,14 @@ class Video extends CI_Controller {
 	public function add_video_playlist($user_id, $playlistId) {
 		if ($this->input->post("submit")) {
 			$page['msg'] = $this->lang->line('form_msg');
-			$rules = $this->config->item('video_id_rule');
-			$this->form_validation->set_rules($rules);
-
-            if ($this->form_validation->run() != FALSE) {
-				$video_ids = $this->input->post("video_ids");
-				foreach ($video_ids as $video_id) {
-					$this->video_model->oauth_insert_video_playlist($user_id, $playlistId, array(
-						"videoId" => $video_id
-					));
-				}
-				redirect("video/playlist/" . $user_id);
-				return;
+			$video_ids = $this->input->post("video_ids");
+			foreach ($video_ids as $video_id) {
+				$this->video_model->oauth_insert_video_playlist($user_id, $playlistId, array(
+					"videoId" => $video_id
+				));
 			}
+			redirect("video/videolist/{$user_id}/{$playlistId}?success=true");
+			return;
 		}
         $page['page_name'] = 'add_video';
         $page['msg'] = $this->lang->line('form_msg');
@@ -1109,6 +1104,9 @@ class Video extends CI_Controller {
 	 * @param type $playlistId
 	 */
 	public function videolist($user_id, $playlistId) {
+		if ($this->input->get("success")) {
+			$page["success"] = TRUE;
+		}
         $profile = $this->user_model->getUserProfile($user_id);
         $channel = $profile['username'];
         $page['playlistVideoFeed'] = $this->video_model->get_videos_by_playlist($user_id, $playlistId);

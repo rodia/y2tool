@@ -3,6 +3,11 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
 <center>
+	<?php if (isset($success)) : ?>
+	<div class="success">
+		<p>The video(s) has been added with success.</p>
+	</div>
+	<?php endif; ?>
     <table>
         <tr>
             <td valign="top">
