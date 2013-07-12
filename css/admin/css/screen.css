@@ -1828,6 +1828,13 @@ a.restore:hover img {
 	padding: 0 5px;
 }
 
+#related-link ul li:after {
+	content: " >";
+}
+
+#related-link ul li.last:after {
+	content: "";
+}
 
 /* Filter & search styles */
 .filter-table {

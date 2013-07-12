@@ -24,6 +24,12 @@ if (!defined('BASEPATH'))
         }
     });
 </script>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	"video/playlist/{$user_id}" => "Playlist",
+	$title
+)); ?>
 <center>
 	<?php if (isset($success) && $success === TRUE) : ?>
 	<div class="success">

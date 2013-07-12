@@ -39,7 +39,7 @@ function get_link_relates(array $links) {
 	<?php if ( ! is_numeric($url)) : ?>
 	<li><a href="<?php echo base_url() . $url; ?>"><?php echo $label; ?></a></li>
 	<?php else : ?>
-	<li><?php echo $label; ?></li>
+	<li class="last"><?php echo $label; ?></li>
 	<?php endif; ?>
 	<?php endforeach; ?>
 </ul>

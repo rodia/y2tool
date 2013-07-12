@@ -84,6 +84,13 @@ if (!defined('BASEPATH'))
 
 	});
 </script>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	"video/playlist/{$user_id}" => "Playlist",
+	"video/videolist/{$user_id}/{$videoFeedID}" => "Video list",
+	$title
+)); ?>
 <center>
 	<?php echo form_open("video/add_video_playlist/{$user_id}/{$videoFeedID}", array("method" => "post", 'novalidate' => 'novalidate')); ?>
 	<!--video/addvideo-->

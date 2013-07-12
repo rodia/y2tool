@@ -24,6 +24,11 @@ if (!defined('BASEPATH'))
         }
     });
 </script>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	$title
+)); ?>
 <center>
     <?php
     $attributes = array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm');
