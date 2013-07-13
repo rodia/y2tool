@@ -470,9 +470,11 @@ class Video extends CI_Controller {
 	 * @param string $playlistId
 	 */
     function edit_playlist($user_id, $playlistId) {
+		if ($this->input->get("submit")) {
 
+		}
 
-		$page["playlistListEntry"] = $this->video_model->oauth_get_playlist($user_id, $playlistId);
+		$page["playlistEntry"] = $this->video_model->oauth_get_playlist($user_id, $playlistId);
         $page['page_name'] = 'edit_playlist';
         $page['title'] = "Edit playlist";
         $page['channel'] = $this->user_model->get_channel($user_id);

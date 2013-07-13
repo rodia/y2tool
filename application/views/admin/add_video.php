@@ -92,7 +92,7 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
-	<?php show_messages($success, $msg, $type); ?>
+	<?php if (isset($success)) show_messages($success, $msg, $type); ?>
 	<?php echo form_open("video/add_video_playlist/{$user_id}/{$videoFeedID}", array("method" => "post", 'novalidate' => 'novalidate')); ?>
 	<!--video/addvideo-->
         <table border="0" width="800" cellpadding="0" cellspacing="0" id="product-table">

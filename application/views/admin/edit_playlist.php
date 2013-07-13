@@ -10,7 +10,7 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
-	<?php show_messages($success, $message, $type); ?>
+	<?php if(isset($success)) show_messages($success, $message, $type); ?>
 	<?php echo form_open("video/edit_playlist/{$user_id}/{$videoFeedID}", array("method" => "post")); ?>
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
             <tbody>

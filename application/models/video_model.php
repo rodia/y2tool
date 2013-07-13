@@ -1826,7 +1826,6 @@ class Video_model extends CI_Model {
 				foreach ($playlistsResponse['items'] as $key => $playlist) {
 					$playlists = $playlist;
 				}
-				var_dump($playlists);
 				return $playlists;
 			} catch (Google_ServiceException $e) {
 				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
