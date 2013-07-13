@@ -422,10 +422,10 @@ class Video_model extends CI_Model {
 				}
 
 			} catch (Google_ServiceException $e) {
-				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			} catch (Google_Exception $e) {
-				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			}
 		}
@@ -1853,6 +1853,52 @@ class Video_model extends CI_Model {
 			$videoEntry->setVideoTags($value);
 		} else if ($field == "category") {
 			$videoEntry->setVideoCategory($value);
+		}
+	}
+	/**
+	 *
+	 * @param int $user_id
+	 * @param string $playlistId
+	 * @param array $data
+	 *
+	 * @return boolean True if success operation
+	 */
+	public function saveplaylist($user_id, $playlistId, $data) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+				$content = new Google_Playlist();
+				$content->setId($playlistId);
+
+				$snippet = new Google_PlaylistSnippet();
+				$snippet->setTitle($data["title"]);
+				$snippet->setDescription($data["description"]);
+				$content->setSnippet($snippet);
+
+				$youtube->playlists->update(
+					'snippet,status',
+					$content
+				);
+				return TRUE;
+			} catch (Google_ServiceException $e) {
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			} catch (Google_Exception $e) {
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			}
 		}
 	}
 }

@@ -471,7 +471,18 @@ class Video extends CI_Controller {
 	 */
     function edit_playlist($user_id, $playlistId) {
 		if ($this->input->get("submit")) {
+			$page['msg'] = $this->lang->line('form_msg');
+			$rules = $this->config->item('rule_for_title');
+            $this->form_validation->set_rules($rules);
 
+            if ($this->form_validation->run() == FALSE) {
+				if ($this->video_model->saveplaylist($user_id, $playlistId, array(
+					"title" => $this->input->post("play_title"),
+					"description" => $this->input->post("play_description")
+				))) {
+					redirect("video/videolist/{}/{}?success=true&msg=" . $msg . "&type=success");
+				}
+			}
 		}
 
 		$page["playlistEntry"] = $this->video_model->oauth_get_playlist($user_id, $playlistId);
