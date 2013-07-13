@@ -457,11 +457,14 @@ class Video extends CI_Controller {
 	 * @param string $videoFeedID
 	 * @param string $videoId
 	 */
-    function delvideo($user_id, $videoFeedID, $videoId) {
-		redirect("video/videolist/{$user_id}/{$videoFeedID}?success=" .
-			($this->video_model->oauth_delete_video_playlist($user_id, $videoFeedID, array(
+    public function delvideo($user_id, $videoFeedID, $videoId) {
+		$success = $this->video_model->oauth_delete_video_playlist($user_id, $videoFeedID, array(
 				"video_id" => $videoId
-		)) ? "true" : "false"));
+		));
+		$msg = $success ? "The video(s) was deleted success!" : "The video not was possible deleted";
+		$type = $success ? "success" : "error";
+		redirect("video/videolist/{$user_id}/{$videoFeedID}?success=" .
+			(($success) ? "true" : "false") . "&msg=" . $msg . "&type=" . $type);
     }
 	/**
 	 * OAuth
@@ -581,7 +584,11 @@ class Video extends CI_Controller {
             }
         }
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 * @param type $user_id
+	 * @param type $playlistId
+	 */
     function delplaylist($user_id, $playlistId) {
         $yt = $this->user_model->getHttpClient($user_id);
         $profile = $this->user_model->getUserProfile($user_id);
@@ -1116,6 +1123,8 @@ class Video extends CI_Controller {
 	public function videolist($user_id, $playlistId) {
 		if ($this->input->get("success")) {
 			$page["success"] = TRUE;
+			$page["message"] = $this->input->get("msg");
+			$page["type"] = $this->input->get("type");
 		}
         $profile = $this->user_model->getUserProfile($user_id);
         $channel = $profile['username'];

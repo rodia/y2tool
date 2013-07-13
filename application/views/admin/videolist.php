@@ -31,19 +31,7 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
-	<?php if (isset($success) && $success === TRUE) : ?>
-	<div class="success">
-		<p>The video(s) has been added with success.</p>
-	</div>
-	<?php elseif (isset($success) && $success == "del") :?>
-	<div class="success">
-		<p>The video(s) has been deleted with success.</p>
-	</div>
-	<?php elseif (isset($success) && $success == "false") : ?>
-	<div class="error">
-		<p>The video(s) not was removed. Service Google </p>
-	</div>
-	<?php endif; ?>
+	<?php if (isset($success)) show_messages($success, $msg, $type); ?>
     <table>
         <tr>
             <td valign="top">
