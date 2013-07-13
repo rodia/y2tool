@@ -463,29 +463,27 @@ class Video extends CI_Controller {
 				"video_id" => $videoId
 		)) ? "true" : "false"));
     }
-
+	/**
+	 * OAuth
+	 *
+	 * @param int $user_id
+	 * @param string $playlistId
+	 */
     function edit_playlist($user_id, $playlistId) {
-        $profile = $this->user_model->getUserProfile($user_id);
-        $channel = $profile['username'];
-        $yt = $this->user_model->getHttpClient($user_id);
-        $yt->setMajorProtocolVersion(2);
-        //
-        $playlistListFeed = $yt->getPlaylistListFeed($channel);
 
-        foreach ($playlistListFeed as $playlistListEntry) {
-            if ($playlistListEntry->playlistId == $playlistId) {
-                $page["playlistListEntry"] = $playlistListEntry;
-                break;
-            }
-        }
+
+		$page["playlistListEntry"] = $this->video_model->oauth_get_playlist($user_id, $playlistId);
         $page['page_name'] = 'edit_playlist';
         $page['title'] = "Edit playlist";
-        $page['channel'] = $channel;
+        $page['channel'] = $this->user_model->get_channel($user_id);
         $page['user_id'] = $user_id;
+        $page['videoFeedID'] = $playlistId;
         $page['msg'] = $this->lang->line('form_msg');
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function saveplaylist() {
         $user_id = $this->input->post("user_id");
         $channel = $this->input->post('channel');
@@ -1081,7 +1079,7 @@ class Video extends CI_Controller {
     function playlist($user_id) {
         $profile = $this->user_model->getUserProfile($user_id);
         $channel = $profile['username'];
-        $page['playlistListFeed'] = $this->video_model->oauth_get_playlist($user_id);
+        $page['playlistListFeed'] = $this->video_model->oauth_get_playlists($user_id);
         $page['msg'] = "";
         $page['page_name'] = 'playlist';
         $page['title'] = "Playlist (channel: {$channel})";

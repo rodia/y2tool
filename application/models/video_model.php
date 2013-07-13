@@ -1748,7 +1748,7 @@ class Video_model extends CI_Model {
 	 * @param int $user_id
 	 * @return array
 	 */
-    public function oauth_get_playlist($user_id) {
+    public function oauth_get_playlists($user_id) {
 		$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
 		$client = $this->get_google_client();
@@ -1790,8 +1790,54 @@ class Video_model extends CI_Model {
 				htmlspecialchars($e->getMessage())));
 			}
 		}
-		return $playlist;
+		return $playlists;
     }
+	/**
+	 * OAth
+	 *
+	 * @param type $user_id
+	 * @param string $playlistId
+	 * @return array Playlist for $playlistId selected
+	 */
+	public function oauth_get_playlist($user_id, $playlistId) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+		$rp = $this->config->item("rp");
+		$playlists = array();
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+
+				$playlistsResponse = $youtube->playlists->listPlaylists(
+					'id, snippet,contentDetails',
+					array(
+						'id' => $playlistId,
+						'maxResults' => $rp
+					)
+				);
+				foreach ($playlistsResponse['items'] as $key => $playlist) {
+					$playlists = $playlist;
+				}
+				var_dump($playlists);
+				return $playlists;
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			}
+		}
+		return $playlists;
+	}
 	/**
 	 * Enable the field change of video entry defined
 	 *

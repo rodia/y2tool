@@ -10,11 +10,7 @@ if (!defined('BASEPATH'))
 <center>
 	<?php if (isset($success) && $success === TRUE) : ?>
 	<div class="success">
-		<p>The user(s) has been added with success.</p>
-	</div>
-	<?php elseif (isset($success) && $success == "del") :?>
-	<div class="success">
-		<p>The user(s) has been deleted with success.</p>
+		<p><?php echo $msg; ?></p>
 	</div>
 	<?php elseif (isset($success) && $success == "false") : ?>
 	<div class="error">
