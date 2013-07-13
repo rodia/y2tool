@@ -931,10 +931,6 @@ class Video_model extends CI_Model {
 
 		$client = $this->get_google_client();
 		$youtube = new Google_YoutubeService($client);
-		$rp = $this->config->item("rp");
-		$current_tags = array();
-		$categories = array();
-		$current_category = "";
 
 		if (isset($token)) {
 			$client->setAccessToken($token);
@@ -946,30 +942,22 @@ class Video_model extends CI_Model {
 			try {
 				$channelsResponse = $youtube->channels->listChannels(
 					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
-						'mine' => 'true',
+					'mine' => 'true',
 				));
 
-				var_dump($channelsResponse);
-
+				$profile = array();
 				foreach ($channelsResponse["items"] as $channel) {
-					$activities = $youtube->activities->list(
-						"id,snippet",
-						$channel["id"]
-					);
-
-					var_dump($activities);
+					$profile["title"] = $channel["snippet"]["title"];
+					$profile["username"] = $this->user_model->get_channel($user_id);
+					$profile["subs"] = $channel["statistics"]["subscriberCount"];
 				}
 
-				$profile = array();
-				$profile["title"] = "";
-				$profile["username"] = "";
-				$profile["subs"] = 0;
 				return $profile;
 			} catch (Google_ServiceException $e) {
-				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			} catch (Google_Exception $e) {
-				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			}
 		}

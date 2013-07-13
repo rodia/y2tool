@@ -2,8 +2,25 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
-
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	$title
+)); ?>
 <center>
+	<?php if (isset($success) && $success === TRUE) : ?>
+	<div class="success">
+		<p>The user(s) has been added with success.</p>
+	</div>
+	<?php elseif (isset($success) && $success == "del") :?>
+	<div class="success">
+		<p>The user(s) has been deleted with success.</p>
+	</div>
+	<?php elseif (isset($success) && $success == "false") : ?>
+	<div class="error">
+		<p>The user(s) not was removed.</p>
+	</div>
+	<?php endif; ?>
     <table border="0" width="800" cellpadding="0" cellspacing="0" id="product-table">
         <tr>
             <th class="table-header-repeat line-left"><a href="">#</a></th>
@@ -46,6 +63,4 @@ if (!defined('BASEPATH'))
         }
         ?>
     </table>
-
-
 </center>

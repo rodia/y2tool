@@ -1454,7 +1454,11 @@ class Video extends CI_Controller {
 //        redirect("admin/users");
         redirect("video/bulk");
     }
-
+	/**
+	 * Controller
+	 *
+	 * Search videos by keyword defined.
+	 */
 	public function result() {
 		$videos = array();
 		$q = $this->input->get('q') ? $this->input->get('q') : "";
@@ -1470,7 +1474,14 @@ class Video extends CI_Controller {
 		$page['title'] = "Upload a new video";
 		$this->load->view('admin/index', $page);
 	}
-
+	/**
+	 * Controller
+	 *
+	 * Show videos by user_id selected.
+	 *
+	 * @param int $user_id
+	 * @param int $category
+	 */
 	public function videos($user_id, $category = "all") {
 		$this->load->library('pagination');
 
@@ -1500,46 +1511,6 @@ class Video extends CI_Controller {
 		$page["video_model"] = $this->video_model;
         $this->load->view('admin/index', $page);
 	}
-
-	/**
-	 *
-	 * @param int $user
-	 * @param string $category
-	 */
-//    function videos($user, $category = "all") {
-//		$this->load->library('pagination');
-//
-//		$opcions = array();
-//		$start = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
-//
-//		$opcions['per_page'] = $this->config->item("rp");
-//		$opcions['base_url'] = base_url() . "video/videos/{$user}/{$category}";
-//
-//        // $page['videos'] = $this->video_model->getUserUploads($channel);
-//		// optionally specify version 2 to retrieve a v2 feed
-//
-//        if ($user != "all" && $category == "all") {
-//			$page['videos'] = $this->video_model->all_videos(array($user), NULL, $start);
-//		} else if ($user != "all" && $category != "all") {
-//			$page['videos'] = $this->video_model->all_videos(array($user), $category, $start);
-//		} else if ($user == "all" && $category != "all") {
-//			$page['videos'] = $this->video_model->all_videos(NULL, $category, $start);
-//		} else {
-//			$page['videos'] = $this->video_model->all_videos(NULL, NULL, $start);
-//		}
-//		$opcions['total_rows'] = $this->video_model->get_count_videos();
-//		$opcions['uri_segment'] = 5;
-//		$this->pagination->initialize($opcions);
-//		$page['pagination'] = $this->pagination->create_links();
-//        $page['users'] = $this->user_model->get_all_users();
-//        $page['msg'] = "";
-//        $page['page_name'] = 'videos';
-//        $page['title'] = "Videos (Channel: $channel)";
-//        $page['channel'] = $channel;
-//        $page['owner'] = $user;
-//		$page["video_model"] = $this->video_model;
-//        $this->load->view('admin/index', $page);
-//    }
 
     function comment() {
         $rules = $this->config->item('video_id_and_comment');

@@ -59,3 +59,24 @@ function get_user_dropbox($users) {
 
 	return $users_options;
 }
+/**
+ *
+ * @param mixed $success type or state for message
+ * @param string $msg The message for show
+ */
+function show_messages($success, $msg = "") { ?>
+	<?php if ( ! empty($success) && $success === TRUE) : ?>
+	<div class="success">
+		<p>The video(s) has been added with success.</p>
+	</div>
+	<?php elseif ( ! empty($success) && $success == "del") :?>
+	<div class="success">
+		<p>The video(s) has been deleted with success.</p>
+	</div>
+	<?php elseif ( ! empty($success) && $success == "false") : ?>
+	<div class="error">
+		<p>The video(s) not was removed. Service Google </p>
+	</div>
+	<?php endif; ?>
+<?php
+}

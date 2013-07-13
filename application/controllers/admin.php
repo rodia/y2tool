@@ -147,15 +147,15 @@ class Admin extends CI_Controller {
         $this->load->view('admin/index', $data);
     }
 	/**
-	 *
+	 * Delete on user by database,
 	 * @param int $id
 	 */
 	public function delete($id) {
-		$this->user_model->delete_user($id);
-		$page['users'] = $this->user_model->get_all_admins();
-        $page['page_name'] = 'admins';
-        $page['title'] = "Admins List";
-        $this->load->view('admin/index', $page);
+		redirect("admin/admins?success=true&msg=" . ($this->user_model->delete_user($id) ? "User removed success" : "The user selected not possible remove."));
+//		$page['users'] = $this->user_model->get_all_admins();
+//        $page['page_name'] = 'admins';
+//        $page['title'] = "Admins List";
+//        $this->load->view('admin/index', $page);
 	}
 	/**
 	 * CONTROLLERS
@@ -528,8 +528,17 @@ class Admin extends CI_Controller {
         $page['title'] = "User Management";
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * Controllers
+	 *
+	 * Show all users
+	 */
     function admins() {
+		if ($this->input->get("success")) {
+			$page["success"] = $this->input->get("success");
+			$page["msg"] = $this->input->get("msg");
+			$page["success"] = ($page["success"] == "true") ? TRUE : $page["success"];
+		}
         $page['users'] = $this->user_model->get_all_admins();
         $page['page_name'] = 'admins';
         $page['title'] = "Admins List";
