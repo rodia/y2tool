@@ -23,7 +23,7 @@ class Analytics extends CI_Controller {
     	$search_country = ($country != "" && $country != "all") ? urldecode($country) : "";
     	$search_category = ($category != "" && $category != "all") ? urldecode($category) : "";
     	$search_sex = ($sex != "" && $sex != "all") ? urldecode($sex) : "";
-    	
+    	$start = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
     	$page["users"] = $this->user_model->get_all_users($start, $search_name, $search_youtube, $search_country, $search_category, $search_sex);
     	
     	$temp_users = explode(",", $this->input->cookie("hold-users"));
