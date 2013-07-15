@@ -1,8 +1,17 @@
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#product-table tr").hover(function(){
+	/*$("#product-table tr").hover(function(){
 			$(this).toggle( "highlight" );
-		});
+		},function(){
+			$(this).toggle( "highlight" );
+			});*/
+
+	$('#product-table tr').click(function() {
+        var href = $(this).find("a").attr("href");
+        if(href) {
+            window.location = href;
+        }
+    });
 });
 </script>
 
@@ -17,7 +26,7 @@ $(document).ready(function(){
 		<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 			<tr>
 				
-				
+				<th style="display:none;"></th>
 				<th class="table-header-repeat line-left"><a href="">Username</a></th>
 				<th class="table-header-repeat line-left"><a href="">Youtube Channel</a></th>
 				<!--<th class="table-header-repeat line-left"><a href="">Views</a></th>-->
@@ -31,7 +40,9 @@ $(document).ready(function(){
 				<?php foreach ($users as $key => $row) : ?>
 				<?php $checked = in_array($row->id, $hold_users); ?>
 				<?php $hold_username[$row->id] = $row->user_login; ?>
+				
 					<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
+					<td style="display:none;"><a href="<?php echo base_url(); ?>analytics/<?php echo $row->id; ?>"></a></td>
 						<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
 						<td><?php echo $row->youtube_channels; ?></td>
 						<!--<td><?php  ?></td>-->
