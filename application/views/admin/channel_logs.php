@@ -19,8 +19,13 @@ if (!defined('BASEPATH'))
 
 <script>
 $(function() {
-  $("#start-date").datepicker();
-  $("#end-date").datepicker();
+	var startDate = $("#start-date").datepicker({
+		dateFormat: 'yy-mm-dd'
+	});
+	var endDate = $("#end-date").datepicker({
+		dateFormat: 'yy-mm-dd'
+	});
+
 });
 </script>
 <?php $this->load->helper("views_helper"); ?>
@@ -63,6 +68,13 @@ $(function() {
     </table>
 	<?php echo form_close(); ?>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
+		<tr>
+			<td colspan="10">
+				<h4>Report for last 30 day:</h4>
+				<?php echo form_label("Start date:", "start-date"); ?> <?php echo form_input(array("name" => "start-date", "id" => "start-date"), $startDate); ?>
+				<?php echo form_label("End date", "end-date"); ?> <?php echo form_input(array("name" => "end-date", "id" => "end-date"), $endDate); ?>
+			</td>
+		</tr>
         <tr>
             <th class="table-header-repeat line-left col-date"><a href="">Date</a></th>
             <th class="table-header-repeat line-left col-admin"><a href="">Admin Name</a></th>
@@ -74,19 +86,9 @@ $(function() {
             <th class="table-header-repeat line-left col-subscribers-at"><a href="">No. of subscribers at Action</a></th>
             <th class="table-header-repeat line-left col-subscribers-in"><a href="">No. of Views at Action</a></th>
             <th class="table-header-repeat line-left col-current-view"><a href="">No. Current Views</a></th>
-
         </tr>
-		<tr>
-			<td colspan="10">
-				<?php echo form_label("Start date:", "start-date"); ?> <?php echo form_input(array("name" => "start-date", "id" => "start-date")); ?>
-				<?php echo form_label("End date", "end-date"); ?> <?php echo form_input(array("name" => "end-date", "id" => "end-date")); ?>
-			</td>
-		</tr>
         <?php if ( ! empty($logs)) : ?>
             <?php foreach ($logs as $key => $row) : ?>
-<!--                $c++;
-				$entry = $model->get_video_entry($row->video_id);
-                ?>-->
                 <tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
                     <td><abbr title="<?php echo $row->registered_date; ?>"><?php echo date("d/m/y", strtotime($row->registered_date));?></abbr></td><!-- Date -->
                     <td><?php echo $row->admin; ?></td><!-- Admin Name -->
