@@ -14,7 +14,12 @@ class Analytics extends CI_Controller {
 	 *
 	 * By default, video dashboard is showed to logged in admin
 	 */
-    function index() {
+    function index($name = "all", $youtube = "all", $country = "all", $category = "all", $sex = "all") {
+		$search_name = ($name != "" && $name != "all" ) ? urldecode($name) : "";
+		$search_youtube = ($youtube != "" && $youtube != "all") ? urldecode($youtube) : "";
+		$search_country = ($country != "" && $country != "all") ? urldecode($country) : "";
+		$search_category = ($category != "" && $category != "all") ? urldecode($category) : "";
+		$search_sex = ($sex != "" && $sex != "all") ? urldecode($sex) : "";
     	
     	$this->load->library('pagination');
     	//$this->pagination->initialize($opcions);
