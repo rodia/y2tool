@@ -16,7 +16,7 @@ class Analytics extends CI_Controller {
 	 */
     function index() {
     	$this->load->library('pagination');
-    	$this->pagination->initialize($opcions);
+    	//$this->pagination->initialize($opcions);
     	$page['pagination'] = $this->pagination->create_links();
 		$page['page_name'] = 'list-channels-analytics';
         $page['title'] = "Select Channel Analytics";
