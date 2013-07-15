@@ -16,15 +16,15 @@ $(document).ready(function(){
 	<div class="step-user">
 		<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 			<tr>
-				<th class="table-header-repeat line-left" width="20"><input type="checkbox" id="checkAll"></th>
-				<th class="table-header-repeat line-left"><a href="">Task</a></th>
+				
+				
 				<th class="table-header-repeat line-left"><a href="">Username</a></th>
 				<th class="table-header-repeat line-left"><a href="">Youtube Channel</a></th>
 				<!--<th class="table-header-repeat line-left"><a href="">Views</a></th>-->
 				<th class="table-header-repeat line-left"><a href="">Category</a></th>
 				<th class="table-header-repeat line-left"><a href="">Country</a></th>
 				<th class="table-header-repeat line-left"><a href="">Sex</a></th>
-				<th class="table-header-repeat line-left"><a href="">Bulk Actions</a></th>
+				
 
 			</tr>
 			<?php if (!empty($users)): ?>
