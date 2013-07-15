@@ -1,6 +1,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#product-table tr").toggle( "highlight" );
+	$("#product-table tr").hover(function(){
+			$(this).toggle( "highlight" );
+		});
 });
 </script>
 
