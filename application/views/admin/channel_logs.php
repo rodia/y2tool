@@ -20,10 +20,22 @@ if (!defined('BASEPATH'))
 <script>
 $(function() {
 	var startDate = $("#start-date").datepicker({
-		dateFormat: 'yy-mm-dd'
+		dateFormat: 'yy-mm-dd',
+		defaultDate: "+1w",
+		changeMonth: true,
+		numberOfMonths: 3,
+		onClose: function(selectedDate) {
+			$("#end-date").datepicker("option", "minDate", selectedDate);
+		}
 	});
 	var endDate = $("#end-date").datepicker({
-		dateFormat: 'yy-mm-dd'
+		dateFormat: 'yy-mm-dd',
+		defaultDate: "+1w",
+		changeMonth: true,
+		numberOfMonths: 3,
+		onClose: function(selectedDate) {
+			$("#start-date").datepicker("option", "maxDate", selectedDate);
+		}
 	});
 
 });
@@ -70,9 +82,13 @@ $(function() {
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 		<tr>
 			<td colspan="10">
+				<?php echo form_open("admin/channel_report/{$user_id}"); ?>
 				<h4>Report for last 30 day:</h4>
 				<?php echo form_label("Start date:", "start-date"); ?> <?php echo form_input(array("name" => "start-date", "id" => "start-date"), $startDate); ?>
 				<?php echo form_label("End date", "end-date"); ?> <?php echo form_input(array("name" => "end-date", "id" => "end-date"), $endDate); ?>
+
+				<?php echo form_submit(array("name" => "go", "value" => "Go")); ?>
+				<?php form_close(); ?>
 			</td>
 		</tr>
         <tr>
