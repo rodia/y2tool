@@ -6,6 +6,7 @@ class Analytics extends CI_Controller {
 	
         $this->load->model('user_model');
         $this->load->model('video_model');
+     
     }
 
     /**
@@ -14,7 +15,9 @@ class Analytics extends CI_Controller {
 	 * By default, video dashboard is showed to logged in admin
 	 */
     function index() {
-	
+    	$this->load->library('pagination');
+    	$this->pagination->initialize($opcions);
+    	$page['pagination'] = $this->pagination->create_links();
 		$page['page_name'] = 'list-channels-analytics';
         $page['title'] = "Select Channel Analytics";
         $this->load->view('admin/index', $page);
