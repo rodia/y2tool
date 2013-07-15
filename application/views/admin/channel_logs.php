@@ -17,11 +17,19 @@ if (!defined('BASEPATH'))
 	});
 </script>
 
+<script>
+$(function() {
+  $("#start-date").datepicker();
+  $("#end-date").datepicker();
+});
+</script>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	$title
+)); ?>
 <center>
-	<?php
-    $attributes = array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm', 'method' => 'get');
-    echo form_open('admin/channel_report/' . $channel, $attributes);
-	?>
+	<?php echo form_open('admin/channel_report/' . $user_id, array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm', 'method' => 'get')); ?>
 	<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
         <tr>
             <th class="table-header-repeat line-left minwidth-1"><a><b>Filters</b></a></th>
@@ -68,36 +76,32 @@ if (!defined('BASEPATH'))
             <th class="table-header-repeat line-left col-current-view"><a href="">No. Current Views</a></th>
 
         </tr>
-        <?php
-        $c = 0;
-        if (!empty($logs)) {
-            foreach ($logs as $row) {
-                $c++;
+		<tr>
+			<td colspan="10">
+				<?php echo form_label("Start date:", "start-date"); ?> <?php echo form_input(array("name" => "start-date", "id" => "start-date")); ?>
+				<?php echo form_label("End date", "end-date"); ?> <?php echo form_input(array("name" => "end-date", "id" => "end-date")); ?>
+			</td>
+		</tr>
+        <?php if ( ! empty($logs)) : ?>
+            <?php foreach ($logs as $key => $row) : ?>
+<!--                $c++;
 				$entry = $model->get_video_entry($row->video_id);
-                ?>
-                <tr <?php if ($c % 2) echo "class=\"alternate-row\""; ?>>
+                ?>-->
+                <tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
                     <td><abbr title="<?php echo $row->registered_date; ?>"><?php echo date("d/m/y", strtotime($row->registered_date));?></abbr></td><!-- Date -->
                     <td><?php echo $row->admin; ?></td><!-- Admin Name -->
                     <td><?php echo $row->video_id; ?></td><!-- Video ID -->
                     <td><?php echo $row->description; ?></td><!-- Action Taken -->
-					<td><?php echo $model->print_desc($row->task_id, $row->admin, $row->task, $row->video_id, $row->channel, $row->who); ?></td><!-- Action Description -->
+					<td><?php echo print_desc($row->task_id, $row->admin, $row->task, $row->video_id, $row->channel, $row->who); ?></td><!-- Action Description -->
 					<td class="number"><?php echo $row->likes; ?></td><!-- No. of Likes at Action -->
-                    <td class="number"><?php
-					$rating_info = $entry->getVideoRatingInfo ();
-					echo $rating_info["numRaters"];
-					?></td><!-- Current No. of Likes -->
+                    <td class="number"><?php ?></td><!-- Current No. of Likes -->
                     <td class="number"><?php echo $row->subs; ?></td><!-- No. of subscribers at Action -->
                     <td class="number"><?php echo $row->views; ?></td><!-- No. of Views at Action -->
-                    <td class="number"><?php
-						echo $entry->getVideoViewCount();
-					?></td><!-- No. Current Views -->
+                    <td class="number"><?php ?></td><!-- No. Current Views -->
 
-                    <!-- //print_desc($logs[$j]['task_id'], $logs[$j]['admin'], $logs[$j]['task'], $logs[$j]['video_id'], $logs[$j]['channel'],  $logs[$j]['reviewed_by'])-->
                 </tr>
-                <?php
-            }
-        }
-        ?>
+			<?php endforeach; ?>
+		<?php endif; ?>
     </table>
     <br>
     <br>

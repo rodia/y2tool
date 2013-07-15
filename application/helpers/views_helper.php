@@ -77,3 +77,38 @@ function show_messages($success, $msg = "", $type = "success") { ?>
 	<?php endif; ?>
 <?php
 }
+
+/**
+ *
+ * @param int $opt
+ * @param string $admin
+ * @param string $task
+ * @param string $video_id
+ * @param string $channel
+ * @param string $who
+ * @return string
+ */
+function print_desc($opt, $admin, $task, $video_id, $channel, $who) {
+   switch ($opt) {
+	   case 1: return "$admin did $task on video $video_id in the channel $channel";//edit_video
+		   break;
+	   case 2: return "";//remove_video
+		   break;
+	   case 3: return "$admin did $task on video $video_id in the channel $channel using the channel $who ";//like_video
+		   break;
+	   case 4: return " ";//share_video
+		   break;
+	   case 5: return "$admin did $task on video $video_id in the channel $channel using the channel $who ";//comment_video
+		   break;
+	   case 6: return "$admin did $task ($video_id) in the channel $channel ";//upload video
+		   break;
+	   case 7: return "$admin did $task ($video_id) in the channel $channel ";//new_playlis
+		   break;
+	   case 8: return "$admin did $task ($video_id) in the channel $channel ";//edit_play
+		   break;
+	   case 9: return "$admin did $task ($video_id) in the channel $channel ";//remove_pla
+		   break;
+	   default : return "";
+		   break;
+   }
+}

@@ -291,6 +291,15 @@ class Admin extends CI_Controller {
 	 * @param string $channel
 	 */
 	public function channel_report($user_id = "") {
+
+		$this->load->library('pagination');
+
+		$opcions = array();
+		$start = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+
+		$opcions['per_page'] = $this->config->item("rp");
+		$opcions['base_url'] = base_url() . "admin/channel_report/{$user_id}";
+
 		$page["current_admin_name"] = $admin_name = $this->input->get('admin_name') ? $this->input->get('admin_name') : '';
 		$page["current_video_id"] = $video_id = $this->input->get('video_id') ? $this->input->get('video_id') : '';
 		$page["current_action_taken"] = $action_taken = $this->input->get('action_taken') ? $this->input->get('action_taken') : '';
@@ -302,14 +311,11 @@ class Admin extends CI_Controller {
         $page['title'] = "Reports for: {$channel} | Current Number of Subscribers: {$total_sub}";
 
         $page['logs'] = $this->video_model->get_report_log($channel, $admin_name, $video_id, $action_taken);
-
 		$page["admin_name"] = $this->video_model->get_array_for_select($page["logs"], "admin");
 		$page["video_id"] = $this->video_model->get_array_for_select($page["logs"], "video_id");
 		$page["action_taken"] = $this->video_model->get_array_for_select($page["logs"], "description");
-
-		$page['model'] = $this->video_model;
-
 		$page["channel"] = $channel;
+		$page["user_id"] = $user_id;
 
         $this->load->view('admin/index', $page);
 	}
