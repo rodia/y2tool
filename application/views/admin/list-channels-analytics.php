@@ -41,7 +41,7 @@
 			<?php endif; ?>
 		</table>
 		<div id="pagination">
-			<?php echo $pagination; ?>
+			<?php //echo $pagination; ?>
 		</div>
 	</div>
 		<div id="show-common-videos" class="step-video" style="display: none;">
