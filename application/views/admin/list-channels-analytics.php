@@ -1,10 +1,10 @@
 <script type="text/javascript">
 $(document).ready(function(){
-	/*$("#product-table tr").hover(function(){
-			$(this).toggle( "highlight" );
+	$("#product-table tr").hover(function(){
+			$(this).css( "cursor","pointer");
 		},function(){
-			$(this).toggle( "highlight" );
-			});*/
+			$(this).css( "cursor","default");
+			});
 
 	$('#product-table tr').click(function() {
         var href = $(this).find("a").attr("href");
@@ -21,7 +21,7 @@ $(document).ready(function(){
 		<p><?php echo $this->input->get("msg"); ?></p>
 	</div>
 	<?php endif; ?>
-    
+    <?php if($type=="channels"){?>
 	<div class="step-user">
 		<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 			<tr>
@@ -42,7 +42,7 @@ $(document).ready(function(){
 				<?php $hold_username[$row->id] = $row->user_login; ?>
 				
 					<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
-					<td style="display:none;"><a href="<?php echo base_url(); ?>analytics/<?php echo $row->id; ?>"></a></td>
+					<td style="display:none;"><a href="<?php echo base_url(); ?>analytics/channel/<?php echo $row->id; ?>"></a></td>
 						<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
 						<td><?php echo $row->youtube_channels; ?></td>
 						<!--<td><?php  ?></td>-->
@@ -57,9 +57,12 @@ $(document).ready(function(){
 			<?php //echo $pagination; ?>
 		</div>
 	</div>
-		<div id="show-common-videos" class="step-video" style="display: none;">
+	<?php }else{?>
+	hjkjk
+	<?php }?>
+		<!-- <div id="show-common-videos" class="step-video" style="display: none;">
 		<a href="#" id="get-videos">Show videos of user selected</a>
 		<div id="content-dinamic-show-videos"></div>
-	</div>
+		</div>-->
 	
 </center>
