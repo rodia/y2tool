@@ -15,6 +15,8 @@ class Analytics extends CI_Controller {
 	 */
     function index() {
 	
-		redirect("video/bulk");
+		$page['page_name'] = 'list-channels-analytics';
+        $page['title'] = "Select Channel Analytics";
+        $this->load->view('admin/index', $page);
     }
 }
