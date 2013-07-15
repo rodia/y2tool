@@ -31,7 +31,7 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
-	<?php if (isset($success)) show_messages($success, $msg, $type); ?>
+	<?php if (isset($success)) show_messages($success, $message, $type); ?>
     <table>
         <tr>
             <td valign="top">
