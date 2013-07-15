@@ -53,7 +53,7 @@ if (!defined('BASEPATH'))
                     </ul>
                 <?php } ?>
             </li>
-             <li><a href="<?php echo base_url(); ?>analytics">Analytics</a>
+             <li><a href="<?php echo base_url(); ?>admin/analytics">Analytics</a>
             </li>
             <li><a href="<?php echo base_url(); ?>admin/setting">Setup FB</a>
                 <ul>
