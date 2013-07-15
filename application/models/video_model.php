@@ -1325,10 +1325,15 @@ class Video_model extends CI_Model {
     }
 	/**
 	 *
-	 * @param type $channel
-	 * @return type
+	 * @param string $channel
+	 * @param string $startDate
+	 * @param string $endDate
+	 * @param string $admin
+	 * @param string $video_id
+	 * @param string $action_taken
+	 * @return array
 	 */
-	public function get_report_log($channel, $admin = '', $video_id = '', $action_taken = '') {
+	public function get_report_log($channel, $startDate, $endDate, $admin = '', $video_id = '', $action_taken = '') {
 		$this->db_my_db = $this->load->database('my_db', TRUE);
 		$this->db_my_db->select('*');
         $this->db_my_db->select('v.youtube_id as video_id, v.channel, h.registered_date, h.who, h.video_views as views, h.video_likes as likes, h.channel_subs as subs, a.name as admin, t.title as task');
@@ -1337,6 +1342,8 @@ class Video_model extends CI_Model {
         $this->db_my_db->join('yt_admin_user a', 'a.id = h.admin_id');
         $this->db_my_db->join('yt_task t', 't.id = h.task_id', 't.description');
         $this->db_my_db->where('v.channel', $channel);
+		$this->db_my_db->where('registered_date >=', $startDate);
+		$this->db_my_db->where('registered_date <=', $endDate);
 		if ($admin != '') $this->db_my_db->where("a.name", $admin);
 		if ($video_id != '') $this->db_my_db->where("v.youtube_id", $video_id);
 		if ($action_taken != '') $this->db_my_db->where("t.description", $action_taken);

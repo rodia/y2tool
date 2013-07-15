@@ -310,7 +310,10 @@ class Admin extends CI_Controller {
 		$page['page_name'] = 'channel_logs';
         $page['title'] = "Reports for: {$channel} | Current Number of Subscribers: {$total_sub}";
 
-        $page['logs'] = $this->video_model->get_report_log($channel, $admin_name, $video_id, $action_taken);
+		$page["endDate"] = date("Y-m-d");
+		$page["startDate"] = strtotime ('-30 day', strtotime($page["endDate"]));
+		$page["startDate"] = date ('Y-m-d', $page["startDate"]);
+        $page['logs'] = $this->video_model->get_report_log($channel, $page["startDate"], $page["endDate"], $admin_name, $video_id, $action_taken);
 		$page["admin_name"] = $this->video_model->get_array_for_select($page["logs"], "admin");
 		$page["video_id"] = $this->video_model->get_array_for_select($page["logs"], "video_id");
 		$page["action_taken"] = $this->video_model->get_array_for_select($page["logs"], "description");
