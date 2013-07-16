@@ -33,7 +33,7 @@ class Analytics extends CI_Controller {
     	$this->video_model->get_temp_users_id($page["hold_users"], $page["pair_user_login"], $temp_users);
     	 
     	
-    	$page['pagination'] = $this->pagination->create_links();
+    	//$page['pagination'] = $this->pagination->create_links();
 		$page['page_name'] = 'list-channels-analytics';
         $page['title'] = "Select Channel Analytics";
         $page['type'] = "channels";

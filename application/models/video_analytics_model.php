@@ -25,7 +25,7 @@ class Video_analytics_model extends CI_Model {
 		$current_tags = array();
 		$categories = array();
 		$current_category = "";
-		$return;
+		$return_res;
 		
 		if (isset($token)) {
 			$client->setAccessToken($token);
@@ -46,8 +46,8 @@ class Video_analytics_model extends CI_Model {
 				foreach ($channelsResponse['items'] as $channel) {
 					$channel_id = $channel['id'];
 					
-					$return = $youtube_analytics->reports->query("channel==".$channel_id,"2012-01-01","2013-07-11","views");
-					
+					$return_res = $youtube_analytics->reports->query("channel==".$channel_id,"2012-01-01","2013-07-11","views");
+					return $return_res;
 					/*
 					$current_channel = $channel["snippet"]["title"];
 					$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
@@ -86,7 +86,7 @@ class Video_analytics_model extends CI_Model {
 			}
 		}
 
-		return $return;
+		//return $return;
 	}
 	public function get_google_client() {
 		$client = new Google_Client();
