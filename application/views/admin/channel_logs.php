@@ -43,6 +43,7 @@ $(function() {
 <?php $this->load->helper("views_helper"); ?>
 <?php get_link_relates(array(
 	"video/bulk" => "Dashboard",
+	"/video/videos/{$user_id}" => "Videos",
 	$title
 )); ?>
 <center>
@@ -112,10 +113,10 @@ $(function() {
                     <td><?php echo $row->description; ?></td><!-- Action Taken -->
 					<td><?php echo print_desc($row->task_id, $row->admin, $row->task, $row->video_id, $row->channel, $row->who); ?></td><!-- Action Description -->
 					<td class="number"><?php echo $row->likes; ?></td><!-- No. of Likes at Action -->
-                    <td class="number"><?php ?></td><!-- Current No. of Likes -->
+                    <td class="number"><?php echo print_likes($row->video_id); ?></td><!-- Current No. of Likes -->
                     <td class="number"><?php echo $row->subs; ?></td><!-- No. of subscribers at Action -->
                     <td class="number"><?php echo $row->views; ?></td><!-- No. of Views at Action -->
-                    <td class="number"><?php ?></td><!-- No. Current Views -->
+                    <td class="number"><?php echo print_current_views($row->video_id); ?></td><!-- No. Current Views -->
 
                 </tr>
 			<?php endforeach; ?>

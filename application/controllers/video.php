@@ -1527,7 +1527,7 @@ class Video extends CI_Controller {
         $page['users'] = $this->user_model->get_all_users();
         $page['msg'] = "";
         $page['page_name'] = 'videos';
-        $page['title'] = "Report Videos (Channel: $channel)";
+        $page['title'] = "Videos (Channel: $channel)";
         $page['channel'] = $channel;
         $page['owner'] = $user_id;
 		$page['selected'] = ($this->input->post('user_id')) ? $this->input->post('user_id') : '';
