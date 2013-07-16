@@ -56,7 +56,7 @@ class Analytics extends CI_Controller {
     		//$opcions['uri_segment'] = 5;
     		//$this->pagination->initialize($opcions);
     		$page['report'] = $this->video_analytics_model->query($user_id);
-    		$page['pagination'] = $this->pagination->create_links();
+    		//$page['pagination'] = $this->pagination->create_links();
     		$page['users'] = $this->user_model->get_all_users();
     		$page['msg'] = "";
     		$page['page_name'] = 'list-channels-analytics';
