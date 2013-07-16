@@ -58,7 +58,10 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<?php }else{?>
-	hjkjk
+	
+	<?php var_dump($report);?>
+	
+    
 	<?php }?>
 		<!-- <div id="show-common-videos" class="step-video" style="display: none;">
 		<a href="#" id="get-videos">Show videos of user selected</a>
