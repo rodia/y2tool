@@ -47,7 +47,7 @@ class Video_analytics_model extends CI_Model {
 					$channel_id = $channel['id'];
 					
 					$return_res = $youtube_analytics->reports->query("channel==".$channel_id,"2012-01-01","2013-07-11","views");
-					return $return_res;
+					
 					/*
 					$current_channel = $channel["snippet"]["title"];
 					$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
@@ -78,15 +78,19 @@ class Video_analytics_model extends CI_Model {
 				}
 		
 			} catch (Google_ServiceException $e) {
-				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
-				htmlspecialchars($e->getMessage())));
+				/*error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));*/
+				return sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage()));
 			} catch (Google_Exception $e) {
-				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
-				htmlspecialchars($e->getMessage())));
+				/*error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));*/
+				return sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage()));
 			}
 		}
 
-		//return $return;
+		return $return_res;
 	}
 	public function get_google_client() {
 		$client = new Google_Client();
