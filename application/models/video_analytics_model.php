@@ -88,4 +88,16 @@ class Video_analytics_model extends CI_Model {
 
 		return $return;
 	}
+	public function get_google_client() {
+		$client = new Google_Client();
+		$client->setClientId($this->config->item("OAUTH2_CLIENT_ID"));
+		$client->setClientSecret($this->config->item("OAUTH2_CLIENT_SECRET"));
+		$redirect = filter_var('https://www.buzzmyvideos.com/beta2/signup-oauth',
+				FILTER_SANITIZE_URL);
+		$client->setRedirectUri($redirect);
+		$client->addService('plus.login');
+		$client->addService('plus.me');
+	
+		return $client;
+	}
 }
