@@ -118,13 +118,13 @@ function print_desc($opt, $admin, $task, $video_id, $channel, $who) {
  * @param string $video_id ID Youtube
  * @return int Count of like in the video
  */
-function print_likes($video_id) {
-	$youtube = $this->video_model->get_google_youtubeService();
+function print_likes($video_id, $resource) {
+	$resource->load->model("video_model");
+	$youtube = $resource->video_model->get_google_youtubeService();
 	$videoResponse = $youtube->videos->listVideos(
 		$video_id,
 		'statistics'
 	);
-	var_dump($videoResponse);
 	foreach($videoResponse['items'] as $video)
 	{
 		$video_like = $video['statistics']['likeCount'];
@@ -132,13 +132,13 @@ function print_likes($video_id) {
 	return $video_like;
 }
 
-function print_current_views($video_id) {
-	$youtube = $this->video_model->get_google_youtubeService();
+function print_current_views($video_id, $resource) {
+	$resource->load->model("video_model");
+	$youtube = $resource->video_model->get_google_youtubeService();
 	$videoResponse = $youtube->videos->listVideos(
 		$video_id,
 		'statistics'
 	);
-	var_dump($videoResponse);
 	foreach($videoResponse['items'] as $video)
 	{
 		$video_views = $video['statistics']['viewCount'];
