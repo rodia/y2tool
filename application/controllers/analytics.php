@@ -6,6 +6,7 @@ class Analytics extends CI_Controller {
 	
         $this->load->model('user_model');
         $this->load->model('video_model');
+        $this->load->model('video_analytics_model');
      
     }
 
