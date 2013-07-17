@@ -1232,7 +1232,7 @@ class Video extends CI_Controller {
 			));
 		}
 		$this->load->helper("views_helper");
-		die(json_encode(array("video_id" => $video_id, "user_id" => $user_id, "value" => $value, "field" => $field, "channel" => $channel, "excerpt" => get_excerpt($video["description"]))));
+		die(json_encode(array("video_id" => $video_id, "user_id" => $user_id, "value" => $value, "field" => $field, "channel" => $channel, "excerpt" => get_excerpt($field == "description" ? $value : $video["description"]))));
 	}
 	/**
 	 * CONTROLLERS
