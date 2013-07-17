@@ -107,18 +107,23 @@ class Video_model extends CI_Model {
 				$snippet.setTags($this->input->post("video_tags"));
 				
 				$video_objt->setSnippet($video_snippet);
-				$youtube->videos->insert("snippet,statistics,status",$video_objt,array("data"=>file_get_contents($_FILES['video_file']['tmp_name']),
+				$objt = $youtube->videos->insert("snippet,statistics,status",$video_objt,array("data"=>file_get_contents($_FILES['video_file']['tmp_name']),
 						"mimeType" => $_FILES['video_file']['type']));
 				
 				
 
 			} catch (Google_ServiceException $e) {
-				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
-				htmlspecialchars($e->getMessage())));
+				$log = sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage()));
+				error_log($log);
+				return $log;
 			} catch (Google_Exception $e) {
-				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
-				htmlspecialchars($e->getMessage())));
+				$log = sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage()));
+				error_log($log);
+				return $log;
 			}
+			return $objt;
     	}
     }
 	/**
