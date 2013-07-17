@@ -49,6 +49,12 @@ if (!defined('BASEPATH'))
         }
     });
 </script>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	"/video/videos/{$user}" => "Videos",
+	$title
+)); ?>
 <center>
 	<?php if ($this->input->get("msg")): ?>
 	<div class="forgot-pwd success">
@@ -65,6 +71,7 @@ if (!defined('BASEPATH'))
 					<option value="<?php echo $item->id;?>"<?php echo $item->id == $user ? " selected=\"selected\"" : "";?>><?php echo $item->name;?></option>
 					<?php endforeach;?>
 				</select>
+				<?php echo form_submit("user_id", $user); ?>
 				<?php echo form_submit("filter-user", "Filter"); ?>
 				<?php echo form_close();?>
 			</td>
@@ -72,6 +79,7 @@ if (!defined('BASEPATH'))
 				<?php echo form_open('video/sharing', array('id' => 'select-category', 'name' => 'select-category', 'method' => 'get')); ?>
 				<a><b>Category: </b></a>
 				<?php echo form_dropdown('category_name', $categories, $category, 'id="select-item-category" class="select_style"'); ?>
+				<?php echo form_submit("user_id", $user); ?>
 				<?php echo form_submit("filter-user", "Filter"); ?>
 				<a class="restore" alt="admin_name" title="Click for restore selects"><img src="<?php echo base_url(); ?>css/admin/images/icons/icon_restore.png" width="15" height="15" /></a>
 				<?php echo form_close();?>
@@ -84,10 +92,7 @@ if (!defined('BASEPATH'))
         </tr>
     </table>
 
-    <?php
-    $attributes = array('id' => 'myForm', 'name' => 'myForm');
-    echo form_open('video/s1_sharing', $attributes);
-    ?>
+    <?php echo form_open('video/s1_sharing', array('id' => 'myForm', 'name' => 'myForm')); ?>
     <table class="filter-table">
         <tr>
             <td>Choose a Videos and click in Share
@@ -101,26 +106,21 @@ if (!defined('BASEPATH'))
             <th class="table-header-repeat line-left"><a href="">Title</a></th>
             <th class="table-header-repeat line-left"><a href="">Preview</a></th>
         </tr>
-        <?php
-        $c = 0;
-        if (!empty($videos)) {
-            for ($i = 0; $i < sizeof($videos); $i++) {
-                $c++;
-                ?>
-                <tr<?php echo ($c % 2) ? " class=\"alternate-row\"" : ""; ?>>
-                    <td><input id="ids<?php echo $videos[$i]['video_id']; ?>" type="checkbox" name="ids[]" value="<?php echo $videos[$i]['video_id']; ?>"></td>
-                    <td><label for="ids<?php echo $videos[$i]['video_id']; ?>"><?php echo substr($videos[$i]['title'], 0, 80); ?></label></td>
+        <?php if (!empty($videos)) : ?>
+			<?php foreach ($videos as $key => $video) : ?>
+                <tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
+                    <td><input id="ids<?php echo $video['video_id']; ?>" type="checkbox" name="ids[]" value="<?php echo $video['video_id']; ?>"></td>
+                    <td><label for="ids<?php echo $video['video_id']; ?>"><?php echo substr($video['title'], 0, 80); ?></label></td>
                     <td>
-                        <img src="<?php echo $videos[$i]['thumbnail']; ?>" class="borderPhoto" style="height:33px;width:50px;"  />
+                        <img src="<?php echo $video['thumbnail']; ?>" class="borderPhoto" style="height:33px;width:50px;"  />
                     </td>
                 </tr>
-                <?php
-            }
-        }
-        ?>
+			<?php endforeach; ?>
+        <?php endif; ?>
     </table>
 	<div class="pagination">
 	<?php echo $pagination; ?>
 	</div>
+	<?php echo form_hidden("user_id", $user); ?>
     <?php echo form_close(); ?>
 </center>

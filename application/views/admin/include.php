@@ -7,9 +7,9 @@ if (!defined('BASEPATH'))
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/admin/js/jquery-ui-1.9.2/css/ui-darkness/jquery-ui-1.9.2.custom.min.css" type="text/css" media="screen" title="default" />
 <script type='text/javascript' src='<?php echo base_url(); ?>css/admin/js/jquery-1.8.1.min.js'></script>
 <!--<script type='text/javascript' src='<?php echo base_url(); ?>css/admin/js/jquery/ui.core.js'></script>
-<script type='text/javascript' src='<?php echo base_url(); ?>css/admin/js/jquery.validate.min.js'></script>
 <script type='text/javascript' src='<?php echo base_url(); ?>css/admin/js/autocomplete.jquery.js'></script>
 <script type='text/javascript' src='<?php echo base_url(); ?>css/admin/js/jquery/jquery.datePicker.js'></script>-->
+<script type='text/javascript' src='<?php echo base_url(); ?>css/admin/js/jquery.validate.min.js'></script>
 <script type='text/javascript' src='<?php echo base_url(); ?>css/admin/js/jquery-ui-1.9.2/js/jquery-ui-1.9.2.custom.min.js'></script>
 <?php if (isset($headers)) echo $headers; ?>
 <script type="text/javascript">

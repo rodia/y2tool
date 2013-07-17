@@ -291,9 +291,10 @@ class Admin extends CI_Controller {
 	 * @param string $channel
 	 */
 	public function channel_report($user_id = "") {
+		$subscriptors = $this->video_model->get_subscriptors($user_id);
+		$channel = $this->user_model->get_channel($user_id);
 
 		$this->load->library('pagination');
-
 		$opcions = array();
 		$start = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
 
@@ -303,12 +304,8 @@ class Admin extends CI_Controller {
 		$page["current_admin_name"] = $admin_name = $this->input->get('admin_name') ? $this->input->get('admin_name') : '';
 		$page["current_video_id"] = $video_id = $this->input->get('video_id') ? $this->input->get('video_id') : '';
 		$page["current_action_taken"] = $action_taken = $this->input->get('action_taken') ? $this->input->get('action_taken') : '';
-
-		$subscriptors = $this->video_model->get_subscriptors($user_id);
-		$total_sub = $subscriptors["subs"];
-		$channel = $this->user_model->get_channel($user_id);
 		$page['page_name'] = 'channel_logs';
-        $page['title'] = "Reports for: {$channel} | Current Number of Subscribers: {$total_sub}";
+        $page['title'] = "Reports for: {$channel} | Current Number of Subscribers: {$subscriptors["subs"]}";
 
 		$page["endDate"] = $this->input->post("end-date") ? $this->input->post("end-date") : date("Y-m-d");
 		if ($this->input->post("start-date")) {
@@ -317,7 +314,7 @@ class Admin extends CI_Controller {
 			$page["startDate"] = strtotime ('-30 day', strtotime($page["endDate"]));
 			$page["startDate"] = date ('Y-m-d', $page["startDate"]);
 		}
-        $page['logs'] = $this->video_model->get_report_log($channel, $page["startDate"], $page["endDate"], $admin_name, $video_id, $action_taken);
+        $page['logs'] = $this->video_model->get_report_log($user_id, $page["startDate"], $page["endDate"], $admin_name, $video_id, $action_taken);
 		$page["admin_name"] = $this->video_model->get_array_for_select($page["logs"], "admin");
 		$page["video_id"] = $this->video_model->get_array_for_select($page["logs"], "video_id");
 		$page["action_taken"] = $this->video_model->get_array_for_select($page["logs"], "description");

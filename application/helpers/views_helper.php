@@ -54,7 +54,11 @@ function get_link_relates(array $links) {
 function get_user_dropbox($users) {
 	$users_options = array();
 	foreach ($users as $row) {
-		$users_options[$row->id] = $row->lastname . " " . $row->firstname;
+		if ($row->lastname != "" || $row->firstname != "") {
+			$users_options[$row->id] = $row->lastname . " " . $row->firstname;
+		} else {
+			$users_options[$row->id] = $row->user_login;
+		}
 	}
 
 	return $users_options;

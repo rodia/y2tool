@@ -333,6 +333,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
 				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
+				. ($auth ? " JOIN 54_usermeta m10 ON (m10.user_id = u1.id AND m10.meta_key = 'type_login')" : "")
 				. " WHERE 1"
 				. ($username != "" ? " AND u1.user_login LIKE '%{$username}%'" : "")
 				. ($youtube != "" ? " AND m4.meta_value LIKE '%{$youtube}%'" : "")
@@ -374,6 +375,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
 				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
+				. ($auth ? " JOIN 54_usermeta m10 ON (m10.user_id = u1.id AND m10.meta_key = 'type_login')" : "")
 				. " WHERE 1"
 				. ($username != "" ? " AND u1.user_login LIKE '%{$username}%'" : "")
 				. ($youtube != "" ? " AND m4.meta_value LIKE '%{$youtube}%'" : "")
@@ -405,7 +407,8 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
-				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "");
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
+				. ($auth ? " JOIN 54_usermeta m10 ON (m10.user_id = u1.id AND m10.meta_key = 'type_login')" : "");
 
         $query = $this->db->query($sql);
 
@@ -438,6 +441,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
 				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
+				. ($auth ? " JOIN 54_usermeta m10 ON (m10.user_id = u1.id AND m10.meta_key = 'type_login')" : "")
 				. " WHERE CONCAT(m1.meta_value, ' ', m2.meta_value) LIKE '%{$q}%'"
 				. "
                 ORDER BY u1.id
@@ -516,6 +520,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
 				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
+				. ($auth ? " JOIN 54_usermeta m10 ON (m10.user_id = u1.id AND m10.meta_key = 'type_login')" : "")
 				. ($in_values != "" ? " WHERE u1.id in ({$in_values})" : "")
 				;
         $query_videos = $this->db->query($sql);
@@ -582,7 +587,8 @@ class User_model extends CI_Model {
                 LEFT JOIN 54_usermeta m2 ON (m2.user_id = u1.id AND m2.meta_key = 'last_name')
                 LEFT JOIN 54_usermeta m4 ON (m4.user_id = u1.id AND m4.meta_key = 'youtube_channels')
                 LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')"
-				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "");
+				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
+				. ($auth ? " JOIN 54_usermeta m10 ON (m10.user_id = u1.id AND m10.meta_key = 'type_login')" : "");
         $query_videos = $this->db->query($sql);
         if ($query_videos->num_rows() > 0) {
             return $query_videos->result();
@@ -934,7 +940,7 @@ class User_model extends CI_Model {
 	 * @return array Get categories with youtube id associate.
 	 */
 	public function get_youtube_categories() {
-		return $options = $this->video_model->get_pair_values(
+		return array("" => "-- Select --") + $options = $this->video_model->get_pair_values(
 			$this->video_model->get_all_categories(),
 			'categoryId',
 			'display_category'
@@ -959,6 +965,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
 				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = 'token')" : "")
+				. ($auth ? " JOIN 54_usermeta m10 ON (m10.user_id = u1.id AND m10.meta_key = 'type_login')" : "")
 				. sprintf(" WHERE m1.user_id = %d", $user_id)
 				;
 
@@ -987,6 +994,7 @@ class User_model extends CI_Model {
 				LEFT JOIN 54_usermeta m5 ON (m5.user_id = u1.id AND m5.meta_key = 'youtube_content_category')
 				LEFT JOIN 54_usermeta m7 ON (m7.user_id = u1.id AND m7.meta_key = 'country')"
 				. ($auth ? " JOIN 54_usermeta m9 ON (m9.user_id = u1.id AND m9.meta_key = '{$metaname}')" : "")
+				. ($auth ? " JOIN 54_usermeta m10 ON (m10.user_id = u1.id AND m10.meta_key = 'type_login')" : "")
 				. sprintf(" WHERE m1.user_id = %d", $user_id)
 				;
 

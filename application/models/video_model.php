@@ -264,7 +264,7 @@ class Video_model extends CI_Model {
 	 * @param int $start
 	 * @return array
 	 */
-	public function get_videos_by_user($user_id, $category = NULL, $start = 0) {
+	public function get_videos_by_user($user_id, $categoryId = NULL, $start = 0) {
 		$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
 		$client = $this->get_google_client();
@@ -287,7 +287,7 @@ class Video_model extends CI_Model {
 			try {
 				$channelsResponse = $youtube->channels->listChannels(
 					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
-						'mine' => 'true',
+					'mine' => 'true',
 				));
 
 				foreach ($channelsResponse['items'] as $channel) {
@@ -312,6 +312,7 @@ class Video_model extends CI_Model {
 							{
 								continue;
 							}
+							if (NULL != $categoryId && $categoryId != $video["snippet"]["categoryId"]) continue; /* Continue only if categoryId correspont */
 							$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category, $channel, $playlistItem);
 							$categories[] = $current_category;
 						}
@@ -332,6 +333,7 @@ class Video_model extends CI_Model {
 		return array_slice($data, $start, $rp);
 	}
 	/**
+	 * Oauth
 	 *
 	 * @param string $video_id Youtube Id
 	 * @param type $user_id User Id for wordpress installation
@@ -514,6 +516,7 @@ class Video_model extends CI_Model {
 					$dbdata = array(
 						"registered_date" => date("Y-m-d H:i:s"),
 						"admin_id" => $this->session->userdata('user_id'),
+						"user_id" => $user_id,
 						"video_id" => $v_id,
 						"video_likes" => $video["statistics"]["likeCount"],
 						"video_views" => $video["statistics"]["viewCount"],
@@ -534,10 +537,11 @@ class Video_model extends CI_Model {
 	}
 	/**
 	 *
-	 * @param string $playlist
+	 * @param int $user_id User ID by system wordpress
+	 * @param array $playlist Data of registered into logs by playlist.
 	 * @param int $task
 	 */
-	public function set_history_playlist($playlist, $task = 8) {
+	public function set_history_playlist($user_id, $playlist, $task = 8) {
 
 		$play_id = $this->video_model->insert_playlist(array(
 			"channel" => $playlist["channel"],
@@ -548,6 +552,7 @@ class Video_model extends CI_Model {
 		$this->video_model->insert_history(array(
 			"registered_date" => date("Y-m-d H:i:s"),
 			"admin_id" => $this->session->userdata('user_id'),
+			"user_id" => $user_id,
 			"video_id" => "",
 			"task_id" => $task,
 			"playlist_id" => $play_id, // Id of database row.
@@ -1293,7 +1298,11 @@ class Video_model extends CI_Model {
         $query = $this->db_my_db->get('yt_video');
         return $query->result();
     }
-
+	/**
+	 *
+	 * @param int $v_id Id of video registered into logs
+	 * @return array
+	 */
     function get_video_log($v_id) {
 		$this->db_my_db = $this->load->database('my_db', TRUE);
         $this->db_my_db->select('*');
@@ -1324,6 +1333,7 @@ class Video_model extends CI_Model {
         return $query->result();
     }
 	/**
+	 * Get report log by user_id into $start and $end date
 	 *
 	 * @param string $channel
 	 * @param string $startDate
@@ -1333,7 +1343,7 @@ class Video_model extends CI_Model {
 	 * @param string $action_taken
 	 * @return array
 	 */
-	public function get_report_log($channel, $startDate, $endDate, $admin = '', $video_id = '', $action_taken = '') {
+	public function get_report_log($user_id, $startDate, $endDate, $admin = '', $video_id = '', $action_taken = '') {
 		$this->db_my_db = $this->load->database('my_db', TRUE);
 		$this->db_my_db->select('*');
         $this->db_my_db->select('v.youtube_id as video_id, v.channel, h.registered_date, h.who, h.video_views as views, h.video_likes as likes, h.channel_subs as subs, a.name as admin, t.title as task');
@@ -1341,7 +1351,7 @@ class Video_model extends CI_Model {
         $this->db_my_db->join('yt_history h', 'h.video_id = v.id');
         $this->db_my_db->join('yt_admin_user a', 'a.id = h.admin_id');
         $this->db_my_db->join('yt_task t', 't.id = h.task_id', 't.description');
-        $this->db_my_db->where('v.channel', $channel);
+        $this->db_my_db->where('h.user_id', $user_id);
 		$this->db_my_db->where('h.registered_date >=', $startDate);
 		$this->db_my_db->where('h.registered_date <=', $endDate);
 		if ($admin != '') $this->db_my_db->where("a.name", $admin);
@@ -1350,7 +1360,11 @@ class Video_model extends CI_Model {
         $query = $this->db_my_db->get();
         return $query->result();
 	}
-
+	/**
+	 * Get all log by video
+	 *
+	 * @return array
+	 */
     function get_video_logs() {
 		$this->db_my_db = $this->load->database('my_db', TRUE);
         $this->db_my_db->select('v.youtube_id as video_id, v.channel, h.registered_date, h.who, h.video_views as views, h.video_likes as likes, a.name as admin, t.title as task, t.id as task_id ');
@@ -1361,7 +1375,10 @@ class Video_model extends CI_Model {
         $query = $this->db_my_db->get();
         return $query->result();
     }
-
+	/**
+	 * Return all registered logs
+	 * @return array
+	 */
     function get_play_logs() {
 		$this->db_my_db = $this->load->database('my_db', TRUE);
         $this->db_my_db->select('p.playlist as playlistID, p.channel, h.registered_date, h.who, a.name as admin, t.title as task, t.id as task_id ');
@@ -1491,6 +1508,7 @@ class Video_model extends CI_Model {
 					$dbdata = array(
 						"registered_date" => date("Y-m-d H:i:s"),
 						"admin_id" => $this->session->userdata('user_id'),
+						"user_id" => $user_id,
 						"video_id" => $v_id,
 						"video_likes" => $video["statistics"]["likeCount"],
 						"video_views" => $video["statistics"]["viewCount"],
@@ -1555,6 +1573,7 @@ class Video_model extends CI_Model {
 				$dbdata = array(
 					"registered_date" => date("Y-m-d H:i:s"),
 					"admin_id" => $this->session->userdata('user_id'),
+					"user_id" => $user_id,
 					"video_id" => $v_id,
 					"task_id" => 5,
 					"video_likes" => $likes,
@@ -1662,7 +1681,7 @@ class Video_model extends CI_Model {
 	 * @param string $message Message for sharing
 	 * @return boolean|mixed The decoded response or false if an error occur
 	 */
-	public function share($video_id, $message) {
+	public function share($video_id, $message, $user_id) {
 		$settings = $this->get_yt_settings();
 		$fdappId = $settings[0]->facebook_apikey;
 		$fbsecret = $settings[0]->facebook_secret;
@@ -1682,16 +1701,14 @@ class Video_model extends CI_Model {
 			$video_id = $aux[1];
 		}
 
-		$yt = new Zend_Gdata_YouTube();
-        $videoEntry = $yt->getVideoEntry($video_id);
-		$videoThumbnails = $videoEntry->getVideoThumbnails();
-		$videoThumbnail = $videoThumbnails[0];
-		$video_id = $videoEntry->getVideoId();
+        $videoEntry = $this->get_video($video_id, $user_id);
+		$videoThumbnail = $videoEntry["thumbnail"];
+		$video_id = $videoEntry["video_id"];
 
 		try {
 			$params = array(
 				'message' => $message,
-				'link' => 'http://www.youtube.com/watch?v=' . $videoEntry->getVideoId(),
+				'link' => 'http://www.youtube.com/watch?v=' . $videoEntry["video_id"],
 				'picture' => $videoThumbnail["url"]
 			);
 			$post = $facebook->api("/$fbpageid/feed", 'post', $params);

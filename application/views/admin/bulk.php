@@ -500,7 +500,7 @@ jQuery.extend(jQuery.validator.prototype, {
 	<div class="step-user">
 		<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 			<tr>
-				<th class="table-header-repeat line-left" width="20"><input type="checkbox" id="checkAll"></th>
+				<th class="table-header-repeat line-left" width="20"><!-- <input type="checkbox" id="checkAll"> --></th>
 				<th class="table-header-repeat line-left"><a href="">Task</a></th>
 				<th class="table-header-repeat line-left"><a href="">Username</a></th>
 				<th class="table-header-repeat line-left"><a href="">Youtube Channel</a></th>
@@ -689,14 +689,14 @@ jQuery.extend(jQuery.validator.prototype, {
 
 		</table>
 	</div>
-	
+
 	<div id="featured-channel" class="step-video" style="display: none">
-	
+
 	<table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
 							<tr>
 								<th class="table-header-repeat line-left" width="20"><input type="checkbox" id="checkAll"></th>
 								<th class="table-header-repeat line-left"><a href="">Username</a></th>
-								<th class="table-header-repeat line-left"><a href="">Youtube Channel</a></th>				
+								<th class="table-header-repeat line-left"><a href="">Youtube Channel</a></th>
 							</tr>
 							<?php if (!empty($users)): ?>
 								<?php foreach ($users as $key => $row) : ?>
@@ -723,9 +723,9 @@ jQuery.extend(jQuery.validator.prototype, {
 
 				<td  colspan="2">
 
-					<div id="featured_inputs"> 
+					<div id="featured_inputs">
 						<p>
-						
+
 						</p>
 					 </div>
 					<h2><a href="#" class="addInput" rel="featured_inputs" style="color:#0093F0">Add another input box</a></h2>
