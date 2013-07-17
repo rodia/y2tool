@@ -126,16 +126,6 @@ $(document).ready(function(){
 		}
 	});
 
-	function isCheckedById(id){
-		var checked = $("input[@id="+id+"]:checked").length;
-		if (checked == 0){
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
-
 	$(".add-remove").click(function() {
 		var obj = this;
 		var title = $(obj).attr("title");

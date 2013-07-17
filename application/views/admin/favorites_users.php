@@ -19,18 +19,8 @@ function getChannel($url) {
                 return false;
             }else{
                 return true; //submit the form
-            }				
+            }
         });
-			
-        function isCheckedById(id){
-            var checked = $("input[@id="+id+"]:checked").length;
-            if (checked == 0){
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
     });
 </script>
 <center>
@@ -46,9 +36,9 @@ function getChannel($url) {
     ?>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
         <tr>
-            <th></th>            
             <th></th>
-            <th></th>  
+            <th></th>
+            <th></th>
             <th></th>
             <th></th>
             <th  width="450">
@@ -59,10 +49,10 @@ function getChannel($url) {
         </tr>
     </table>
     <table border="0" width="800" cellpadding="0" cellspacing="0" id="product-table">
-        <tr>            
+        <tr>
             <th class="table-header-repeat line-left" width="20"><input type="checkbox" id="checkAll"></th>
-            <th class="table-header-repeat line-left"><a href="">Channel</a></th>            
-            <th class="table-header-repeat line-left"><a href="">Name</a></th>            
+            <th class="table-header-repeat line-left"><a href="">Channel</a></th>
+            <th class="table-header-repeat line-left"><a href="">Name</a></th>
         </tr>
         <?php
         $c = 0;
@@ -72,8 +62,8 @@ function getChannel($url) {
                 ?>
                 <tr <?php if ($c % 2)
             echo "class=\"alternate-row\""; ?>>
-                    <td><input type="checkbox" name="users_ids[]" value="<?php echo $user->id; ?>###<?php echo getChannel($user->youtube_channels) ?>"></td>                                    
-                    <td><?php echo $user->youtube_channels; ?></td>  
+                    <td><input type="checkbox" name="users_ids[]" value="<?php echo $user->id; ?>###<?php echo getChannel($user->youtube_channels) ?>"></td>
+                    <td><?php echo $user->youtube_channels; ?></td>
                     <td><?php echo $user->lastname . " " . $user->firstname; ?></td>
                 </tr>
                 <?php
