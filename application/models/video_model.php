@@ -109,7 +109,7 @@ class Video_model extends CI_Model {
 				
 				$chunkSizeBytes = 1 * 1024 * 1024;
 				$media = new Google_MediaFileUpload('video/mp4', null);
-				$video_path = "uploads/ES_262_05_00_00.mp4"; //http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
+				$video_path = base_url()."uploads/ES_262_05_00_00.mp4"; //http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
 				$media->setFileSize(filesize($video_path));
 				
 				$video_objt->setSnippet($video_snippet);
