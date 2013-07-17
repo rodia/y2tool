@@ -62,6 +62,11 @@ $(document).ready(function(){
 
 });
 </script>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	$title
+)); ?>
 <center>
 	<div id="message"></div>
     <?php echo form_open('video/videoActions', array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm')); ?>
@@ -72,12 +77,13 @@ $(document).ready(function(){
             </tr>
         <?php } ?>
         <tr>
-            <th class="table-header-repeat line-left"><a href="">Title</a></th>
-            <th class="table-header-repeat line-left minwidth-1"><a href="">Description</a></th>
+            <th class="table-header-repeat line-left" style="width: 230px;"><a href="">Title</a></th>
+            <th class="table-header-repeat line-left" style="width: 480px;"><a href="">Description</a></th>
             <th class="table-header-repeat line-left"><a href="">Category</a></th>
             <th class="table-header-repeat line-left"><a href="">Channel</a></th>
             <th class="table-header-repeat line-left" width="100"><a href="">Preview</a></th>
         </tr>
+		<?php $category_options = get_categories($this); ?>
         <?php foreach ($videos as $key => $video) : ?>
             <tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
                 <td><span class="edit" video_id="<?php echo $video["video_id"]; ?>" field="title" id="title<?php echo $video["video_id"]; ?>" title="Click for edit Title"><?php echo $video["title"]; ?></span>
@@ -85,7 +91,7 @@ $(document).ready(function(){
 
 						<span class="control-panel" video_id="<?php echo $video["video_id"]; ?>" field="title">
 							<img src="<?php echo base_url(); ?>css/admin/images/icons/save_disc.png" class="control" action="save" title="Save" />
-							<img src="<?php echo base_url(); ?>css/admin/images/icons/trash.png" class="control" action="trash" title="Cancel" />
+							<img src="<?php echo base_url(); ?>css/admin/images/icons/close.png" class="control" action="trash" title="Cancel" />
 						</span>
 					</span>
 
@@ -98,17 +104,17 @@ $(document).ready(function(){
 
 						<span class="control-panel" video_id="<?php echo $video["video_id"]; ?>" field="description">
 							<img src="<?php echo base_url(); ?>css/admin/images/icons/save_disc.png" class="control" action="save" title="Save" />
-							<img src="<?php echo base_url(); ?>css/admin/images/icons/trash.png" class="control" action="trash" title="Cancel" />
+							<img src="<?php echo base_url(); ?>css/admin/images/icons/close.png" class="control" action="trash" title="Cancel" />
 						</span>
 					</span>
 				</td>
 
 				<!-- class="edit" -->
-                <td align="center"><span video_id="<?php echo $video["video_id"]; ?>"><?php echo $video["category"]; ?></span>
+                <td align="center"><span video_id="<?php echo $video["video_id"]; ?>"><?php echo form_dropdown('category_id', $category_options, $video["categoryId"], 'class="select_style"'); ?></span>
 					<span class="<?php echo $video["video_id"]; ?>" title="category" style="display: none;"></span></td>
                 <td><?php echo $video["channel"]; ?></td>
                 <td align="center">
-					<img src="<?php echo $video["thumbnail"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
+					<img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
                 </td>
             </tr>
 		<?php endforeach; ?>
@@ -116,5 +122,8 @@ $(document).ready(function(){
 	<div class="pagination">
 	<?php echo $pagination; ?>
 	</div>
+	<?php if ( ! count($videos)) : ?>
+	<div class="success"><?php echo $this->lang->line("no-video-show"); ?></div>
+	<?php endif; ?>
     <?php echo form_close(); ?>
 </center>

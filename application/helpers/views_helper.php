@@ -120,6 +120,7 @@ function print_desc($opt, $admin, $task, $video_id, $channel, $who) {
 /**
  *
  * @param string $video_id ID Youtube
+ * @param object $resource
  * @return int Count of like in the video
  */
 function print_likes($video_id, $resource) {
@@ -135,7 +136,12 @@ function print_likes($video_id, $resource) {
 	}
 	return $video_like;
 }
-
+/**
+ *
+ * @param string $video_id
+ * @param object $resource
+ * @return string
+ */
 function print_current_views($video_id, $resource) {
 	$resource->load->model("video_model");
 	$youtube = $resource->video_model->get_google_youtubeService();
@@ -148,4 +154,13 @@ function print_current_views($video_id, $resource) {
 		$video_views = $video['statistics']['viewCount'];
 	}
 	return $video_views;
+}
+/**
+ *
+ * @param object $resource
+ * @return array
+ */
+function get_categories($resource) {
+	$resource->load->model("user_model");
+	return $resource->user_model->get_youtube_categories();
 }

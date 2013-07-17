@@ -31,3 +31,5 @@ $lang["error_playlist"] = "Error when try insert playlist.";
 $lang["error_video_playlist"] = "Error when try insert video into playlist.";
 $lang["title_add_video_playlist"] = "Add Video to Playlist";
 $lang["title_new_playlist"] = "Add Playlist";
+
+$lang["no-video-show"] = "Not shown any videos. It may be that this channel does not have any videos or google service is not available now, If this is the case, try again, please.";
