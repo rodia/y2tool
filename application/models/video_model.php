@@ -109,12 +109,13 @@ class Video_model extends CI_Model {
 				
 				$chunkSizeBytes = 1 * 1024 * 1024;
 				$media = new Google_MediaFileUpload('video/mp4', null, true, $chunkSizeBytes);
-				$media->setFileSize(filesize("http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4"));
+				$video_path = "uploads/ES_262_05_00_00.mp4"; //http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
+				$media->setFileSize(filesize($video_path));
 				
 				$video_objt->setSnippet($video_snippet);
 				$result = $youtube->videos->insert("snippet,status",$video_objt,array('mediaUpload' => $media));
 				$status = false;
-				$handle = fopen("http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4", "rb");
+				$handle = fopen($video_path, "rb");
 				while (!$status && !feof($handle)) {
 					$chunk = fread($handle, $chunkSizeBytes);
 					$uploadStatus = $media->nextChunk($result, $chunk);
