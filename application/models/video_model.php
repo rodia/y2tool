@@ -104,7 +104,7 @@ class Video_model extends CI_Model {
 				$video_snippet->setCategoryId($this->input->post("video_category"));
 				
 				
-				$video_snippet->setTags($this->input->post("video_tags"));
+				$video_snippet->setTags(split(",",$this->input->post("video_tags")));
 				
 				$video_objt->setSnippet($video_snippet);
 				$objt = $youtube->videos->insert("snippet,statistics,status",$video_objt,array("data"=>file_get_contents($_FILES['video_file']['tmp_name']),
