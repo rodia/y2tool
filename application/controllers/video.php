@@ -1852,7 +1852,7 @@ class Video extends CI_Controller {
 		$this->pagination->initialize($opcions);
 		$page['pagination'] = $this->pagination->create_links();
 		$page["page_name"] = "edit_description";
-		$page["title"] = "Bulk Action > Edit Description";
+		$page["title"] = "Edit Description";
 
 		$this->load->view('admin/index', $page);
 	}
