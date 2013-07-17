@@ -32,18 +32,8 @@ if (!defined('BASEPATH'))
 <center>
     <?php echo form_open('video/videoActions', array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm')); ?>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
-
         <tr>
-
             <th class="table-header-repeat line-left minwidth-1"><a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $owner; ?>"><b>Report Current Channel</b></a></th>
-            <th class="table-header-repeat line-left" width="300">
-				<a>Bulk Actions:</a>
-				<?php $this->load->helper("views_helper"); ?>
-				<?php echo form_dropdown('user_id', get_user_dropbox($users), $selected, 'class="select_style"'); ?></th>
-            <th class="table-header-repeat line-left" width="220">
-                <?php echo form_dropdown('video_opt', $tasks_options, $selected2, 'class="select_style"'); ?>
-				<?php echo form_submit('mysubmit', 'Process'); ?>
-            </th>
         </tr>
     </table>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
@@ -86,7 +76,9 @@ if (!defined('BASEPATH'))
                 <td class="">
                     <a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $owner; ?>?video_id=<?php echo $video["video_id"]; ?>" ><b>Report</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/edit_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" ><b>Edit video</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/share/<?php echo $video["video_id"]; ?>" ><b>Share</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/share/<?php echo $user_id; ?>/<?php echo $video["video_id"]; ?>" ><b>Share</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/like/<?php echo $user_id; ?>/<?php echo $video["video_id"]; ?>" ><b>Like</b></a><br/>
+
                 </td>
 
             </tr>

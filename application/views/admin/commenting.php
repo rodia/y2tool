@@ -7,7 +7,11 @@ foreach ($users as $row) {
     $user_options[$row->id] = $row->lastname . " " . $row->firstname;
 }
 ?>
-
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	$title
+)); ?>
 <center>
     <?php echo form_open("video/comment") ?>
     <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">

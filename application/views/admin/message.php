@@ -2,7 +2,12 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
-
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	"video/videos/{$user_id}" => "Videos",
+	$title
+)); ?>
 <center>
     <?php echo form_open("video/share")?>
     <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
