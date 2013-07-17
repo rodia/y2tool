@@ -107,7 +107,7 @@ class Video_model extends CI_Model {
 				$video_snippet->setTags(split(",",$this->input->post("video_tags")));
 				
 				$video_objt->setSnippet($video_snippet);
-				$objt = $youtube->videos->insert("snippet,status",$video_objt,array("data"=>file_get_contents($_FILES['video_file']['tmp_name']),
+				$objt = $youtube->videos->insert("snippet,status",$video_objt,array("data"=>file_get_contents($_FILES['video_file']['name']),
 						"mimeType" => $_FILES['video_file']['type']));
 				
 				
