@@ -380,34 +380,36 @@ class Admin extends CI_Controller {
 //    }
 
 	function users($name = "all", $youtube = "all", $country = "all", $category = "all", $sex = "all") {
-		$search_name = ($name != "" && $name != "all" ) ? urldecode($name) : "";
-		$search_youtube = ($youtube != "" && $youtube != "all") ? urldecode($youtube) : "";
-		$search_country = ($country != "" && $country != "all") ? urldecode($country) : "";
-		$search_category = ($category != "" && $category != "all") ? urldecode($category) : "";
-		$search_sex = ($sex != "" && $sex != "all") ? urldecode($sex) : "";
-
-		$this->load->library('pagination');
-
-		$opcions = array();
-		$start = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
-		$opcions['per_page'] = $this->config->item("rp");
-		$opcions['base_url'] = base_url() . "admin/users/{$name}/{$youtube}/{$country}/{$category}/{$sex}";
-
-        $page['users'] = $this->user_model->get_all_users($start, $search_name, $search_youtube, $search_country, $search_category, $search_sex);
-		$opcions['total_rows'] = $this->user_model->count_rows_users($search_name, $search_youtube, $search_country, $search_category, $search_sex);
-		$opcions['uri_segment'] = 8;
-		$this->pagination->initialize($opcions);
-		$page['pagination'] = $this->pagination->create_links();
-        $page['page_name'] = 'users';
-		$page['name'] = $search_name;
-		$page['youtube'] = $search_youtube;
-		$page['country'] = $search_country;
-		$page['category'] = $search_category;
-		$page['gender'] = $search_sex;
-		$page['country_list'] = $this->user_model->get_countries_for_select();
-		$page['category_options'] = $this->user_model->get_categories_for_select();
-        $page['title'] = "User Management";
-        $this->load->view('admin/index', $page);
+		redirect($this->config->item("home"));
+		return;
+//		$search_name = ($name != "" && $name != "all" ) ? urldecode($name) : "";
+//		$search_youtube = ($youtube != "" && $youtube != "all") ? urldecode($youtube) : "";
+//		$search_country = ($country != "" && $country != "all") ? urldecode($country) : "";
+//		$search_category = ($category != "" && $category != "all") ? urldecode($category) : "";
+//		$search_sex = ($sex != "" && $sex != "all") ? urldecode($sex) : "";
+//
+//		$this->load->library('pagination');
+//
+//		$opcions = array();
+//		$start = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
+//		$opcions['per_page'] = $this->config->item("rp");
+//		$opcions['base_url'] = base_url() . "admin/users/{$name}/{$youtube}/{$country}/{$category}/{$sex}";
+//
+//        $page['users'] = $this->user_model->get_all_users($start, $search_name, $search_youtube, $search_country, $search_category, $search_sex);
+//		$opcions['total_rows'] = $this->user_model->count_rows_users($search_name, $search_youtube, $search_country, $search_category, $search_sex);
+//		$opcions['uri_segment'] = 8;
+//		$this->pagination->initialize($opcions);
+//		$page['pagination'] = $this->pagination->create_links();
+//        $page['page_name'] = 'users';
+//		$page['name'] = $search_name;
+//		$page['youtube'] = $search_youtube;
+//		$page['country'] = $search_country;
+//		$page['category'] = $search_category;
+//		$page['gender'] = $search_sex;
+//		$page['country_list'] = $this->user_model->get_countries_for_select();
+//		$page['category_options'] = $this->user_model->get_categories_for_select();
+//        $page['title'] = "User Management";
+//        $this->load->view('admin/index', $page);
     }
 	/**
 	 * CONTROLLER

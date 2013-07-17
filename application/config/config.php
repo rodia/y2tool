@@ -422,5 +422,10 @@ $config["KEY_FILE"] = '/home/buzzmy/public_html/access/oauth/indop345698CEDEP.p1
  */
 $config["SERVICE_ACCOUNT_NAME"] = 'youtube';
 
+/**
+ * @var string Home redirect url.
+ */
+$config["home"] = "video/bulk";
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */
