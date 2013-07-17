@@ -1377,7 +1377,7 @@ class Video extends CI_Controller {
 	 * If the user enable your token auth, this task is possible.
 	 */
     function upload() {
-    	
+
     	$user_id = $this->input->post('user_id');
     	$res = $this->video_model->upload_video($user_id);
     	$page['msg'] = $res;
@@ -1389,7 +1389,7 @@ class Video extends CI_Controller {
     	$page['title'] = "Upload a new video";
     	$page['user_id'] = $user_id;
     	$this->load->view('admin/index', $page);
-    	
+
     	/**************** OLD CODE
         $user_id = $this->input->post('user_id');
         $profile = $this->user_model->getUserProfile($user_id);
@@ -1846,7 +1846,7 @@ class Video extends CI_Controller {
 		$opcions['per_page'] = $this->config->item("rp");
 		$opcions['base_url'] = base_url() . "video/select/{$url}";
 
-		$page['videos'] = $this->video_model->all_videos($users, NULL, $start);
+		$page['videos'] = $this->video_model->get_videos_by_user($users, NULL, $start);
 		$opcions['total_rows'] = $this->video_model->get_count_videos();
 		$opcions['uri_segment'] = 4;
 		$this->pagination->initialize($opcions);
