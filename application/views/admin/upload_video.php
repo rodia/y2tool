@@ -13,7 +13,7 @@ if (!defined('BASEPATH'))
 	
 	<?php if ($msg): ?>
 	<div class="forgot-pwd error">
-		<p>S<?php echo $msg?></p>
+		<p><?php echo $msg?></p>
 	</div>
 	<?php endif; ?>
     <form enctype="multipart/form-data" action="<?php echo base_url(); ?>video/upload" method="post">
