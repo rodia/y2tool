@@ -433,8 +433,6 @@ class Video_model extends CI_Model {
 			);
 
 			foreach ($videos['items'] as $video) {
-//				var_dump($video);
-//				echo '<br>';
 				if (isset($video['status']['uploadStatus']) &&
 					$video['status']['uploadStatus'] == 'rejected' &&
 					$video['status']['rejectionReason'] == 'copyright')
@@ -452,7 +450,7 @@ class Video_model extends CI_Model {
 	 *
 	 * @param string $video_id Youtube ID
 	 * @param int $user_id ID for wordpress system
-	 * @param array $data
+	 * @param boolean True if edit video is success, False otherwise.
 	 */
 	public function edit_video($video_id, $user_id, $data) {
 		$token = $this->user_model->get_user_meta($user_id, 'token', true);
@@ -470,7 +468,7 @@ class Video_model extends CI_Model {
 			try {
 				$channelsResponse = $youtube->channels->listChannels(
 					'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
-						'mine' => 'true',
+					'mine' => 'true',
 				));
 
 				foreach ($channelsResponse['items'] as $channel) {
@@ -494,13 +492,15 @@ class Video_model extends CI_Model {
 						$content
 					);
 				}
-
+				return TRUE;
 			} catch (Google_ServiceException $e) {
 				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
+				return FALSE;
 			} catch (Google_Exception $e) {
 				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
+				return FALSE;
 			}
 		}
 	}

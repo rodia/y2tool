@@ -44,32 +44,34 @@ $(document).ready(function(){
 				type: "post",
 				data: {video_id: id, value: value, field: field, user_id: user_id, channel: channel},
 				error: function() {
-					$("#message").show().html("Error an occured");
-					$("#message").delay(3000).hide();
+					show_message("Error an occured");
 				},
 				success: function(data) {
-					$("#message").show().html("<div id=\"message-green\">The data was saved!</div>");
-					$("#message").delay(3000).hide();
+					show_message("<div id=\"message-green\">The data was saved!</div>");
 
 					if (field == "description") {
 						$("#" + field + id).html(value.split(" ", 3));
 					}
-
 				}
 			});
 		}
 	});
 
+function show_message(msg) {
+	$("#message").show().html(msg);
+	$("#message").delay(3000).hide();
+}
 });
 </script>
 <?php $this->load->helper("views_helper"); ?>
 <?php get_link_relates(array(
-	"video/bulk" => "Dashboard",
+	"video/bulk" => "Bulk Action",
 	$title
 )); ?>
 <center>
 	<div id="message"></div>
     <?php echo form_open('video/videoActions', array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm')); ?>
+	<div class="info">For edit, clic into text title or description and edit the content.</div>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
         <?php if (!empty($msg)) { ?>
             <tr class="alternate-row">
@@ -80,7 +82,7 @@ $(document).ready(function(){
             <th class="table-header-repeat line-left" style="width: 230px;"><a href="">Title</a></th>
             <th class="table-header-repeat line-left" style="width: 480px;"><a href="">Description</a></th>
             <th class="table-header-repeat line-left"><a href="">Category</a></th>
-            <th class="table-header-repeat line-left"><a href="">Channel</a></th>
+<!--            <th class="table-header-repeat line-left"><a href="">Channel</a></th>-->
             <th class="table-header-repeat line-left" width="100"><a href="">Preview</a></th>
         </tr>
 		<?php $category_options = get_categories($this); ?>
@@ -112,7 +114,7 @@ $(document).ready(function(){
 				<!-- class="edit" -->
                 <td align="center"><span video_id="<?php echo $video["video_id"]; ?>"><?php echo form_dropdown('category_id', $category_options, $video["categoryId"], 'class="select_style"'); ?></span>
 					<span class="<?php echo $video["video_id"]; ?>" title="category" style="display: none;"></span></td>
-                <td><?php echo $video["channel"]; ?></td>
+<!--                <td><?php echo $video["channel"]; ?></td>-->
                 <td align="center">
 					<img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
                 </td>

@@ -1918,6 +1918,7 @@ background-image: url('../images/icons/error.png');
 /* Edit bulk */
 .edit {
 	/*border: solid 1px rgb(180, 180, 180);*/
+	min-height: 4px;
 	display: block;
 	padding: 5px;
 	padding-right: 17px;
@@ -1946,5 +1947,5 @@ span.content textarea.title {
 	margin: 0px; height: 53px; width: 209px;
 }
 span.content textarea.description {
-	margin: 0px; width: 500px; height: 250px;
+	margin: 0px; width: 450px; height: 200px;
 }

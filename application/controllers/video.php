@@ -1202,6 +1202,8 @@ class Video extends CI_Controller {
 	}
 
 	/**
+	 * Oauth
+	 *
 	 * Ajax request
 	 *
 	 * This controller save the data of video bulk
@@ -1215,52 +1217,20 @@ class Video extends CI_Controller {
 		$channel = $this->input->post("channel");
 
 		if ($video_id) {
-			$yt = $this->user_model->getHttpClient($user_id);
-			$videoEntry = $this->video_model->get_video_entry($video_id);
-			$profile = $this->user_model->getUserProfile($user_id);
+			$video = $this->video_model->get_video($video_id, $user_id);
+			if ($this->video_model->edit_video($video_id, $user_id, array(
+				"video_id" => $video_id,
+				"video_title" => $field == "title" ? $value : $video["title"],
+				"video_description" => $field == "description" ? $value : $video["description"],
+				"category_id" => $field == "category" ? $value : $video["categoryId"],
+				"video_tags" => $video["tags"],
+				"url" => $video["thumbnail"]["url"]
+			))) {
 
-			if ($videoEntry->getEditLink() !== null) {
-				$putUrl = $videoEntry->getEditLink()->getHref();
-				$this->video_model->set_value_edit($videoEntry, $value, $field);
-				$yt->updateEntry($videoEntry, $putUrl);
-
-				$views = $videoEntry->getVideoViewCount();
-				$rating = $videoEntry->getVideoRatingInfo();
-				$likes = $rating['numRaters'];
-
-				if ($field == "title") {
-					$video_title = $value;
-				} else {
-					$video_title = $videoEntry->getVideoTitle();
-				}
-
-				$video = $this->video_model->exists_video($video_id);
-				$v_id = $video["id"];
-				if (!$video) {
-					$data = array(
-						"youtube_id" => $video_id,
-						"channel" => $channel,
-						"title" => $video_title
-					);
-					$v_id = $this->video_model->insert_video($data);
-				}
-
-				$dbdata = array(
-					"registered_date" => date("Y-m-d H:i:s"),
-					"admin_id" => $this->session->userdata('user_id'),
-					"video_id" => $v_id,
-					"video_likes" => $likes,
-					"video_views" => $views,
-					"channel_subs" => $profile["subs"],
-					"task_id" => 1,
-					"who" => $this->session->userdata('name')
-				);
-				$this->video_model->insert_history($dbdata);
-
-				$this->video_model->db_update_video(array(
-					"title" => $video_title,
-					"video_thumbnail_key" => $this->video_model->get_video_thumbnail_key($video_id)
-				), $video_id);
+				$this->video_model->set_history($video_id, $user_id, array(
+					"channel" => $this->user_model->get_channel($user_id),
+					"task_id" => 1
+				));
 			}
 		}
 
