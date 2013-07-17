@@ -114,7 +114,7 @@ class Video_model extends CI_Model {
 				$media->setFileSize(filesize($video_path));    */
 				
 				$video_objt->setSnippet($video_snippet);
-				$result = $youtube->videos->insert("snippet,status",$video_objt,array('data' => file_get_contents($video_path)));
+				$result = $youtube->videos->insert("snippet,status",$video_objt,array('data' => file_get_contents($video_path),"content-type"=>"video/mp4"));
 				
 				/*$status = false;
 				$handle = fopen($video_path, "rb");
