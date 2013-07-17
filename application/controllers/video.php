@@ -1216,25 +1216,23 @@ class Video extends CI_Controller {
 		$user_id = $this->input->post("user_id");
 		$channel = $this->input->post("channel");
 
-		if ($video_id) {
-			$video = $this->video_model->get_video($video_id, $user_id);
-			if ($this->video_model->edit_video($video_id, $user_id, array(
-				"video_id" => $video_id,
-				"video_title" => $field == "title" ? $value : $video["title"],
-				"video_description" => $field == "description" ? $value : $video["description"],
-				"category_id" => $field == "category" ? $value : $video["categoryId"],
-				"video_tags" => $video["tags"],
-				"url" => $video["thumbnail"]["url"]
-			))) {
+		$video = $this->video_model->get_video($video_id, $user_id);
+		if ($this->video_model->edit_video($video_id, $user_id, array(
+			"video_id" => $video_id,
+			"video_title" => $field == "title" ? $value : $video["title"],
+			"video_description" => $field == "description" ? $value : $video["description"],
+			"category_id" => $field == "category" ? $value : $video["categoryId"],
+			"video_tags" => $video["tags"],
+			"url" => $video["thumbnail"]["url"]
+		))) {
 
-				$this->video_model->set_history($video_id, $user_id, array(
-					"channel" => $this->user_model->get_channel($user_id),
-					"task_id" => 1
-				));
-			}
+			$this->video_model->set_history($video_id, $user_id, array(
+				"channel" => $this->user_model->get_channel($user_id),
+				"task_id" => 1
+			));
 		}
-
-		die(json_encode(array("video_id" => $video_id, "user_id" => $user_id, "value" => $value, "field" => $field, "channel" => $channel)));
+		$this->load->helper("views_helper");
+		die(json_encode(array("video_id" => $video_id, "user_id" => $user_id, "value" => $value, "field" => $field, "channel" => $channel, "excerpt" => get_excerpt($video["description"]))));
 	}
 	/**
 	 * CONTROLLERS

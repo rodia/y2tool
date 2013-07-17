@@ -38,6 +38,7 @@ $(document).ready(function(){
 			var value = $("#" + field + "-value" + id).val();
 			var user_id = $("#" + field + "-field" + id).attr("user_id");
 			var channel = $("#" + field + "-field" + id).attr("channel");
+			$("#" + field + id).html("<img src=\"<?php echo base_url(); ?>css/admin/images/loading_bar.gif\" />");
 
 			$.ajax({
 				url: url,
@@ -49,8 +50,10 @@ $(document).ready(function(){
 				success: function(data) {
 					show_message("<div id=\"message-green\">The data was saved!</div>");
 
-					if (field == "description") {
-						$("#" + field + id).html(value.split(" ", 3));
+					if (data.field == "title") {
+						$("#" + field + id).html(data.value);
+					} else if (data.field == "description") {
+						$("#" + field + id).html(data.excerpt);
 					}
 				}
 			});
@@ -58,8 +61,9 @@ $(document).ready(function(){
 	});
 
 function show_message(msg) {
-	$("#message").show().html(msg);
-	$("#message").delay(3000).hide();
+	$("#message").html(msg);
+	$("#message").delay(3000);
+	$("#message").hide();
 }
 });
 </script>
@@ -69,7 +73,7 @@ function show_message(msg) {
 	$title
 )); ?>
 <center>
-	<div id="message"></div>
+	<div id="message" style="display: none;"></div>
     <?php echo form_open('video/videoActions', array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm')); ?>
 	<div class="info">For edit, clic into text title or description and edit the content.</div>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
