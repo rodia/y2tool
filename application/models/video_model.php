@@ -17,8 +17,12 @@ class Video_model extends CI_Model {
 		require_once 'google-api-php-client/src/Google_Client.php';
 		require_once 'google-api-php-client/src/contrib/Google_YouTubeService.php';
 		require_once 'google-api-php-client/src/contrib/Google_Oauth2Service.php';
-
+		$config['upload_path'] = 'uploads';
+		$config['allowed_types'] = 'flv|mp4|m3u8|ts|3gp|mov|avi|wmv';
+		$config['max_size'] = '67108864';
+		
 		$this->load->model('user_model');
+		$this->load->library('upload');
     }
 	/**
 	 *
@@ -60,6 +64,62 @@ class Video_model extends CI_Model {
                 $v_id = $this->insert_video($data);
             }
         }
+    }
+    
+    /**
+     *
+     * @param string $user_id
+     */
+    function upload_video($user_id) {
+    	$token = $this->user_model->get_user_meta($user_id, 'token', true);
+    	
+    	$client = $this->get_google_client();
+    	$youtube = new Google_YoutubeService($client);
+    	$rp = $this->config->item("rp");
+    	$current_tags = array();
+    	$categories = array();
+    	$current_category = "";
+    	
+    	if (isset($token)) {
+    		$client->setAccessToken($token);
+    	}
+    	
+    	if ($client->getAccessToken()) {
+    			$_SESSION['token'] = $client->getAccessToken();
+
+			$data = array();
+			$i = 0;
+
+			try {
+				
+				
+				$video_objt = new Google_Video();
+				$video_snippet = new Google_VideoSmippet();
+				$video_status = new Google_VideoStatus();
+				$video_status.setPrivacyStatus("public");
+				$video_objt.setStatus(status);
+				
+				$video_snippet.setTitle($this->input->post("video_title"));
+				$video_snippet.setDescription($this->input->post("video_description"));
+				$video_snippet.setCategoryId($this->input->post("video_category"));
+				
+				
+				$snippet.setTags($this->input->post("video_tags"));
+				
+				$video_objt->setSnippet($video_snippet);
+				$youtube->videos->insert("snippet,statistics,status",$video_objt,array("data"=>file_get_contents($_FILES['video_file']['tmp_name']),
+						"mimeType" => $_FILES['video_file']['type']));
+				
+				
+
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+			}
+    	}
     }
 	/**
 	 * Enable a object of upload video

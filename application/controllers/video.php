@@ -1377,6 +1377,20 @@ class Video extends CI_Controller {
 	 * If the user enable your token auth, this task is possible.
 	 */
     function upload() {
+    	
+    	$user_id = $this->input->post('user_id');
+    	$res = $this->video_model->upload_video($user_id);
+    	$page['msg'] = $res;
+    	/*$page['video_title'] = $video_title;
+    	$page['video_description'] = $video_description;
+    	$page['video_tags'] = $video_tags;
+    	$page['video_file'] = "";*/
+    	$page['page_name'] = 'upload_video';
+    	$page['title'] = "Upload a new video";
+    	$page['user_id'] = $user_id;
+    	$this->load->view('admin/index', $page);
+    	
+    	/**************** OLD CODE
         $user_id = $this->input->post('user_id');
         $profile = $this->user_model->getUserProfile($user_id);
         $subs = $profile['subs'];
@@ -1475,6 +1489,7 @@ class Video extends CI_Controller {
                 $this->load->view('admin/index', $page);
             }
         }
+        ************************/
     }
 
     function index() {

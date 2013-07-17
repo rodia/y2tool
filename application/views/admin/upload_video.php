@@ -10,6 +10,12 @@ if (!defined('BASEPATH'))
 		<p><a href="<?php echo base_url(); ?>/admin/users">Go back!</a></p>
 	</div>
 	<?php endif; ?>
+	
+	<?php if ($msg): ?>
+	<div class="forgot-pwd error">
+		<p>S<?php echo $msg?></p>
+	</div>
+	<?php endif; ?>
     <form enctype="multipart/form-data" action="<?php echo base_url(); ?>video/upload" method="post">
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
             <tbody>
