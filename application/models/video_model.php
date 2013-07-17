@@ -106,10 +106,21 @@ class Video_model extends CI_Model {
 
 				$video_snippet->setTags(split(",",$this->input->post("video_tags")));
 
+				
+				$chunkSizeBytes = 1 * 1024 * 1024;
+				$media = new Google_MediaFileUpload('video/mp4', null, true, $chunkSizeBytes);
+				$media->setFileSize(filesize("http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4"));
+				
 				$video_objt->setSnippet($video_snippet);
-				$objt = $youtube->videos->insert("snippet,status",$video_objt,array("data"=>file_get_contents("http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4"),
-						"mimeType" => "video/mp4"));
-
+				$result = $youtube->videos->insert("snippet,status",$video_objt,array('mediaUpload' => $media));
+				$status = false;
+				$handle = fopen($videoPath, "rb");
+				while (!$status && !feof($handle)) {
+					$chunk = fread($handle, $chunkSizeBytes);
+					$uploadStatus = $media->nextChunk($result, $chunk);
+				}
+				
+				fclose($handle);
 
 
 			} catch (Google_ServiceException $e) {
@@ -123,7 +134,7 @@ class Video_model extends CI_Model {
 				error_log($log);
 				return $log;
 			}
-			return $objt;
+			return $result;
     	}
     }
 	/**
