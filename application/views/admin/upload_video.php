@@ -4,12 +4,12 @@ if (!defined('BASEPATH'))
 ?>
 
 <center>
-	<?php if (!$user_auth): ?>
+	<!-- <?php if (!$user_auth): ?>
 	<div class="forgot-pwd error">
 		<p>Sorry! The user Not enable your channel for this tools. please try with another user.</p>
 		<p><a href="<?php echo base_url(); ?>/admin/users">Go back!</a></p>
 	</div>
-	<?php endif; ?>
+	<?php endif; ?> -->
 	
 	<?php if ($msg): ?>
 	<div class="forgot-pwd error">
