@@ -97,14 +97,14 @@ class Video_model extends CI_Model {
 				$video_snippet = new Google_VideoSnippet();
 				$video_status = new Google_VideoStatus();
 				$video_status->setPrivacyStatus("public");
-				$video_objt->setStatus(status);
+				$video_objt->setStatus($video_status);
 				
 				$video_snippet->setTitle($this->input->post("video_title"));
 				$video_snippet->setDescription($this->input->post("video_description"));
 				$video_snippet->setCategoryId($this->input->post("video_category"));
 				
 				
-				$snippet->setTags($this->input->post("video_tags"));
+				$video_snippet->setTags($this->input->post("video_tags"));
 				
 				$video_objt->setSnippet($video_snippet);
 				$objt = $youtube->videos->insert("snippet,statistics,status",$video_objt,array("data"=>file_get_contents($_FILES['video_file']['tmp_name']),
