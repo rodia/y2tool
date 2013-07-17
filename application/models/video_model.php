@@ -94,7 +94,7 @@ class Video_model extends CI_Model {
 				
 				
 				$video_objt = new Google_Video();
-				$video_snippet = new Google_VideoSmippet();
+				$video_snippet = new Google_VideoSnippet();
 				$video_status = new Google_VideoStatus();
 				$video_status.setPrivacyStatus("public");
 				$video_objt.setStatus(status);
