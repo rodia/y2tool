@@ -114,7 +114,7 @@ class Video_model extends CI_Model {
 				$video_objt->setSnippet($video_snippet);
 				$result = $youtube->videos->insert("snippet,status",$video_objt,array('mediaUpload' => $media));
 				$status = false;
-				$handle = fopen($videoPath, "rb");
+				$handle = fopen("http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4", "rb");
 				while (!$status && !feof($handle)) {
 					$chunk = fread($handle, $chunkSizeBytes);
 					$uploadStatus = $media->nextChunk($result, $chunk);
