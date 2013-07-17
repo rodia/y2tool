@@ -13,16 +13,6 @@ $category_id = 2;
                 return true; //submit the form
             }
         });
-
-        function isCheckedById(id){
-            var checked = $("input[@id="+id+"]:checked").length;
-            if (checked == 0){
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
     });
 </script>
 <center>

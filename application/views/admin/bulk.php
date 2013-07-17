@@ -129,16 +129,6 @@ $(document).ready(function(){
 		}
 	});
 
-	function isCheckedById(id){
-		var checked = $("input[@id="+id+"]:checked").length;
-		if (checked == 0){
-			return false;
-		}
-		else{
-			return true;
-		}
-	}
-
 	$(".add-remove").click(function() {
 		var obj = this;
 		var title = $(obj).attr("title");
@@ -171,10 +161,15 @@ $(document).ready(function(){
 	});
 
 	$(".action").click(function() {
-		var action = $(this).attr("title");
+		if (!isCheckedById("ids")){
+			alert ("Please select at least one checkbox");
+			return false;
+		} else {
+			var action = $(this).attr("title");
 
-		$("input[name=selected-action]").val(action);
-		return true;
+			$("input[name=selected-action]").val(action);
+			return true;
+		}
 	});
 
 	$(".pre-action").click(function() {
@@ -559,7 +554,7 @@ jQuery.extend(jQuery.validator.prototype, {
 			<button title="description-video" class="action">Edit Description</button>
 		</div>
 	</div>
-
+	<!-- like video -->
 	<div id="like-video" class="step-video" style="display: none;">
 		<table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
 			<tr>
@@ -590,7 +585,7 @@ jQuery.extend(jQuery.validator.prototype, {
 		</table>
 
 	</div>
-
+	<!-- comment video -->
 	<div id="comment-video" class="step-video" style="display: none">
 		<table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
 			<tbody>
