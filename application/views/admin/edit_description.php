@@ -116,7 +116,7 @@ function show_message(msg) {
 				</td>
 
 				<!-- class="edit" -->
-                <td align="center"><span video_id="<?php echo $video["video_id"]; ?>"><?php echo form_dropdown('category_id', $category_options, $video["categoryId"], "class=\"select_style save_dropbox\" field=\"category\" user_id=\"{$user_id}\""); ?></span>
+                <td align="center"><span video_id="<?php echo $video["video_id"]; ?>"><?php echo form_dropdown('category_id', $category_options, $video["categoryId"], "class=\"select_style save_dropbox\" field=\"category\" user_id=\"{$video["user_id"]}\" video_id=\"{$video["video_id"]}\""); ?></span>
 					<span class="<?php echo $video["video_id"]; ?>" title="category" style="display: none;"></span></td>
 <!--                <td><?php echo $video["channel"]; ?></td>-->
                 <td align="center">
