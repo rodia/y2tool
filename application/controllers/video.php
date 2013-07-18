@@ -993,7 +993,9 @@ class Video extends CI_Controller {
 		if ($this->input->post("submit")) {
 			$page['msg'] = $this->lang->line('form_msg');
 			$video_ids = $this->input->post("video_ids");
+			var_dump($this->input->post("videos_user"));
 			foreach ($video_ids as $video_id) {
+				if ($video_id == "") continue;
 				$this->video_model->oauth_insert_video_playlist($user_id, $playlistId, array(
 					"videoId" => $video_id
 				));
