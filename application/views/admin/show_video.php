@@ -2,6 +2,11 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"go-back" => "Go back",
+	$title
+)); ?>
 <h3><?php echo $entry["title"]; ?></h3>
 <?php echo $entry["embedHtml"]; ?>
 <?php echo form_open("video/comment", array("method" => "post", "name" => "comments")); ?>

@@ -37,7 +37,11 @@ function get_link_relates(array $links) {
 <ul>
 	<?php foreach ($links as $url => $label) : ?>
 	<?php if ( ! is_numeric($url)) : ?>
+	<?php if ($url == "go-back") : ?>
+	<li><a href="#" onclick="javascript:history.go(-1);"><?php echo $label; ?></a>
+	<?php else : ?>
 	<li><a href="<?php echo base_url() . $url; ?>"><?php echo $label; ?></a></li>
+	<?php endif; ?>
 	<?php else : ?>
 	<li class="last"><?php echo $label; ?></li>
 	<?php endif; ?>
