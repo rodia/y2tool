@@ -60,6 +60,30 @@ $(document).ready(function(){
 		}
 	});
 
+	$(".save_dropbox").change(function() {
+		var id = $(this).attr("video_id");
+		var field = $(this).attr("field");
+
+		var url = "<?php echo base_url(); ?>video/ajax_edit";
+		var value = $(this).val();
+		var user_id = $(this).attr("user_id");
+		var channel = $(this).attr("channel");
+		$("#" + field + id).html("<img src=\"<?php echo base_url(); ?>css/admin/images/loading_bar.gif\" />");
+
+		$.ajax({
+			url: url,
+			type: "post",
+			data: {video_id: id, value: value, field: field, user_id: user_id, channel: channel},
+			error: function() {
+				show_message("Error an occured");
+			},
+			success: function() {
+				show_message("The data was saved!");
+				$("#" + field + id).html("");
+			}
+		});
+	});
+
 function show_message(msg) {
 	$("#message").html(msg);
 	$("#message").delay(3000);
@@ -116,11 +140,11 @@ function show_message(msg) {
 				</td>
 
 				<!-- class="edit" -->
-                <td align="center"><span video_id="<?php echo $video["video_id"]; ?>"><?php echo form_dropdown('category_id', $category_options, $video["categoryId"], "class=\"select_style save_dropbox\" field=\"category\" user_id=\"{$video["user_id"]}\" video_id=\"{$video["video_id"]}\""); ?></span>
-					<span class="<?php echo $video["video_id"]; ?>" title="category" style="display: none;"></span></td>
+                <td align="center"><span video_id="<?php echo $video["video_id"]; ?>"><?php echo form_dropdown('category_id', $category_options, $video["categoryId"], "class=\"select_style save_dropbox\" field=\"category\" user_id=\"{$video["user_id"]}\" video_id=\"{$video["video_id"]}\" channel=\"{$video["channel"]}\""); ?></span>
+					<span class="category<?php echo $video["video_id"]; ?>" title="category" style="display: none;"></span></td>
 <!--                <td><?php echo $video["channel"]; ?></td>-->
                 <td align="center">
-					<img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
+					<img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:61px;width:91px;" />
                 </td>
             </tr>
 		<?php endforeach; ?>
