@@ -1087,7 +1087,7 @@ class Video_model extends CI_Model {
 	public function get_all_countries() {
 		$this->db_my_db = $this->load->database('my_db', TRUE);
 		$this->db_my_db->select('country');
-		$this->db_my_db->order_by("id", "ASC");
+		$this->db_my_db->order_by("country", "ASC");
 		$query = $this->db_my_db->get('yt_country');
 		return $query->result();
 	}
