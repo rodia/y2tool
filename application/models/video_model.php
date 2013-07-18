@@ -1215,7 +1215,7 @@ class Video_model extends CI_Model {
 					$postBody
 				);
 
-				$this->insert_history_playlist(array(
+				$this->set_history_playlist(array(
 					"channel" => $channel,
 					"play_title" => $playlist["snippet"]["title"],
 					"snippet" => array(
