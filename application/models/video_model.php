@@ -107,22 +107,22 @@ class Video_model extends CI_Model {
 				$video_snippet->setTags(split(",",$this->input->post("video_tags")));
 
 				$video_path = base_url()."uploads/ES_262_05_00_00.mp4";
-				
+
 /*				$chunkSizeBytes = 1 * 1024 * 1024;
 				$media = new Google_MediaFileUpload('video/mp4', null);
 				 //http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
 				$media->setFileSize(filesize($video_path));    */
-				
+
 				$video_objt->setSnippet($video_snippet);
 				$result = $youtube->videos->insert("snippet,status",$video_objt,array('data' => file_get_contents($video_path),"mimeType"=>"video/mp4"));
-				
+
 				/*$status = false;
 				$handle = fopen($video_path, "rb");
 				while (!$status && !feof($handle)) {
 					$chunk = fread($handle, $chunkSizeBytes);
 					$uploadStatus = $media->nextChunk($result, $chunk);
 				}
-				
+
 				fclose($handle);*/
 
 
@@ -339,8 +339,9 @@ class Video_model extends CI_Model {
 	 * OAuth
 	 * Get user videos of account in youtube by user regitered your oauth token.
 	 *
-	 * @param int $user_id
-	 * @param int $start
+	 * @param int|array $user_id This parameter can be a list of id user or a single id user
+	 * @param int $categoryId Category of Youtube
+	 * @param int $start get offset for get videos.
 	 * @return array
 	 */
 	public function get_videos_by_user($user_id, $categoryId = NULL, $start = 0) {

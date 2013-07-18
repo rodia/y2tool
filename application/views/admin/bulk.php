@@ -348,8 +348,9 @@ $(document).ready(function(){
 		var url = "/video/get_ajax_videos";
 		var user_id = [];
 
-		$.each($("#hold-selected span"), function(key, value) {
-			user_id[key] = $(value).attr("title");
+		$("input[type=checkbox]:checked").each(
+		function() {
+			user_id[key] = $(this).val();
 		});
 
 		$("#content-dinamic-show-videos").html("<img src=\"<?php echo base_url(); ?>css/admin/images/loading_bar.gif\" />");

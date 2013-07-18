@@ -1843,12 +1843,9 @@ class Video extends CI_Controller {
 	 */
 	public function get_ajax_videos() {
 		header('Content-type: application/json; charset=utf-8');
-		/*$users_id = $this->input->post("users");
-		$category = $this->input->post("category");*/
-		$users_id = '40220';
-		$category = 'Games';
-		$videos = $this->video_model->all_videos($users_id, $category);
-		//echo json_encode($videos)
+		$users_id = $this->input->post("users");
+		$category = $this->input->post("category");
+		$videos = $this->video_model->get_videos_by_user($users_id, $category);
 		die(json_encode($videos));
 	}
 
