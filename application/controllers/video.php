@@ -1628,15 +1628,18 @@ class Video extends CI_Controller {
 	 *
 	 * @param string $video_id
 	 */
-    function share($video_id) {
+    function share($user_id, $video_id) {
 		if ($this->input->post("submit")) {
-
+			$this->video_model->like($video_id, $user_id);
+			redirect("video/videos/{$user_id}?success=true&msg=Video was linking success&type=success");
+			return;
 		}
         $page['page_name'] = 'message';
         $page['msg'] = '';
         $page['message'] = '';
         $page['title'] = "Sharing video";
         $page['video_id'] = $video_id;
+        $page['user_id'] = $user_id;
 
         $this->load->view('admin/index', $page);
     }

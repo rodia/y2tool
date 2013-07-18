@@ -9,7 +9,8 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
-    <?php echo form_open("video/share")?>
+	<?php if (isset($success)) show_messages($success, $msg, $type); ?>
+    <?php echo form_open("video/share/{$user_id}/{$video_id}")?>
     <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
             <tbody>
                 <tr>
@@ -23,14 +24,13 @@ if (!defined('BASEPATH'))
                         <h2>Message *</h2>
                     </td>
                     <td>
-						<?php echo form_textarea(array("name" => "message", "cols" => "30", "value" => $message)); ?>
+						<?php echo form_textarea(array("name" => "message", "cols" => "50", "value" => $message)); ?>
                         <span><?php echo form_error('message'); ?></span>
                     </td>
                 </tr>
                 <tr>
                     <td align="center" colspan="2">
 						<?php echo form_submit(array("name" => "submit", "value" => "Submit", "class" => "form-submit")); ?>
-						<?php echo form_hidden("video_id", $video_id); ?>
                     </td>
                 </tr>
             </tbody>

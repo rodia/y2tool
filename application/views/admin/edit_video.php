@@ -64,7 +64,7 @@ if (!defined('BASEPATH'))
                     <td>
 						<?php echo form_input(array("name" => "video_tags", "id" => "video_tags", "value" => implode(", ", $videoEntry["tags"]), "class" => "inp-form", "size" => "60px")); ?>
                         <span><?php echo form_error('video_tags'); ?></span>
-						<span>Enter tags separated by commas.</span>
+						<br /><strong>Enter tags by separated commas.</strong>
                     </td>
                 </tr>
                 <tr>
