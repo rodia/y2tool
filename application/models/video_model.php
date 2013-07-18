@@ -630,11 +630,15 @@ class Video_model extends CI_Model {
 	 */
 	public function set_history_playlist($user_id, $playlist, $task = 8) {
 
-		$play_id = $this->video_model->insert_playlist(array(
-			"channel" => $playlist["channel"],
-			"title" => $playlist["play_title"],
-			"playlist" => $playlist["snippet"]["channelId"]
-		));
+		if ( ! ($playlist_db = $this->exists_playlist($playlist["id"]))) {
+			$play_id = $this->video_model->insert_playlist(array(
+				"channel" => $playlist["channel"],
+				"title" => $playlist["play_title"],
+				"playlist" => $playlist["snippet"]["channelId"]
+			));
+		} else {
+			$play_id = $playlist_db->id;
+		}
 
 		$this->video_model->insert_history(array(
 			"registered_date" => date("Y-m-d H:i:s"),
@@ -692,7 +696,7 @@ class Video_model extends CI_Model {
 				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 					$videos = $youtube->videos->listVideos(
 						$playlistItem['contentDetails']['videoId'],
-						'snippet,contentDetails,status,statistics'
+						'snippet,contentDetails,status,statistics,player'
 					);
 
 					foreach ($videos['items'] as $video) {
@@ -1211,11 +1215,12 @@ class Video_model extends CI_Model {
 				$postBody->setSnippet($snippet);
 
 				$playlist = $youtube->playlists->insert(
-					"snippet,status",
+					"id,snippet,status",
 					$postBody
 				);
 
 				$this->set_history_playlist($user_id, array(
+					"playlistId" => $playlist["id"],
 					"channel" => $channel,
 					"play_title" => $playlist["snippet"]["title"],
 					"snippet" => array(
@@ -1292,7 +1297,7 @@ class Video_model extends CI_Model {
 
 			try {
 				$video_id = $this->get_id_by_url($data["videoId"]);
-
+				var_dump($video_id);
 				$postBody = new Google_PlaylistItem();
 
 				$resource = new Google_ResourceId();
@@ -1310,11 +1315,11 @@ class Video_model extends CI_Model {
 				);
 				return TRUE;
 			} catch (Google_ServiceException $e) {
-				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			} catch (Google_Exception $e) {
-				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			}

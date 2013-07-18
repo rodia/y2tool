@@ -95,10 +95,15 @@ if (!defined('BASEPATH'))
 		});
 	});
 </script>
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	$title
+)); ?>
 <center>
+	<?php if (isset($success)) show_messages($success, $msg, $type); ?>
     <table>
         <tr>
-
             <td valign="top">
 				<?php echo form_open('admin/users', array('name' => 'by_name', 'id' => 'by_name', 'method' => 'get')); ?>
 					Name:
@@ -166,10 +171,11 @@ if (!defined('BASEPATH'))
 					<td><?php echo isset($row->country) ? $row->country : ""; ?></td>
 					<td><?php echo isset($row->sex) ? $row->sex : ""; ?></td>
 
-					<td >
-						<a href="<?php echo base_url(); ?>video/videos/<?php echo $row->id; ?>" ><b>Show videos</b></a><br/>
+					<td>
+<!--						<a href="<?php echo base_url(); ?>video/videos/<?php echo $row->id; ?>" ><b>Show videos</b></a><br/>
 						<a href="<?php echo base_url(); ?>video/playlist/<?php echo $row->id; ?>" ><b>Show playlist</b></a><br/>
-						<a href="<?php echo base_url(); ?>admin/upload/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/>
+						<a href="<?php echo base_url(); ?>admin/upload/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/>-->
+						<a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/>
 					</td>
 				</tr>
 			 <?php endforeach; ?>

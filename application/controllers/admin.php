@@ -291,37 +291,41 @@ class Admin extends CI_Controller {
 	 * @param string $channel
 	 */
 	public function channel_report($user_id = "") {
-		$subscriptors = $this->video_model->get_subscriptors($user_id);
-		$channel = $this->user_model->get_channel($user_id);
+		if ($user_id != "") {
+			$subscriptors = $this->video_model->get_subscriptors($user_id);
+			$channel = $this->user_model->get_channel($user_id);
 
-		$this->load->library('pagination');
-		$opcions = array();
-		$start = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			$this->load->library('pagination');
+			$opcions = array();
+			$start = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
 
-		$opcions['per_page'] = $this->config->item("rp");
-		$opcions['base_url'] = base_url() . "admin/channel_report/{$user_id}";
+			$opcions['per_page'] = $this->config->item("rp");
+			$opcions['base_url'] = base_url() . "admin/channel_report/{$user_id}";
 
-		$page["current_admin_name"] = $admin_name = $this->input->get('admin_name') ? $this->input->get('admin_name') : '';
-		$page["current_video_id"] = $video_id = $this->input->get('video_id') ? $this->input->get('video_id') : '';
-		$page["current_action_taken"] = $action_taken = $this->input->get('action_taken') ? $this->input->get('action_taken') : '';
-		$page['page_name'] = 'channel_logs';
-        $page['title'] = "Reports for: {$channel} | Current Number of Subscribers: {$subscriptors["subs"]}";
+			$page["current_admin_name"] = $admin_name = $this->input->get('admin_name') ? $this->input->get('admin_name') : '';
+			$page["current_video_id"] = $video_id = $this->input->get('video_id') ? $this->input->get('video_id') : '';
+			$page["current_action_taken"] = $action_taken = $this->input->get('action_taken') ? $this->input->get('action_taken') : '';
+			$page['page_name'] = 'channel_logs';
+			$page['title'] = "Reports for: {$channel} | Current Number of Subscribers: {$subscriptors["subs"]}";
 
-		$page["endDate"] = $this->input->post("end-date") ? $this->input->post("end-date") : date("Y-m-d");
-		if ($this->input->post("start-date")) {
-			$page["startDate"] = $this->input->post("start-date");
+			$page["endDate"] = $this->input->post("end-date") ? $this->input->post("end-date") : date("Y-m-d");
+			if ($this->input->post("start-date")) {
+				$page["startDate"] = $this->input->post("start-date");
+			} else {
+				$page["startDate"] = strtotime ('-30 day', strtotime($page["endDate"]));
+				$page["startDate"] = date ('Y-m-d', $page["startDate"]);
+			}
+			$page['logs'] = $this->video_model->get_report_log($user_id, $page["startDate"], $page["endDate"], $admin_name, $video_id, $action_taken);
+			$page["admin_name"] = $this->video_model->get_array_for_select($page["logs"], "admin");
+			$page["video_id"] = $this->video_model->get_array_for_select($page["logs"], "video_id");
+			$page["action_taken"] = $this->video_model->get_array_for_select($page["logs"], "description");
+			$page["channel"] = $channel;
+			$page["user_id"] = $user_id;
+
+			$this->load->view('admin/index', $page);
 		} else {
-			$page["startDate"] = strtotime ('-30 day', strtotime($page["endDate"]));
-			$page["startDate"] = date ('Y-m-d', $page["startDate"]);
+			redirect("admin/user?success=true&msg=Select an user for view reports&type=info");
 		}
-        $page['logs'] = $this->video_model->get_report_log($user_id, $page["startDate"], $page["endDate"], $admin_name, $video_id, $action_taken);
-		$page["admin_name"] = $this->video_model->get_array_for_select($page["logs"], "admin");
-		$page["video_id"] = $this->video_model->get_array_for_select($page["logs"], "video_id");
-		$page["action_taken"] = $this->video_model->get_array_for_select($page["logs"], "description");
-		$page["channel"] = $channel;
-		$page["user_id"] = $user_id;
-
-        $this->load->view('admin/index', $page);
 	}
 	/**
 	 * CONTROLLER
@@ -378,38 +382,50 @@ class Admin extends CI_Controller {
 //		$page['category_options'] = $this->user_model->get_categories_for_select();
 //        $this->load->view('admin/index', $page);
 //    }
+	/**
+	 *
+	 * @param int $name
+	 * @param string $youtube
+	 * @param string $country
+	 * @param string $category
+	 * @param string $sex
+	 */
+	public function users($name = "all", $youtube = "all", $country = "all", $category = "all", $sex = "all") {
+//		redirect($this->config->item("home"));
+//		return;
+		if ($this->input->get("success")) {
+			$page["success"] = TRUE;
+			$page["msg"] = $this->input->get("msg");
+			$page["type"] = $this->input->get("type");
+		}
+		$search_name = ($name != "" && $name != "all" ) ? urldecode($name) : "";
+		$search_youtube = ($youtube != "" && $youtube != "all") ? urldecode($youtube) : "";
+		$search_country = ($country != "" && $country != "all") ? urldecode($country) : "";
+		$search_category = ($category != "" && $category != "all") ? urldecode($category) : "";
+		$search_sex = ($sex != "" && $sex != "all") ? urldecode($sex) : "";
 
-	function users($name = "all", $youtube = "all", $country = "all", $category = "all", $sex = "all") {
-		redirect($this->config->item("home"));
-		return;
-//		$search_name = ($name != "" && $name != "all" ) ? urldecode($name) : "";
-//		$search_youtube = ($youtube != "" && $youtube != "all") ? urldecode($youtube) : "";
-//		$search_country = ($country != "" && $country != "all") ? urldecode($country) : "";
-//		$search_category = ($category != "" && $category != "all") ? urldecode($category) : "";
-//		$search_sex = ($sex != "" && $sex != "all") ? urldecode($sex) : "";
-//
-//		$this->load->library('pagination');
-//
-//		$opcions = array();
-//		$start = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
-//		$opcions['per_page'] = $this->config->item("rp");
-//		$opcions['base_url'] = base_url() . "admin/users/{$name}/{$youtube}/{$country}/{$category}/{$sex}";
-//
-//        $page['users'] = $this->user_model->get_all_users($start, $search_name, $search_youtube, $search_country, $search_category, $search_sex);
-//		$opcions['total_rows'] = $this->user_model->count_rows_users($search_name, $search_youtube, $search_country, $search_category, $search_sex);
-//		$opcions['uri_segment'] = 8;
-//		$this->pagination->initialize($opcions);
-//		$page['pagination'] = $this->pagination->create_links();
-//        $page['page_name'] = 'users';
-//		$page['name'] = $search_name;
-//		$page['youtube'] = $search_youtube;
-//		$page['country'] = $search_country;
-//		$page['category'] = $search_category;
-//		$page['gender'] = $search_sex;
-//		$page['country_list'] = $this->user_model->get_countries_for_select();
-//		$page['category_options'] = $this->user_model->get_categories_for_select();
-//        $page['title'] = "User Management";
-//        $this->load->view('admin/index', $page);
+		$this->load->library('pagination');
+
+		$opcions = array();
+		$start = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
+		$opcions['per_page'] = $this->config->item("rp");
+		$opcions['base_url'] = base_url() . "admin/users/{$name}/{$youtube}/{$country}/{$category}/{$sex}";
+
+        $page['users'] = $this->user_model->get_all_users($start, $search_name, $search_youtube, $search_country, $search_category, $search_sex);
+		$opcions['total_rows'] = $this->user_model->count_rows_users($search_name, $search_youtube, $search_country, $search_category, $search_sex);
+		$opcions['uri_segment'] = 8;
+		$this->pagination->initialize($opcions);
+		$page['pagination'] = $this->pagination->create_links();
+        $page['page_name'] = 'users';
+		$page['name'] = $search_name;
+		$page['youtube'] = $search_youtube;
+		$page['country'] = $search_country;
+		$page['category'] = $search_category;
+		$page['gender'] = $search_sex;
+		$page['country_list'] = $this->user_model->get_countries_for_select();
+		$page['category_options'] = $this->user_model->get_categories_for_select();
+        $page['title'] = "User Management";
+        $this->load->view('admin/index', $page);
     }
 	/**
 	 * CONTROLLER
