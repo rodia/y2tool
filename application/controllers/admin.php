@@ -324,7 +324,7 @@ class Admin extends CI_Controller {
 
 			$this->load->view('admin/index', $page);
 		} else {
-			redirect("admin/user?success=true&msg=Select an user for view reports&type=info");
+			redirect("admin/users?success=true&msg=Select an user for view reports&type=info");
 		}
 	}
 	/**

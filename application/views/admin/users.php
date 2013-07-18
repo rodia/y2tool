@@ -175,7 +175,7 @@ if (!defined('BASEPATH'))
 <!--						<a href="<?php echo base_url(); ?>video/videos/<?php echo $row->id; ?>" ><b>Show videos</b></a><br/>
 						<a href="<?php echo base_url(); ?>video/playlist/<?php echo $row->id; ?>" ><b>Show playlist</b></a><br/>
 						<a href="<?php echo base_url(); ?>admin/upload/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/>-->
-						<a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/>
+						<a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $row->id; ?>" ><b>View Channel Report</b></a><br/>
 					</td>
 				</tr>
 			 <?php endforeach; ?>
