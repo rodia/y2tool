@@ -8,14 +8,8 @@ if (!defined('BASEPATH'))
 	"video/videos/{$user_id}" => "Videos",
 	$title
 )); ?>
-<!--<div id="related-link">
-	<ul>
-		<li><a href="<?php echo base_url(); ?>admin/users">Dashboard</a></li>
-		<li><a href="<?php echo base_url(); ?>video/videos/<?php echo $user_id; ?>">Videos</a></li>
-		<li>Edit Video</li>
-	</ul>
-</div>-->
 <center>
+	<?php if (isset($success)) show_messages($success, $message, $type); ?>
 	<?php echo form_open("video/" . implode( "/", array($post_form, $video_id, $user_id)), array("enctype" => "multipart/form-data", "method" => "post")); ?>
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
             <tbody>
@@ -70,6 +64,7 @@ if (!defined('BASEPATH'))
                     <td>
 						<?php echo form_input(array("name" => "video_tags", "id" => "video_tags", "value" => implode(", ", $videoEntry["tags"]), "class" => "inp-form", "size" => "60px")); ?>
                         <span><?php echo form_error('video_tags'); ?></span>
+						<span>Enter tags separated by commas.</span>
                     </td>
                 </tr>
                 <tr>

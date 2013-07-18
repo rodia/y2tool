@@ -1176,18 +1176,26 @@ class Video extends CI_Controller {
 
 			$file = $this->video_model->set_thumbnails($video_id, $user_id);
 
-			$this->video_model->edit_video($video_id, $user_id, array(
+			if ($this->video_model->edit_video($video_id, $user_id, array(
 				"video_id" => $this->input->post('video_id'),
 				"video_title" => $this->input->post('video_title'),
 				"video_description" => $this->input->post('video_description'),
 				"category_id" => $this->input->post('category_id'),
 				"video_tags" => explode(",", $this->input->post('video_tags')),
 				"url" => $file
-			));
-			$this->video_model->set_history($video_id, $user_id, array(
-				"channel" => $this->user_model->get_channel($user_id),
-				"task_id" => 1
-			));
+			))) {
+				$this->video_model->set_history($video_id, $user_id, array(
+					"channel" => $this->user_model->get_channel($user_id),
+					"task_id" => 1
+				));
+				$page["success"] = TRUE;
+				$page["message"] = "The video was modified successfully!";
+				$page["type"] = "success";
+			} else {
+				$page["success"] = TRUE;
+				$page["message"] = "The video could not be edited! try Again.";
+				$page["type"] = "error";
+			}
 		}
         $page['videoEntry'] = $this->video_model->get_video($video_id, $user_id);
         $page['page_name'] = 'edit_video';
