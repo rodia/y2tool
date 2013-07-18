@@ -581,48 +581,16 @@ class Video extends CI_Controller {
         }
     }
 	/**
-	 * @deprecated since version 1.0
-	 * @param type $user_id
-	 * @param type $playlistId
+	 *
+	 * @param int $user_id
+	 * @param string $playlistId
 	 */
     function delplaylist($user_id, $playlistId) {
-        $yt = $this->user_model->getHttpClient($user_id);
-        $profile = $this->user_model->getUserProfile($user_id);
-        $channel = $profile['username'];
-        $yt->setMajorProtocolVersion(2);
-        $playlistListFeed = $yt->getPlaylistListFeed($channel);
-        foreach ($playlistListFeed as $playlistListEntry) {
-            if ($playlistListEntry->playlistId == $playlistId) {
-                $playlistListEntry->delete();
-
-                $playlist = $this->video_model->exists_playlist($playlistId);
-                $play_id = $playlist['id'];
-//                if (!$playlist) {
-//                    $data = array(
-//                        "channel" => $channel,
-//                        "title" => $playlist_title,
-//                        "playlistId" => $playlistId
-//                    );
-//                    $play_id = $this->video_model->insert_playlist($data);
-//                }
-                $dbdata = array(
-                    "registered_date" => date("Y-m-d H:i:s"),
-                    "admin_id" => $this->session->userdata('user_id'),
-                    "video_id" => 0,
-                    "task_id" => 9,
-                    "playlist_id" => $play_id,
-                    "who" => $this->session->userdata('name')
-                );
-                $this->video_model->insert_history($dbdata);
-            }
-        }
-        $page['playlistListFeed'] = $yt->getPlaylistListFeed($channel);
-        $page['msg'] = $this->lang->line('form_rm_play_success');
-        $page['page_name'] = 'playlist';
-        $page['title'] = "Playlist (channel: " . $channel . ")";
-        $page['user_id'] = $user_id;
-        $page['channel'] = $channel;
-        $this->load->view('admin/index', $page);
+        if ($this->video_model->oauth_delete_playlist($user_id, $playlistId)) {
+			redirect("video/playlist/{$user_id}?success=true&msg=Playlist is deleted success&type=success");
+		} else {
+			redirect("video/playlist/{$user_id}?success=true&msg=Error playlist not was deleted&type=error");
+		}
     }
 	/**
 	 *	oauth

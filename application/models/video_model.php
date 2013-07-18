@@ -1236,6 +1236,43 @@ class Video_model extends CI_Model {
 	}
 	/**
 	 *
+	 * @param int $user_id User ID by wordpress system
+	 * @param string $playlistId Playlist ID for Youtube
+	 * @return boolean
+	 */
+	public function oauth_delete_playlist($user_id, $playlistId) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+				$playlist = $youtube->playlists->delete(
+					$playlistId
+				);
+
+				return TRUE;
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			}
+		}
+		return FALSE;
+	}
+	/**
+	 *
 	 * @param int $user_id
 	 * @param string $playlistId
 	 * @param array $data

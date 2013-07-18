@@ -2,8 +2,14 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
-
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	"/video/playlist/{$user_id}" => "Playlist",
+	$title
+)); ?>
 <center>
+	<?php if (isset($success)) show_messages($success, $msg, $type); ?>
 	<?php echo form_open("video/new_playlist/{$user_id}/{$channel}", array("method" => "post")); ?>
 	<!--video/newplay-->
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
