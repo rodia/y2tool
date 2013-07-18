@@ -49,7 +49,7 @@ if (!defined('BASEPATH'))
                 <td><?php echo str_replace("<", "", substr($video["description"], 0, 100)); ?></td>
                 <td align="center"><?php echo $video["category"]; ?></td>
                 <td align="center">
-					<a href="<?php echo base_url(); ?>video/view/<?php echo $videoEntry["video_id"]; ?>/<?php echo $owner; ?>" >
+					<a href="<?php echo base_url(); ?>video/view/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" >
                         <img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
                     </a>
                     <!-- AddThis Button BEGIN -->
