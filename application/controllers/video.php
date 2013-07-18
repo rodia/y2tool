@@ -1630,7 +1630,7 @@ class Video extends CI_Controller {
     function view($videoId, $user_id) {
         $page['users'] = $this->user_model->get_all_users();
         $page['entry'] = $this->video_model->get_video($videoId, $user_id);
-        $page['channel'] = $channel;
+        $page['channel'] = $this->user_model->get_channel($user_id);
         $page['page_name'] = 'show_video';
         $page['title'] = "Video";
         $page['user_id'] = $user_id;

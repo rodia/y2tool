@@ -2,13 +2,14 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
-<h3><?php echo $video["title"]; ?></h3>
-<?php echo $video["embedHtml"]; ?>
+<h3><?php echo $entry["title"]; ?></h3>
+<?php echo $entry["embedHtml"]; ?>
 <form name="comments" method="post" action="<?php echo base_url() . 'video/comment'; ?>">
+<?php echo form_open("video/comment", array("method" => "post", "name" => "comments")); ?>
     <br/>
-    <textarea name="comment" cols=50></textarea>
-    <input type="hidden" value="<?php echo $entry["video_id"]; ?>" name="video_id">
-    <input type="hidden" value="<?php echo $channel; ?>" name="channel">
+    <?php echo form_textarea(array("name" => "comment", "cols" => 15)); ?>
+	<?php echo form_hidden("video_id", $entry["video_id"]); ?>
+	<?php echo form_hidden("channel", $channel); ?>
     <br/>
-    <input type="submit" value="Comment">
+	<?php echo form_submit(array("name" => "submit", "value" => "Comment")); ?>
 </form>
