@@ -171,7 +171,7 @@ $(function() {
             </tr>
         </table>
 
-		<div id="show-common-videos" class="step-video" style="display: none;">
+		<div id="show-common-videos" class="step-video">
 			<a href="#" id="get-videos">Show my videos</a>
 			<div id="content-dinamic-show-videos"></div>
 		</div>
