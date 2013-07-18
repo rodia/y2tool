@@ -34,7 +34,7 @@ if (!defined('BASEPATH'))
                     <li><a href="<?php echo base_url(); ?>video/like">Liking</a></li>
                 </ul>
             </li>-->
-			<li><a href="<?php echo base_url(); ?>admin/report_">Reporting</a></li>
+			<li><a href="<?php echo base_url(); ?>admin/channel_report">Reporting</a></li>
 <!--            <li><a href="#" onclick="return false;">Bulk actions</a>
             <li><a href="<?php echo base_url(); ?>video/bulk">Bulk actions</a>
                 <ul>
