@@ -310,7 +310,9 @@ class Video extends CI_Controller {
         }
         redirect("video/sync");
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function actions() {
         $user_id = $this->input->post('user_id');
         $playlistId = $this->input->post('playlist_id');
@@ -324,7 +326,13 @@ class Video extends CI_Controller {
                 break;
         }
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 * @param type $playlistId
+	 * @param type $video_ids
+	 * @param type $user_id
+	 * @param type $channel
+	 */
     function removeVideos($playlistId, $video_ids, $user_id, $channel) {
         for ($i = 0; $i < sizeof($video_ids); $i++) {
             $this->delvideo2($playlistId, $video_ids[$i], $user_id, $channel);
@@ -332,7 +340,9 @@ class Video extends CI_Controller {
 //        delvideo($videoFeedID, $videoId, $user_id, $channel);
         $this->videolist($playlistId, $user_id, $channel);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
 	function userActions() {
         $video_id = $this->input->post('video_id');
         $users_ids = $this->input->post('ids');
@@ -1470,10 +1480,13 @@ class Video extends CI_Controller {
         }
         ************************/
     }
-
+	/**
+	 * Controller
+	 *
+	 * Home redirect.
+	 */
     function index() {
-//        redirect("admin/users");
-        redirect("video/bulk");
+        redirect($this->config->item("home"));
     }
 	/**
 	 * Controller
@@ -1492,7 +1505,7 @@ class Video extends CI_Controller {
 
 		$page["videos"] = $videos;
 		$page['page_name'] = 'videos';
-		$page['title'] = "Upload a new video";
+		$page['title'] = "Search Videos";
 		$this->load->view('admin/index', $page);
 	}
 	/**
@@ -1532,7 +1545,9 @@ class Video extends CI_Controller {
 		$page["video_model"] = $this->video_model;
         $this->load->view('admin/index', $page);
 	}
-
+	/**
+	 *
+	 */
     function comment() {
         $rules = $this->config->item('video_id_and_comment');
         $page['msg'] = $this->lang->line('form_msg');
@@ -1607,20 +1622,14 @@ class Video extends CI_Controller {
             $this->load->view('admin/index', $page);
         }
     }
-
-    function view($videoId, $channel = "", $user_id = 0) {
-        $yt = new Zend_Gdata_YouTube();
-        $yt->setMajorProtocolVersion(2);
-        try {
-            $entry = $yt->getVideoEntry($videoId);
-        } catch (Zend_Gdata_App_HttpException $httpException) {
-            echo 'ERROR ' . $httpException->getMessage();
-            echo ' HTTP details<br /><textarea cols="100" rows="20">';
-            echo $httpException->getRawResponseBody();
-            echo '</textarea><br />';
-        }
+	/**
+	 *
+	 * @param string $videoId Youtube Id
+	 * @param int $user_id
+	 */
+    function view($videoId, $user_id) {
         $page['users'] = $this->user_model->get_all_users();
-        $page['entry'] = $entry;
+        $page['entry'] = $this->video_model->get_video($videoId, $user_id);
         $page['channel'] = $channel;
         $page['page_name'] = 'show_video';
         $page['title'] = "Video";

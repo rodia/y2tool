@@ -444,7 +444,7 @@ class Video_model extends CI_Model {
 
 			$videos = $youtube->videos->listVideos(
 				$video_id,
-				'snippet,contentDetails,status,statistics'
+				'snippet,contentDetails,status,statistics,player'
 			);
 
 			foreach ($videos['items'] as $video) {
@@ -814,6 +814,7 @@ class Video_model extends CI_Model {
 		$data[$i]["channel"] = "";
 		$data[$i]["channel_id"] = $channel != NULL ? $channel["id"] : "";
 		$data[$i]["user_id"] = $user_id;
+		$data[$i]["embedHtml"] = $video["player"]["embedHtml"];
 
 		$data[$i++]["thumbnail"]["url"] = $video["snippet"]["thumbnails"]["default"]["url"];
 	}
@@ -1750,7 +1751,7 @@ class Video_model extends CI_Model {
 	 *
 	 * @param string $video_id Youtube video ID
 	 * @param string $message Message for sharing
-	 * @param int $user_id 
+	 * @param int $user_id
 	 * @return boolean|mixed The decoded response or false if an error occur
 	 */
 	public function share($video_id, $message, $user_id) {

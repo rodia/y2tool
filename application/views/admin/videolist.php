@@ -58,7 +58,7 @@ if (!defined('BASEPATH'))
                 <td><?php echo str_replace("<", "", substr($videoEntry["description"], 0, 100)); ?></td>
 
                 <td align="center">
-                    <a href="<?php echo base_url(); ?>video/view/<?php echo $videoEntry["video_id"]; ?>" >
+                    <a href="<?php echo base_url(); ?>video/view/<?php echo $videoEntry["video_id"]; ?>/<?php echo $user_id; ?>" >
                         <img src="<?php echo $videoEntry["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
                     </a>
                     <!-- AddThis Button BEGIN -->
@@ -73,7 +73,7 @@ if (!defined('BASEPATH'))
                 </td>
                 <td class="align-left"><?php echo $videoEntry["view_count"]; ?></td>
                 <td>
-                    <a href="<?php echo base_url(); ?>video/share/<?php echo $videoEntry["video_id"]; ?>"><b>Share</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/share/<?php echo $user_id; ?>/<?php echo $videoEntry["video_id"]; ?>"><b>Share</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/delvideo/<?php echo $user_id; ?>/<?php echo $videoFeedID; ?>/<?php echo $videoEntry["video_id"]; ?>" onclick="return confirm('Are you sure to remove this video?');"><b>Remove Video</b></a>
                 </td>
             </tr>

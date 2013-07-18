@@ -49,9 +49,9 @@ if (!defined('BASEPATH'))
                 <td><?php echo str_replace("<", "", substr($video["description"], 0, 100)); ?></td>
                 <td align="center"><?php echo $video["category"]; ?></td>
                 <td align="center">
-                    <img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;"  />
-
-                    <h3></h3>
+					<a href="<?php echo base_url(); ?>video/view/<?php echo $videoEntry["video_id"]; ?>/<?php echo $owner; ?>" >
+                        <img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
+                    </a>
                     <!-- AddThis Button BEGIN -->
                     <div class="addthis_toolbox addthis_default_style ">
                         <a class="addthis_button_preferred_1" addthis:url="https://www.youtube.com/watch?v=<?php echo $video["video_id"]; ?>" addthis:title="<?php echo $video["title"]; ?>"></a>
