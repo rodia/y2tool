@@ -109,7 +109,7 @@ $(function() {
                 <tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
                     <td><abbr title="<?php echo $row->registered_date; ?>"><?php echo date("d/m/y", strtotime($row->registered_date));?></abbr></td><!-- Date -->
                     <td><?php echo $row->admin; ?></td><!-- Admin Name -->
-                    <td><?php echo $row->video_id; ?></td><!-- Video ID -->
+                    <td><a href="<?php echo base_url(); ?>video/view/<?php echo $row->video_id; ?>/<?php echo $user_id; ?>"><?php echo $row->video_id; ?></a></td><!-- Video ID -->
                     <td><?php echo $row->description; ?></td><!-- Action Taken -->
 					<td><?php echo print_desc($row->task_id, $row->admin, $row->task, $row->video_id, $row->channel, $row->who); ?></td><!-- Action Description -->
 					<td class="number"><?php echo $row->likes; ?></td><!-- No. of Likes at Action -->
