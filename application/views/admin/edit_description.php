@@ -45,10 +45,10 @@ $(document).ready(function(){
 				type: "post",
 				data: {video_id: id, value: value, field: field, user_id: user_id, channel: channel},
 				error: function() {
-					show_message("Error an occured");
+					show_message("Error an occured (click to close this message)");
 				},
 				success: function(data) {
-					show_message("<div id=\"message-green\">The data was saved!</div>");
+					show_message("The data was saved! (click to close this message)");
 
 					if (data.field == "title") {
 						$("#" + field + id).html(data.value);
@@ -68,26 +68,31 @@ $(document).ready(function(){
 		var value = $(this).val();
 		var user_id = $(this).attr("user_id");
 		var channel = $(this).attr("channel");
-		$("#" + field + id).html("<img src=\"<?php echo base_url(); ?>css/admin/images/loading_bar.gif\" />");
+		$("#" + field + id).show();
 
 		$.ajax({
 			url: url,
 			type: "post",
 			data: {video_id: id, value: value, field: field, user_id: user_id, channel: channel},
 			error: function() {
-				show_message("Error an occured");
+				show_message("Error an occured! (click to close this message)");
 			},
 			success: function() {
-				show_message("The data was saved!");
-				$("#" + field + id).html("");
+				show_message("The data was saved! (click to close this message)");
+				$("#" + field + id).hide();
 			}
 		});
 	});
 
+	$("#message").click(function() {
+		$(this).hide();
+	});
+
 function show_message(msg) {
 	$("#message").html(msg);
-	$("#message").delay(3000);
-	$("#message").hide();
+	$("#message").show();
+//	$("#message").delay(3000);
+//	$("#message").hide();
 }
 });
 </script>
@@ -97,7 +102,7 @@ function show_message(msg) {
 	$title
 )); ?>
 <center>
-	<div id="message" style="display: none;"></div>
+	<div id="message" class="success" style="display: none;"></div>
     <?php echo form_open('video/videoActions', array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm')); ?>
 	<div class="info">For edit, clic into text title or description and edit the content.</div>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
@@ -141,7 +146,7 @@ function show_message(msg) {
 
 				<!-- class="edit" -->
                 <td align="center"><span video_id="<?php echo $video["video_id"]; ?>"><?php echo form_dropdown('category_id', $category_options, $video["categoryId"], "class=\"select_style save_dropbox\" field=\"category\" user_id=\"{$video["user_id"]}\" video_id=\"{$video["video_id"]}\" channel=\"{$video["channel"]}\""); ?></span>
-					<span class="category<?php echo $video["video_id"]; ?>" title="category" style="display: none;"></span></td>
+					<span id="category<?php echo $video["video_id"]; ?>" title="category" style="display: none;"><img src="<?php echo base_url(); ?>css/admin/images/loading_bar.gif" /></span></td>
 <!--                <td><?php echo $video["channel"]; ?></td>-->
                 <td align="center">
 					<img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:61px;width:91px;" />
