@@ -347,10 +347,10 @@ $(document).ready(function(){
 	$("#get-videos").click(function() {
 		var url = "/video/get_ajax_videos";
 		var user_id = [];
-
+		var key = 0;
 		$("input[type=checkbox]:checked").each(
 		function() {
-			user_id[key] = $(this).val();
+			user_id[key++] = $(this).val();
 		});
 
 		$("#content-dinamic-show-videos").html("<img src=\"<?php echo base_url(); ?>css/admin/images/loading_bar.gif\" />");
@@ -360,24 +360,24 @@ $(document).ready(function(){
 			data: {users: user_id, category: null},
 			type: "post",
 			success: function(data) {
-				alert(data);
 				$("#content-dinamic-show-videos").html("");
-				$("#content-dinamic-show-videos").append("<table width=\"800\">" +
+				$("#content-dinamic-show-videos").append("<table width=\"800\" id=\"product-table\">" +
 					"<thead>" +
 						"<tr>" +
-							"<th>Youtube ID</th>" +
-							"<th>Title</th>" +
-							"<th>Views</th>" +
-							"<th>Category</th>" +
+							"<td></td>" +
+							"<td>Title</td>" +
+							"<td>Views</td>" +
+							"<td>Category</td>" +
 						"</tr>" +
 					"</thead>" +
 					"<tbody></tbody>" +
 					"</table>"
 				);
 				for(var item in data) {
+					if (data[item].video_id == undefined) continue;
 					$("#content-dinamic-show-videos table tbody").append(
-						"<tr>" +
-							"<td>" + data[item].video_id + "</td>" +
+						"<tr" + (item % 2 ? " class=\"alternate-row\"" : "") + ">" +
+							"<td><input type=\"checkbox\" name=\"videos_user[]\" value=\"" + data[item].video_id + "\"></td>" +
 							"<td>" + data[item].title + "</td>" +
 							"<td>" + data[item].view_count + "</td>" +
 							"<td>" + data[item].category + "</td>" +
