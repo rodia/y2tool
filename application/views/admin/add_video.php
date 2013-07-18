@@ -2,34 +2,77 @@
 /**
  * @version 1.1
  *
+ * Add video playlist
  */
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
 <script type="text/javascript">
-	$(function() {
+$(function() {
 
-		$('.addInput').live('click', function() {
-			var select_action = $(this).attr("rel");
+	$('.addInput').live('click', function() {
+		var select_action = $(this).attr("rel");
 
-			var inputsDiv = $('#' + select_action);
-			var i = $('#' + select_action + ' p').size() + 1;
-			var name_field = select_action.replace("_inputs", "");
-			$('<p><label for="video_id"><span>Video ID ' + i + ' * </span><input type="text" class="inp-form" size="60" name="' + name_field + '_ids[]" id="video_ids_' + i + '" value="" placeholder="Enter youtube video id" /></label> <span><a href="#" class="remInput" rel="' + select_action + '" style="color:#0093F0">Remove</a></span></p>').appendTo(inputsDiv);
-			$(inputsDiv).attr("title", i);
-			return false;
-		});
-
-		$('.remInput').live('click', function() {
-			var select_action = $(this).attr("rel");
-			var i = $('#' + select_action + ' p').size() + 1;
-			if( i > 2 ) {
-				$(this).parents('p').remove();
-				i--;
-			}
-			return false;
-		});
+		var inputsDiv = $('#' + select_action);
+		var i = $('#' + select_action + ' p').size() + 1;
+		var name_field = select_action.replace("_inputs", "");
+		$('<p><label for="video_id"><span>Video ID ' + i + ' * </span><input type="text" class="inp-form" size="60" name="' + name_field + '_ids[]" id="video_ids_' + i + '" value="" placeholder="Enter youtube video id" /></label> <span><a href="#" class="remInput" rel="' + select_action + '" style="color:#0093F0">Remove</a></span></p>').appendTo(inputsDiv);
+		$(inputsDiv).attr("title", i);
+		return false;
 	});
+
+	$('.remInput').live('click', function() {
+		var select_action = $(this).attr("rel");
+		var i = $('#' + select_action + ' p').size() + 1;
+		if( i > 2 ) {
+			$(this).parents('p').remove();
+			i--;
+		}
+		return false;
+	});
+
+	$("#get-videos").click(function() {
+		var url = "/video/get_ajax_videos";
+		var user_id = [];
+		user_id[0] = <?php echo $user_id; ?>
+
+		$("#content-dinamic-show-videos").html("<img src=\"<?php echo base_url(); ?>css/admin/images/loading_bar.gif\" />");
+
+		$.ajax({
+			url : url,
+			data: {users: user_id, category: null},
+			type: "post",
+			success: function(data) {
+				$("#content-dinamic-show-videos").html("");
+				$("#content-dinamic-show-videos").append("<table width=\"800\" id=\"product-table\">" +
+					"<thead>" +
+						"<tr>" +
+							"<td></td>" +
+							"<td>Title</td>" +
+							"<td>Views</td>" +
+							"<td>Category</td>" +
+						"</tr>" +
+					"</thead>" +
+					"<tbody></tbody>" +
+					"</table>"
+				);
+				for(var item in data) {
+					if (data[item].video_id == undefined) continue;
+					$("#content-dinamic-show-videos table tbody").append(
+						"<tr" + (item % 2 ? " class=\"alternate-row\"" : "") + ">" +
+							"<td><input type=\"checkbox\" name=\"videos_user[]\" value=\"" + data[item].video_id + "\"></td>" +
+							"<td>" + data[item].title + "</td>" +
+							"<td>" + data[item].view_count + "</td>" +
+							"<td>" + data[item].category + "</td>" +
+						"<tr>"
+					);
+				}
+			}
+		});
+
+		return false;
+	});
+});
 
 	jQuery.extend(jQuery.validator.prototype, {
 		/*
@@ -127,5 +170,10 @@ if (!defined('BASEPATH'))
                 </td>
             </tr>
         </table>
+
+		<div id="show-common-videos" class="step-video" style="display: none;">
+			<a href="#" id="get-videos">Show my videos</a>
+			<div id="content-dinamic-show-videos"></div>
+		</div>
     <?php echo form_close(); ?>
 </center>
