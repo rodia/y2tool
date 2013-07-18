@@ -1743,8 +1743,14 @@ class Video_model extends CI_Model {
 	}
 	/**
 	 *
+	 * @param string $video_id
+	 * @param string $message
+	 * @return boolean|mixed
+	 *
+	 *
 	 * @param string $video_id Youtube video ID
 	 * @param string $message Message for sharing
+	 * @param int $user_id 
 	 * @return boolean|mixed The decoded response or false if an error occur
 	 */
 	public function share($video_id, $message, $user_id) {
@@ -1778,6 +1784,10 @@ class Video_model extends CI_Model {
 				'picture' => $videoThumbnail["url"]
 			);
 			$post = $facebook->api("/$fbpageid/feed", 'post', $params);
+			$this->set_history($video_id, $user_id, array(
+				"channel" => $this->user_model->get_channel($user_id),
+				"task_id" => 3
+			));
 			return $post;
 		} catch (FacebookApiException $e1) {
 			error_log($e1);

@@ -18,7 +18,9 @@ class Video extends CI_Controller {
         $this->load->model('video_model');
         $this->load->model('user_model');
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function liking() {
 //        $page['users'] = $this->user_model->get_all_users();
         $page["users"] = $this->user_model->get_all_users();
@@ -48,7 +50,7 @@ class Video extends CI_Controller {
         $this->load->view('admin/index', $page);
     }
 	/**
-	 *
+	 * @deprecated since version 1.0
 	 * @param string|int $user User Admin for select your channel.
 	 * @param string $category Categories of video
 	 */
@@ -105,7 +107,9 @@ class Video extends CI_Controller {
         $page['title'] = "Distributing across multiple channels (select the channels)";
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function s2_grabbing() {
 
         $video_ids = explode("###", $this->input->post('video_ids'));
@@ -197,37 +201,35 @@ class Video extends CI_Controller {
         $page['title'] = "Favoriting Videos";
         $this->load->view('admin/index', $page);
     }
-
-    function sharing($user = "all", $category = "all") {
+	/**
+	 *
+	 * @param int $user
+	 * @param int|string $categoryId
+	 */
+    function sharing($user_id, $categoryId = "all") {
 		$this->load->library('pagination');
 
 		$opcions = array();
 		$start = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
 
 		$opcions['per_page'] = $this->config->item("rp");
-		$opcions['base_url'] = base_url() . "video/sharing/{$user}/{$category}";
+		$opcions['base_url'] = base_url() . "video/sharing/{$user_id}/{$categoryId}";
 
         // optionally specify version 2 to retrieve a v2 feed
-        if ($user != "all" && $category == "all") {
-			$page['videos'] = $this->video_model->all_videos(array($user), NULL, $start);
-		} else if ($user != "all" && $category != "all") {
-			$page['videos'] = $this->video_model->all_videos(array($user), $category, $start);
-		} else if ($user == "all" && $category != "all") {
-			$page['videos'] = $this->video_model->all_videos(NULL, $category, $start);
-		} else {
-			$page['videos'] = $this->video_model->all_videos(NULL, NULL, $start);
-		}
+//        if ($user != "all" && $category == "all") {
+//			$page['videos'] = $this->video_model->all_videos(array($user), NULL, $start);
+//		} else if ($user != "all" && $category != "all") {
+//			$page['videos'] = $this->video_model->all_videos(array($user), $category, $start);
+//		} else if ($user == "all" && $category != "all") {
+//			$page['videos'] = $this->video_model->all_videos(NULL, $category, $start);
+//		} else {
+//			$page['videos'] = $this->video_model->all_videos(NULL, NULL, $start);
+//		}
+		$page['videos'] = $this->video_model->get_videos_by_user($user_id, $categoryId == "all" ? NULL : $categoryId, $start);
 		$page["users"] = $this->user_model->get_all_users();
-		$page["user"] = $user;
-		$page["category"] = $category;
-		$page["categories"] = array_merge(
-			array("" => "-- Select --"),
-			$this->video_model->get_pair_values(
-				$this->video_model->get_all_categories(),
-				'category',
-				'display_category'
-			)
-		);
+		$page["user"] = $user_id;
+		$page["category"] = $categoryId;
+		$page["categories"] = $this->user_model->get_youtube_categories();
 		$opcions['total_rows'] = $this->video_model->get_count_videos();
 		$opcions['uri_segment'] = 5;
 		$this->pagination->initialize($opcions);
@@ -236,42 +238,17 @@ class Video extends CI_Controller {
         $page['title'] = "Sharing Videos";
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * Share video
+	 */
     function s1_sharing() {
-//        $settings = $this->video_model->get_yt_settings();
         $page["video_ids"] = $this->input->post('ids');
-//        $page['page_name'] = 'bulksharing';
-//        $page['title'] = "Sharing videos";
-		$date = date("Y-m-d H:i:s");
-		$admin_id = $this->session->userdata('user_id');
+		$user_id = $this->input->post("user_id");
 		foreach ($page["video_ids"] as $item) {
-			$this->video_model->share($item, "");
-			$video_id = $this->video_model->get_video_id($item);
-			if ($video_id == 0) {
-				$data = array(
-					"youtube_id" => $item,
-					"channel" => "",
-					"title" => $video_id
-				);
-				$this->video_model->insert_video($data);
-			}
-			$dbdata = array(
-				"registered_date" => $date,
-				"admin_id" => $admin_id,
-				"video_id" => $video_id,
-				"task_id" => 4,
-				"who" => "Sharing Video " + $item + " (" + $this->session->userdata('name') + ")"
-			);
-			$this->video_model->insert_history($dbdata);
+			$this->video_model->share($item, "", $user_id);
 		}
 		$msg = "Bulk sharing is done!";
-//        $page['fdappId'] = $settings[0]->facebook_apikey;
-//        $page['fbsecret'] = $settings[0]->facebook_secret;
-//        $page['fbaccessToken'] = $settings[0]->facebook_accesstoken;
-//        $page['fbpageid'] = "me";
-
-//        $this->load->view('admin/index', $page);
-		redirect("video/sharing". (isset($msg) ? "?msg=" . $msg : ""));
+		redirect("video/sharing". (isset($msg) ? "?success=true&msg=" . $msg . "&type=success": ""));
     }
 
     function s1_favorites() {
@@ -281,7 +258,9 @@ class Video extends CI_Controller {
         $page['title'] = "Favoriting Videos (select the channels)";
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function s2_favorites() {
 
         $video_ids = explode("###", $this->input->post('video_ids'));
@@ -363,7 +342,9 @@ class Video extends CI_Controller {
         }
         redirect("video/liking");
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function videoActions() {
         $user_id = $this->input->post('user_id');
         $video_opt = $this->input->post('video_opt');
@@ -377,7 +358,12 @@ class Video extends CI_Controller {
                 break;
         }
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 * @param type $user_id
+	 * @param type $video_ids
+	 * @param type $owner
+	 */
     function likingVideos($user_id, $video_ids, $owner) {
         for ($i = 0; $i < sizeof($video_ids); $i++) {
 //            echo "$video_ids[$i]<br>";
@@ -628,17 +614,28 @@ class Video extends CI_Controller {
         $page['channel'] = $channel;
         $this->load->view('admin/index', $page);
     }
-
-    function like() {
-
-        $page['users'] = $this->user_model->get_all_users();
-        $page['msg'] = $this->lang->line('form_msg');
-        $page['video_id'] = "";
-        $page['page_name'] = 'like';
-        $page['title'] = "Single like";
-        $this->load->view('admin/index', $page);
+	/**
+	 *	oauth
+	 *
+	 * @param string $video_id Youtube ID
+	 * @param int $user_id User Id for wordpress system
+	 */
+    function like($video_id, $user_id) {
+		if ($this->video_model->like($video_id, $user_id)) {
+			redirect("video/videos/{$user_id}?success=true&msg=Action apply&type=success");
+		} else {
+			redirect("video/videos/{$user_id}?success=true&msg=Not Possible this action&type=error");
+		}
+//        $page['users'] = $this->user_model->get_all_users();
+//        $page['msg'] = $this->lang->line('form_msg');
+//        $page['video_id'] = "";
+//        $page['page_name'] = 'like';
+//        $page['title'] = "Single like";
+//        $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function likingnvideos() {
 
         $page['users'] = $this->user_model->get_all_users();
@@ -647,7 +644,9 @@ class Video extends CI_Controller {
         $page['title'] = "Liking N videos";
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function playlistnvideos() {
 
         $page['users'] = $this->user_model->get_all_users();
@@ -659,7 +658,7 @@ class Video extends CI_Controller {
         $this->load->view('admin/index', $page);
     }
 	/**
-	 *
+	 * @deprecated since version 1.0
 	 */
     function processliking() {
         $video_ids = $this->input->post('video_ids');
@@ -720,7 +719,7 @@ class Video extends CI_Controller {
         $this->load->view('admin/index', $page);
     }
 	/**
-	 *
+	 * @deprecated since version 1.0
 	 */
     function processplaylist() {
         $video_ids = $this->input->post('video_ids');
@@ -791,7 +790,9 @@ class Video extends CI_Controller {
         $page['title'] = "Playlist N videos";
         $this->load->view('admin/index', $page);
     }
-
+	/**
+	 * @deprecated since version 1.0
+	 */
     function apply_like() {
 
         $rule = $this->config->item('video_id_rule');
@@ -979,7 +980,7 @@ class Video extends CI_Controller {
 				))) {
 					$page['msg'] = $this->lang->line("error_playlist");
 				} else {
-					redirect("video/playlist/" . $user_id);
+					redirect("video/playlist/" . $user_id . "?success=true&msg=Playlist added success&type=success");
 					return;
 				}
 			}
@@ -1003,7 +1004,7 @@ class Video extends CI_Controller {
 		redirect("video/add_video_playlist/{$user_id}/{$playlistId}");
 	}
 	/**
-	 * Outh
+	 * Oauth
 	 *
 	 * This function capture the post request for form Add Video.
 	 *
@@ -1019,7 +1020,7 @@ class Video extends CI_Controller {
 					"videoId" => $video_id
 				));
 			}
-			redirect("video/videolist/{$user_id}/{$playlistId}?success=true");
+			redirect("video/videolist/{$user_id}/{$playlistId}?success=true&msg=Videos added successful&type=success");
 			return;
 		}
         $page['page_name'] = 'add_video';
@@ -1244,6 +1245,8 @@ class Video extends CI_Controller {
 	}
 	/**
 	 * CONTROLLERS
+	 *
+	 * @deprecated since version 1.0
 	 *
 	 * This function manage the action for show list of videos availables
 	 */
@@ -1630,8 +1633,8 @@ class Video extends CI_Controller {
 	 */
     function share($user_id, $video_id) {
 		if ($this->input->post("submit")) {
-			$this->video_model->like($video_id, $user_id);
-			redirect("video/videos/{$user_id}?success=true&msg=Video was linking success&type=success");
+			$this->video_model->share($video_id, $this->input->post("message"), $user_id);
+			redirect("video/videos/{$user_id}?success=true&msg=Video was sharing success&type=success");
 			return;
 		}
         $page['page_name'] = 'message';
@@ -1645,6 +1648,8 @@ class Video extends CI_Controller {
     }
 	/**
 	 * CONTROLLERS
+	 *
+	 * @deprecated since version 1.0
 	 *
 	 * Set a share video of request post
 	 */
@@ -1807,7 +1812,7 @@ class Video extends CI_Controller {
 
 		}
 		delete_cookie("hold-users");
-		redirect("video/bulk" . (!empty($msg) ? "?msg=" . $msg : ""));
+		redirect("video/bulk" . (!empty($msg) ? "?success=true&msg=" . $msg . "&type=success" : ""));
 	}
 
 	public function select($users) {
@@ -1858,14 +1863,6 @@ class Video extends CI_Controller {
 		$category = $this->input->post("category");
 		$videos = $this->video_model->get_videos_by_user($users_id, $category);
 		die(json_encode($videos));
-	}
-
-	public function php() {
-		phpinfo();
-	}
-
-	public function path() {
-		echo __FILE__;
 	}
 
 }
