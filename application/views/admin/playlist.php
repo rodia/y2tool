@@ -8,11 +8,7 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
-	<?php if (isset($success) && $success === TRUE) : ?>
-	<div class="success">
-		<p>The playlist has been added with success.</p>
-	</div>
-	<?php endif; ?>
+	<?php if (isset($success)) show_messages($success, $msg, $type); ?>
     <table>
         <tr>
             <td valign="top">

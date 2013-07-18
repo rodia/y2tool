@@ -480,7 +480,7 @@ class Video extends CI_Controller {
 					"description" => $this->input->post("play_description")
 				))) {
 					$msg = "The playlist selected is update";
-					redirect("video/videolist/{}/{}?success=true&msg=" . $msg . "&type=success");
+					redirect("video/videolist/{$user_id}/{$playlistId}?success=true&msg=" . $msg . "&type=success");
 				}
 			}
 		}
@@ -1083,10 +1083,14 @@ class Video extends CI_Controller {
 	 * @param type $user_id
 	 */
     function playlist($user_id) {
+		if ($this->input->get("success")) {
+			$page["success"] = TRUE;
+			$page["msg"] = $this->input->get("msg");
+			$page["type"] = $this->input->get("type");
+		}
         $profile = $this->user_model->getUserProfile($user_id);
         $channel = $profile['username'];
         $page['playlistListFeed'] = $this->video_model->oauth_get_playlists($user_id);
-        $page['msg'] = "";
         $page['page_name'] = 'playlist';
         $page['title'] = "Playlist (channel: {$channel})";
         $page['user_id'] = $user_id;
