@@ -1577,33 +1577,10 @@ class Video_model extends CI_Model {
 			try {
 				$youtube->videos->rate($video_id, "like");
 
-				$videos = $youtube->videos->listVideos($video_id,
-					"id,snippet,statistics,contentDetails"
-				);
-
-				foreach ($videos["items"] as $video) {
-					$video = $this->video_model->exists_video($video_id);
-					$v_id = $video["id"];
-					if ( ! $video) {
-						$v_id = $this->video_model->insert_video(array(
-							"youtube_id" => $video_id,
-							"channel" => '',
-							"title" => $video["snippet"]["title"]
-						));
-					}
-
-					$dbdata = array(
-						"registered_date" => date("Y-m-d H:i:s"),
-						"admin_id" => $this->session->userdata('user_id'),
-						"user_id" => $user_id,
-						"video_id" => $v_id,
-						"video_likes" => $video["statistics"]["likeCount"],
-						"video_views" => $video["statistics"]["viewCount"],
-						"task_id" => 3,
-						"who" => $this->user_model->get_channel($user_id) . " ({$video["snippet"]["title"]})"
-					);
-					$this->video_model->insert_history($dbdata);
-				}
+				$this->set_history($video_id, $user_id, array(
+					"channel" => $this->user_model->get_channel($user_id),
+					"task_id" => 3
+				));
 				return TRUE;
 			} catch (Google_ServiceException $e) {
 				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
