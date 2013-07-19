@@ -1739,11 +1739,12 @@ class Video extends CI_Controller {
 		$users_checkbox = $this->input->post("ids");
 		$temp_users = explode(",", $this->input->cookie("hold-users"));
 		$this->video_model->get_temp_users_id($hold_users, $pair_user_login, $temp_users);
+		$video_user = $this->input->post("video_user") ? $this->input->post("video_user") : array();
 
 		$users = array_unique(array_merge($users_checkbox, $hold_users));
 
 		if ($action == "like-video") {
-			$videos = $this->input->post("like_ids");
+			$videos = array_unique(array_merge($this->input->post("like_ids"), $video_user));
 
 			foreach ($users as $user) {
 				foreach ($videos as $video) {
@@ -1753,7 +1754,7 @@ class Video extends CI_Controller {
 
 			$msg = "The Bulk likes was success for all videos";
 		} else if ($action == "comment-video") {
-			$videos = $this->input->post("comment_ids");
+			$videos = array_unique(array_merge($this->input->post("comment_ids"), $video_user));
 			$comment = $this->input->post("comment");
 
 			foreach ($users as $user) {
@@ -1764,7 +1765,7 @@ class Video extends CI_Controller {
 
 			$msg = "The bulk comments was success for all videos";
 		} else if ($action == "favorite-video") {
-			$videos = $this->input->post("favorite_ids");
+			$videos = array_unique(array_merge($this->input->post("favorite_ids"), $video_user));
 
 			foreach ($users as $user) {
 				foreach ($videos as $video) {
@@ -1774,7 +1775,7 @@ class Video extends CI_Controller {
 
 			$msg = "The bulk favorite was success for all videos";
 		} else if ($action == "share-video") {
-			$videos = $this->input->post("share_ids");
+			$videos = array_unique(array_merge($this->input->post("share_ids"), $video_user));
 
 			foreach ($videos as $video) {
 				$this->video_model->share($video, "");
