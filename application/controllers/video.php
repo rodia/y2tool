@@ -1686,6 +1686,11 @@ class Video extends CI_Controller {
 	 * @param string $sex
 	 */
 	public function bulk($name = "all", $youtube = "all", $country = "all", $category = "all", $sex = "all") {
+		if ($this->input->get("success")) {
+			$page["success"] = TRUE;
+			$page["message"] = $this->input->get("msg");
+			$page["type"] = $this->input->get("type");
+		}
 		$search_name = ($name != "" && $name != "all" ) ? urldecode($name) : "";
 		$search_youtube = ($youtube != "" && $youtube != "all") ? urldecode($youtube) : "";
 		$search_country = ($country != "" && $country != "all") ? urldecode($country) : "";

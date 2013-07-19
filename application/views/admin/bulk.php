@@ -444,12 +444,9 @@ jQuery.extend(jQuery.validator.prototype, {
 
 });
 </script>
+
 <center>
-	<?php if ($this->input->get("msg")): ?>
-	<div class="forgot-pwd success">
-		<p><?php echo $this->input->get("msg"); ?></p>
-	</div>
-	<?php endif; ?>
+	<?php if(isset($success)) show_messages($success, $message, $type); ?>
 	<div class="step-user">
 		<table>
 			<tr>
