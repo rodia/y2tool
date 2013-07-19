@@ -1739,7 +1739,7 @@ class Video extends CI_Controller {
 		$users_checkbox = $this->input->post("ids");
 		$temp_users = explode(",", $this->input->cookie("hold-users"));
 		$this->video_model->get_temp_users_id($hold_users, $pair_user_login, $temp_users);
-		$video_user = $this->input->post("video_user") ? $this->input->post("video_user") : array();
+		$video_user = $this->input->post("videos_user") ? $this->input->post("videos_user") : array();
 
 		$users = array_unique(array_merge($users_checkbox, $hold_users));
 
