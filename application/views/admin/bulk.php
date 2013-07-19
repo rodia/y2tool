@@ -186,48 +186,48 @@ $(document).ready(function(){
 	//		$(".pre-action").attr("disabled", "disabled");
 
 			$("#" + action).show();
-			if (action == "like-video") {
-				$('#bulk-form').validate({
-					rules: {
-						"like_ids[]": {required: true}
-					},
-					submitHandler: function(form) {form.submit();}
-				});
-				$(this).removeAttr("disabled");
-			} else if (action == "comment-video") {
-				$('#bulk-form').validate({
-					rules: {
-						"comment_ids[]": {required: true}
-					},
-					submitHandler: function(form) {form.submit();}
-				});
-				$(this).removeAttr("disabled");
-			} else if (action == "favorite-video") {
-				$('#bulk-form').validate({
-					rules: {
-						"favorite_ids[]": {required: true}
-					},
-					submitHandler: function(form) {form.submit();}
-				});
-				$(this).removeAttr("disabled");
-			} else if (action == "share-video") {
-				$('#bulk-form').validate({
-					rules: {
-						"share_ids[]": {required: true}
-					},
-					submitHandler: function(form) {form.submit();}
-				});
-				$(this).removeAttr("disabled");
-			}
-			else if (action == "featured-channel") {
-				$('#bulk-form').validate({
-					rules: {
-						"featured_ids[]": {required: true}
-					},
-					submitHandler: function(form) {form.submit();}
-				});
-				$(this).removeAttr("disabled");
-			}
+//			if (action == "like-video") {
+//				$('#bulk-form').validate({
+//					rules: {
+//						"like_ids[]": {required: true}
+//					},
+//					submitHandler: function(form) {form.submit();}
+//				});
+//				$(this).removeAttr("disabled");
+//			} else if (action == "comment-video") {
+//				$('#bulk-form').validate({
+//					rules: {
+//						"comment_ids[]": {required: true}
+//					},
+//					submitHandler: function(form) {form.submit();}
+//				});
+//				$(this).removeAttr("disabled");
+//			} else if (action == "favorite-video") {
+//				$('#bulk-form').validate({
+//					rules: {
+//						"favorite_ids[]": {required: true}
+//					},
+//					submitHandler: function(form) {form.submit();}
+//				});
+//				$(this).removeAttr("disabled");
+//			} else if (action == "share-video") {
+//				$('#bulk-form').validate({
+//					rules: {
+//						"share_ids[]": {required: true}
+//					},
+//					submitHandler: function(form) {form.submit();}
+//				});
+//				$(this).removeAttr("disabled");
+//			}
+//			else if (action == "featured-channel") {
+//				$('#bulk-form').validate({
+//					rules: {
+//						"featured_ids[]": {required: true}
+//					},
+//					submitHandler: function(form) {form.submit();}
+//				});
+//				$(this).removeAttr("disabled");
+//			}
 		}
 		return false;
 	});
