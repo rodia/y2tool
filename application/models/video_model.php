@@ -598,6 +598,7 @@ class Video_model extends CI_Model {
 					} else {
 						$row = $this->get_db_id_video($video_id);
 						$v_id = $row[0]->id;
+						var_dump($row);
 					}
 
 					$dbdata = array(
@@ -1487,6 +1488,7 @@ class Video_model extends CI_Model {
 		if ($admin != '') $this->db_my_db->where("a.name", $admin);
 		if ($video_id != '') $this->db_my_db->where("v.youtube_id", $video_id);
 		if ($action_taken != '') $this->db_my_db->where("t.description", $action_taken);
+		$this->db_my_db->order_by("h.registered_date", "DESC");
         $query = $this->db_my_db->get();
         return $query->result();
 	}
