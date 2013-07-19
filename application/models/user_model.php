@@ -39,6 +39,8 @@ class User_model extends CI_Model {
 		return $check;
 	}
 	/**
+	 * OAuth
+	 * 
 	 * This funcion work in OAuth protocol.
 	 * The function return a array with information of user.
 	 *

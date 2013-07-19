@@ -1651,10 +1651,9 @@ class Video_model extends CI_Model {
 			$video_id = $aux[1];
 		}
 
-		$yt = $this->user_model->getHttpClient($user_id);
+		$yt = new Zend_Gdata_YouTube();
 		$profile = $this->user_model->getUserProfile($user_id);
 		$channel = $profile["username"];
-		$title = $profile["title"];
 		$yt->setMajorProtocolVersion(2);
 
 		try {
@@ -1664,33 +1663,39 @@ class Video_model extends CI_Model {
 			$commentFeedPostUrl = $videoEntry->getVideoCommentFeedUrl();
 
 			$yt->insertEntry($newComment, $commentFeedPostUrl, 'Zend_Gdata_YouTube_CommentEntry');
-			$views = $videoEntry->getVideoViewCount();
-			$video_title = $videoEntry->getVideoTitle();
-			$rating = $videoEntry->getVideoRatingInfo();
-			$likes = $rating['numRaters'];
-			$video = $this->video_model->exists_video($video_id);
-			$v_id = $video["id"];
-			if (!$video) {
-				$data = array(
-					"youtube_id" => $video_id,
-					"channel" => '',
-					"title" => $video_title
-				);
-				$v_id = $this->video_model->insert_video($data);
-			}
-			if ($video) {
-				$dbdata = array(
-					"registered_date" => date("Y-m-d H:i:s"),
-					"admin_id" => $this->session->userdata('user_id'),
-					"user_id" => $user_id,
-					"video_id" => $v_id,
-					"task_id" => 5,
-					"video_likes" => $likes,
-					"video_views" => $views,
-					"who" => $channel . " ($title)"
-				);
-				$this->video_model->insert_history($dbdata);
-			}
+//			$views = $videoEntry->getVideoViewCount();
+//			$video_title = $videoEntry->getVideoTitle();
+//			$rating = $videoEntry->getVideoRatingInfo();
+//			$likes = $rating['numRaters'];
+
+			$this->video_model->set_history($video_id, $user_id, array(
+				"channel" => $channel,
+				"task_id" => 5
+			));
+
+//			$video = $this->video_model->exists_video($video_id);
+//			$v_id = $video["id"];
+//			if (!$video) {
+//				$data = array(
+//					"youtube_id" => $video_id,
+//					"channel" => '',
+//					"title" => $video_title
+//				);
+//				$v_id = $this->video_model->insert_video($data);
+//			}
+//			if ($video) {
+//				$dbdata = array(
+//					"registered_date" => date("Y-m-d H:i:s"),
+//					"admin_id" => $this->session->userdata('user_id'),
+//					"user_id" => $user_id,
+//					"video_id" => $v_id,
+//					"task_id" => 5,
+//					"video_likes" => $likes,
+//					"video_views" => $views,
+//					"who" => $channel . " ($title)"
+//				);
+//				$this->video_model->insert_history($dbdata);
+//			}
 			return TRUE;
 		} catch (Zend_Gdata_App_HttpException $httpException) {
 			error_log($httpException->getRawResponseBody());

@@ -1723,7 +1723,7 @@ class Video extends CI_Controller {
         $this->load->view('admin/index', $page);
 	}
 	/**
-	 * Controller for form action
+	 * Controller for form action by bulk action
 	 *
 	 * This controller manage the task for bulk action
 	 */
