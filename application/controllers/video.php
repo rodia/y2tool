@@ -1739,6 +1739,7 @@ class Video extends CI_Controller {
 			redirect ("video/bulk");
 		}
 		$msg = "";
+		$type = "success"; /*can do error, info, success type*/
 		$hold_users = array();
 		$pair_user_login = array();
 		$users_checkbox = $this->input->post("ids");
@@ -1762,13 +1763,18 @@ class Video extends CI_Controller {
 			$videos = array_unique(array_merge($this->input->post("comment_ids"), $video_user));
 			$comment = $this->input->post("comment");
 
-			foreach ($users as $user) {
-				foreach ($videos as $video) {
-					$this->video_model->comment($video, $user, $comment);
+			if ($comment != "") {
+				foreach ($users as $user) {
+					foreach ($videos as $video) {
+						if ($video != "") $this->video_model->comment($video, $user, $comment);
+					}
 				}
-			}
 
-			$msg = "The bulk comments was success for all videos";
+				$msg = "The bulk comments was success for all videos";
+			} else {
+				$type = "error";
+				$msg = "Error: Not was possible comment this video";
+			}
 		} else if ($action == "favorite-video") {
 			$videos = array_unique(array_merge($this->input->post("favorite_ids"), $video_user));
 
@@ -1801,7 +1807,7 @@ class Video extends CI_Controller {
 
 		}
 		delete_cookie("hold-users");
-		redirect("video/bulk" . (!empty($msg) ? "?success=true&msg=" . $msg . "&type=success" : ""));
+		redirect("video/bulk" . (!empty($msg) ? "?success=true&msg={$msg}&type={$type}" : ""));
 	}
 
 	public function select($users) {

@@ -444,7 +444,7 @@ jQuery.extend(jQuery.validator.prototype, {
 
 });
 </script>
-
+<?php $this->load->helper("views_helper"); ?>
 <center>
 	<?php if(isset($success)) show_messages($success, $message, $type); ?>
 	<div class="step-user">
