@@ -598,7 +598,6 @@ class Video_model extends CI_Model {
 					} else {
 						$row = $this->get_db_id_video($video_id);
 						$v_id = $row[0]->id;
-						var_dump($row);
 					}
 
 					$dbdata = array(
@@ -1052,10 +1051,10 @@ class Video_model extends CI_Model {
 
 				return $profile;
 			} catch (Google_ServiceException $e) {
-				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			} catch (Google_Exception $e) {
-				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			}
 		}
@@ -1298,7 +1297,6 @@ class Video_model extends CI_Model {
 
 			try {
 				$video_id = $this->get_id_by_url($data["videoId"]);
-				var_dump($video_id);
 				$postBody = new Google_PlaylistItem();
 
 				$resource = new Google_ResourceId();
