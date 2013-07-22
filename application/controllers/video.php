@@ -1866,6 +1866,10 @@ class Video extends CI_Controller {
 		die(json_encode($videos));
 	}
 
+	public function path() {
+		echo __FILE__;
+	}
+
 }
 
 /**/

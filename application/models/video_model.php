@@ -97,7 +97,7 @@ class Video_model extends CI_Model {
 
 				$video_snippet->setTags(split(",",$this->input->post("video_tags")));
 
-				$video_path = "http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
+				$video_path = "/home3/buzzmy/public_html/y2tool/uploads/ES_262_05_00_00.mp4";
 
 /*				$chunkSizeBytes = 1 * 1024 * 1024;
 				$media = new Google_MediaFileUpload('video/mp4', null);
