@@ -8,7 +8,7 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
-	<?php if(isset($success)) show_messages($success, $message, $type); ?>
+	<?php if (isset($success)) show_messages($success, $message, $type); ?>
 	<?php echo form_open_multipart("video/upload/{$user_id}", array("method" => "post")); ?>
     <!--<form enctype="multipart/form-data" action="<?php echo base_url(); ?>video/upload" method="post">-->
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
@@ -24,7 +24,7 @@ if (!defined('BASEPATH'))
                         <h2>Title:</h2>
                     </td>
                     <td>
-                        <input class="inp-form" size="60px" type="text" name="video_title" id="video_title" value="<?php echo $video_title ?>"/>
+						<?php echo form_input(array("name" => "video_title", "id" => "video_title", "value" => $video_title, "class" => "inp-form", "size" => "60px")); ?>
                         <span><?php echo form_error('video_title'); ?></span>
                     </td>
                 </tr>
@@ -33,7 +33,7 @@ if (!defined('BASEPATH'))
                         <h2>Description:</h2>
                     </td>
                     <td>
-                        <textarea class="form-textarea" name="video_description"><?php echo $video_description; ?></textarea>
+						<?php echo form_textarea(array("name" => "video_description", "class" => "form-textarea", "value" => $video_description)); ?>
                         <span><?php echo form_error('video_description'); ?></span>
                     </td>
                 </tr>
@@ -42,7 +42,7 @@ if (!defined('BASEPATH'))
                         <h2>Tags:</h2>
                     </td>
                     <td>
-                        <input class="inp-form" size="60px" type="text" name="video_tags" id="video_tags" value="<?php echo $video_tags; ?>"/>
+						<?php echo form_input(array("name" => "video_tags", "id" => "video_tags", "value" => $video_tags, "class" => "inp-form", "size" => "60px")); ?>
                         <span><?php echo form_error('video_tags'); ?></span>
                         <br />
                         <span class="url-demo">e.g. </span><b><i>video, music</i></b>
@@ -54,25 +54,6 @@ if (!defined('BASEPATH'))
                     </td>
                     <td>
 						<?php echo form_dropdown('video_category', get_categories($this), array(), 'class="select_style" id="video_category"'); ?>
-<!--                        <select  class="select_style" name="video_category" id="video_category">
-                            <option value="Autos">Autos &amp; Vehicles</option>
-                            <option value="Comedy">Comedy</option>
-                            <option value="Education">Education</option>
-                            <option value="Entertainment">Entertainment</option>
-                            <option value="Film">Film &amp; Animation</option>
-                            <option value="Games">Gaming</option>
-                            <option value="Howto">Howto &amp; Style</option>
-                            <option value="Music">Music</option>
-                            <option value="News">News &amp; Politics</option>
-                            <option value="Nonprofit">Nonprofits &amp; Activism</option>
-                            <option value="People">People &amp; Blogs</option>
-                            <option value="Animals">Pets &amp; Animals</option>
-                            <option value="Tech">Science &amp; Technology</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Travel">Travel &amp; Events</option>
-                        </select>-->
-
-
                     </td>
                 </tr>
                 <tr >
@@ -80,17 +61,15 @@ if (!defined('BASEPATH'))
                         <h2>Choose a file to upload:</h2>
                     </td>
                     <td>
-                        <input type="file" name="video_file" size="40" class="inp-form" value="<?php echo $video_file; ?>">
+						<?php echo form_upload(array("name" => "video_file", "class" => "inp-form", "size" => "40", "value" => $video_file)); ?>
                     </td>
                 </tr>
 
                 <tr>
                     <td align="center" colspan="2">
-
-                        <input type="hidden"  name="user_id" value="<?php echo $user_id; ?>" >
-                        <input type="submit" class="form-submit" value="Upload video" id="button" name="submit">
+						<?php echo form_submit(array("name" => "submit", "id" => "button", "class" => "form-submit"), "Upload Video"); ?>
                     </td>
                 </tr>
             </tbody></table>
-    </form>
+    <?php echo form_close(); ?>
 </center>

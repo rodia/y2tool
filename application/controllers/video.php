@@ -1340,6 +1340,23 @@ class Video extends CI_Controller {
 	 * If the user enable your token auth, this task is possible.
 	 */
     function upload($user_id) {
+		$config['upload_path'] = $this->config->item("upload_path");;
+		$config['allowed_types'] = $this->config->item("allowed_types_video");
+		$config['max_size']	= $this->config->item("max_size_video");
+
+		$this->load->library('upload', $config);
+		$this->upload->initialize($config);
+		$res = "";
+		if ($this->input->post("submit")) {
+			$user_id = $this->input->post('user_id') ? $this->input->post("user_id") : $user_id;
+			$res = $this->video_model->upload_video($user_id, array(
+				"video_title" => $this->input->post("video_title"),
+				"video_description" => $this->input->post("video_description"),
+				"video_category" => $this->input->post("video_category"),
+				"video_tags" => $this->input->post("video_tags"),
+				"video_path" => $this->video_model->load_video("video_file")
+			));
+		}
 
 		if ($this->input->get("success")) {
 			$page["success"] = TRUE;
@@ -1347,8 +1364,6 @@ class Video extends CI_Controller {
 			$page["type"] = $this->input->get("type");
 		}
 
-    	$user_id = $this->input->post('user_id');
-    	$res = $this->video_model->upload_video($user_id);
     	$page['msg'] = $res;
     	$page['video_title'] = "";
     	$page['video_description'] = "";

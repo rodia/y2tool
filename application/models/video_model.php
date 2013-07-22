@@ -70,7 +70,7 @@ class Video_model extends CI_Model {
      *
      * @param string $user_id
      */
-    function upload_video($user_id) {
+    function upload_video($user_id, $data) {
     	$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
     	$client = $this->get_google_client();
@@ -90,32 +90,15 @@ class Video_model extends CI_Model {
 				$video_status->setPrivacyStatus("public");
 				$video_objt->setStatus($video_status);
 
-				$video_snippet->setTitle($this->input->post("video_title"));
-				$video_snippet->setDescription($this->input->post("video_description"));
-				$video_snippet->setCategoryId($this->input->post("video_category"));
+				$video_snippet->setTitle($data["video_title"]);
+				$video_snippet->setDescription($data["video_description"]);
+				$video_snippet->setCategoryId($data["video_category"]);
 
 
-				$video_snippet->setTags(split(",",$this->input->post("video_tags")));
-
-				$video_path = "/home3/buzzmy/public_html/y2tool/uploads/ES_262_05_00_00.mp4";
-
-/*				$chunkSizeBytes = 1 * 1024 * 1024;
-				$media = new Google_MediaFileUpload('video/mp4', null);
-				 //http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
-				$media->setFileSize(filesize($video_path));    */
+				$video_snippet->setTags(split(",",$data["video_tags"]));
 
 				$video_objt->setSnippet($video_snippet);
-				$result = $youtube->videos->insert("snippet,status",$video_objt,array('data' => file_get_contents($video_path),"mimeType"=>"video/mp4"));
-
-				/*$status = false;
-				$handle = fopen($video_path, "rb");
-				while (!$status && !feof($handle)) {
-					$chunk = fread($handle, $chunkSizeBytes);
-					$uploadStatus = $media->nextChunk($result, $chunk);
-				}
-
-				fclose($handle);*/
-
+				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($data["video_path"]), "mimeType"=>"video/mp4"));
 
 			} catch (Google_ServiceException $e) {
 				$log = sprintf('<p>A service error occurred: <code>%s</code></p>',
@@ -542,6 +525,21 @@ class Video_model extends CI_Model {
 			return base_url() . substr($this->config->item("upload_path"), 2) . $image["file_name"];
 		}
 	}
+
+	public function load_video($file_video) {
+		$file = $this->upload->do_upload($file_video);
+		$errors = $this->upload->display_errors();
+		if ("" != $errors) {
+			error_log("Error upload video {" . __FILE__ . "}");
+		}
+		if (FALSE != $file) {
+
+			return "";
+		} else {
+			return FALSE;
+		}
+	}
+
 	/**
 	 *
 	 * @param string $video_id Id youtube
