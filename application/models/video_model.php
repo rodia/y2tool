@@ -68,8 +68,10 @@ class Video_model extends CI_Model {
 
     /**
      *
-     * @param string $user_id
-     */
+	 * @param string $user_id
+	 * @param array $data
+	 * @return boolean
+	 */
     function upload_video($user_id, $data) {
     	$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
@@ -82,7 +84,6 @@ class Video_model extends CI_Model {
 
     	if ($client->getAccessToken()) {
     			$_SESSION['token'] = $client->getAccessToken();
-
 			try {
 				$video_objt = new Google_Video();
 				$video_snippet = new Google_VideoSnippet();
@@ -93,7 +94,6 @@ class Video_model extends CI_Model {
 				$video_snippet->setTitle($data["video_title"]);
 				$video_snippet->setDescription($data["video_description"]);
 				$video_snippet->setCategoryId($data["video_category"]);
-
 
 				$video_snippet->setTags(split(",",$data["video_tags"]));
 
@@ -106,12 +106,12 @@ class Video_model extends CI_Model {
 				$log = sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage()));
 				error_log($log);
-				return $log;
+				echo $log;
 			} catch (Google_Exception $e) {
 				$log = sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage()));
 				error_log($log);
-				return $log;
+				echo $log;
 			}
 			return $result;
     	}
