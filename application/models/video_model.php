@@ -533,8 +533,8 @@ class Video_model extends CI_Model {
 			error_log("Error upload video {" . __FILE__ . "}");
 		}
 		if (FALSE != $file) {
-
-			return "";
+			$video = $this->upload->data();
+			return $video["full_path"];
 		} else {
 			return FALSE;
 		}
