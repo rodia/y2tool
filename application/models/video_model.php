@@ -100,6 +100,8 @@ class Video_model extends CI_Model {
 				$video_objt->setSnippet($video_snippet);
 				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($data["video_path"]), "mimeType"=>"video/mp4"));
 
+				var_dump($result);
+
 			} catch (Google_ServiceException $e) {
 				$log = sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage()));
