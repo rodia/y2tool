@@ -2,21 +2,15 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
-
+<?php $this->load->helper("views_helper"); ?>
+<?php get_link_relates(array(
+	"video/bulk" => "Dashboard",
+	$title
+)); ?>
 <center>
-	<!-- <?php if (!$user_auth): ?>
-	<div class="forgot-pwd error">
-		<p>Sorry! The user Not enable your channel for this tools. please try with another user.</p>
-		<p><a href="<?php echo base_url(); ?>/admin/users">Go back!</a></p>
-	</div>
-	<?php endif; ?> -->
-	
-	<?php if ($msg): ?>
-	<div class="forgot-pwd error">
-		<p><?php echo $msg?></p>
-	</div>
-	<?php endif; ?>
-    <form enctype="multipart/form-data" action="<?php echo base_url(); ?>video/upload" method="post">
+	<?php if(isset($success)) show_messages($success, $message, $type); ?>
+	<?php echo form_open_multipart("admin/upload/{$user_id}", array("method" => "post")); ?>
+    <!--<form enctype="multipart/form-data" action="<?php echo base_url(); ?>video/upload" method="post">-->
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
             <tbody>
                 <tr>
@@ -59,7 +53,8 @@ if (!defined('BASEPATH'))
                         <h2>Category:</h2>
                     </td>
                     <td>
-                        <select  class="select_style" name="video_category" id="video_category">
+						<?php echo form_dropdown('video_category', get_categories($this), array(), 'class="select_style" id="video_category"'); ?>
+<!--                        <select  class="select_style" name="video_category" id="video_category">
                             <option value="Autos">Autos &amp; Vehicles</option>
                             <option value="Comedy">Comedy</option>
                             <option value="Education">Education</option>
@@ -75,7 +70,7 @@ if (!defined('BASEPATH'))
                             <option value="Tech">Science &amp; Technology</option>
                             <option value="Sports">Sports</option>
                             <option value="Travel">Travel &amp; Events</option>
-                        </select>
+                        </select>-->
 
 
                     </td>

@@ -1339,7 +1339,13 @@ class Video extends CI_Controller {
 	/**
 	 * If the user enable your token auth, this task is possible.
 	 */
-    function upload() {
+    function upload($user_id) {
+
+		if ($this->input->get("success")) {
+			$page["success"] = TRUE;
+			$page["message"] = $this->input->get("msg");
+			$page["type"] = $this->input->get("type");
+		}
 
     	$user_id = $this->input->post('user_id');
     	$res = $this->video_model->upload_video($user_id);

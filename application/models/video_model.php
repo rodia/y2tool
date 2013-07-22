@@ -75,10 +75,6 @@ class Video_model extends CI_Model {
 
     	$client = $this->get_google_client();
     	$youtube = new Google_YoutubeService($client);
-    	$rp = $this->config->item("rp");
-    	$current_tags = array();
-    	$categories = array();
-    	$current_category = "";
 
     	if (isset($token)) {
     		$client->setAccessToken($token);
@@ -87,12 +83,7 @@ class Video_model extends CI_Model {
     	if ($client->getAccessToken()) {
     			$_SESSION['token'] = $client->getAccessToken();
 
-			$data = array();
-			$i = 0;
-
 			try {
-
-
 				$video_objt = new Google_Video();
 				$video_snippet = new Google_VideoSnippet();
 				$video_status = new Google_VideoStatus();

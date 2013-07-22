@@ -218,6 +218,12 @@ class Admin extends CI_Controller {
 	 */
     function upload($user_id) {
 
+		if ($this->input->get("success")) {
+			$page["success"] = TRUE;
+			$page["message"] = $this->input->get("msg");
+			$page["type"] = $this->input->get("type");
+		}
+
         $page['page_name'] = 'upload_video';
         $page['title'] = "Upload a new video";
         $page['user_id'] = $user_id;
