@@ -9,7 +9,7 @@ if (!defined('BASEPATH'))
 )); ?>
 <center>
 	<?php if(isset($success)) show_messages($success, $message, $type); ?>
-	<?php echo form_open_multipart("admin/upload/{$user_id}", array("method" => "post")); ?>
+	<?php echo form_open_multipart("video/upload/{$user_id}", array("method" => "post")); ?>
     <!--<form enctype="multipart/form-data" action="<?php echo base_url(); ?>video/upload" method="post">-->
         <table width="800" cellspacing="0" cellpadding="0" border="0" id="product-table">
             <tbody>
