@@ -96,9 +96,12 @@ class Video_model extends CI_Model {
 				$video_snippet->setCategoryId($data["video_category"]);
 
 				$video_snippet->setTags(split(",",$data["video_tags"]));
+				
+				$video_path = "http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
 
 				$video_objt->setSnippet($video_snippet);
-				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($data["video_path"]), "mimeType"=>"video/mp4"));
+//				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($data["video_path"]), "mimeType"=>"video/mp4"));
+				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($video_path), "mimeType"=>"video/mp4"));
 
 				var_dump($result);
 
