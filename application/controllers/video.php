@@ -1349,13 +1349,21 @@ class Video extends CI_Controller {
 		$res = "";
 		if ($this->input->post("submit")) {
 			$user_id = $this->input->post('user_id') ? $this->input->post("user_id") : $user_id;
-			$res = $this->video_model->upload_video($user_id, array(
+			if ($this->video_model->upload_video($user_id, array(
 				"video_title" => $this->input->post("video_title"),
 				"video_description" => $this->input->post("video_description"),
 				"video_category" => $this->input->post("video_category"),
 				"video_tags" => $this->input->post("video_tags"),
 				"video_path" => $this->video_model->load_video("video_file")
-			));
+			))) {
+				$page["success"] = TRUE;
+				$page["message"] = "Video upload success!";
+				$page["type"] = "success";
+			} else {
+				$page["success"] = TRUE;
+				$page["message"] = "Video Not was upload!";
+				$page["type"] = "error";
+			}
 		}
 
 		if ($this->input->get("success")) {
