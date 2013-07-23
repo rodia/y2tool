@@ -5,6 +5,7 @@ if (!defined('BASEPATH'))
 <?php $this->load->helper("views_helper"); ?>
 <?php get_link_relates(array(
 	"video/bulk" => "Dashboard",
+	"video/videos/{$user_id}" => "Videos",
 	$title
 )); ?>
 <center>

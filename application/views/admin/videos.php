@@ -20,6 +20,7 @@ if (!defined('BASEPATH'))
 	$title
 )); ?>
 <center>
+	<?php if (isset($success)) show_messages($success, $message, $type); ?>
     <?php echo form_open('video/videoActions', array('class' => 'forms', 'id' => 'myForm', 'name' => 'myForm')); ?>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
         <tr>
@@ -66,6 +67,7 @@ if (!defined('BASEPATH'))
                 <td class="">
                     <a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $owner; ?>?video_id=<?php echo $video["video_id"]; ?>" ><b>Report</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/edit_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" ><b>Edit video</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/delete_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" ><b>Edit video</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/share/<?php echo $owner; ?>/<?php echo $video["video_id"]; ?>" ><b>Share</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/like/<?php echo $owner; ?>/<?php echo $video["video_id"]; ?>" ><b>Like</b></a><br/>
 

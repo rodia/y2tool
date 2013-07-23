@@ -499,6 +499,44 @@ class Video_model extends CI_Model {
 		}
 	}
 	/**
+	 * OAuth
+	 *
+	 * @param string $video_id Youtube id
+	 * @param int $user_id User id of wordpress intallation
+	 * @return boolean
+	 */
+	public function delete_video($video_id, $user_id) {
+		$token = $this->user_model->get_user_meta($user_id, 'token', true);
+
+		$client = $this->get_google_client();
+		$youtube = new Google_YoutubeService($client);
+
+		if (isset($token)) {
+			$client->setAccessToken($token);
+		}
+
+		if ($client->getAccessToken()) {
+			$_SESSION['token'] = $client->getAccessToken();
+
+			try {
+				$videoResponse = $youtube->videos->delete(
+					$video_id
+				);
+
+				var_dump($videoResponse);
+				return TRUE;
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			}
+		}
+	}
+	/**
 	 *
 	 * @param string $video_id video ID Youtube
 	 * @param int $user_id User ID for wordpress system

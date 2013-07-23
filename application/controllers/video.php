@@ -449,9 +449,11 @@ class Video extends CI_Controller {
 	/**
 	 * OAuth
 	 *
-	 * @param int $user_id
-	 * @param string $videoFeedID
-	 * @param string $videoId
+	 * Delete video the playlist selected by $videoFeedID
+	 *
+	 * @param int $user_id user of system wordpress
+	 * @param string $videoFeedID Id of playlist
+	 * @param string $videoId Id of youtube
 	 */
     public function delvideo($user_id, $videoFeedID, $videoId) {
 		$success = $this->video_model->oauth_delete_video_playlist($user_id, $videoFeedID, array(
@@ -1193,7 +1195,19 @@ class Video extends CI_Controller {
         $page['post_form'] = "edit_video";
         $this->load->view('admin/index', $page);
 	}
-
+	/**
+	 * Oauht
+	 *
+	 * @param string $video_id Youtube id
+	 * @param int $user_id user Id of wordpress installation
+	 */
+	public function delete_video($video_id, $user_id) {
+		if ($this->video_model->delete_video($user_id, $video_id)) {
+			redirect("video/videos/{$user_id}?success=true&msg=Video delete success!&type=success");
+		} else {
+			redirect("video/videos/{$user_id}?success=false&msg=The Video not was delete&type=error");
+		}
+	}
 	/**
 	 * Oauth
 	 *
@@ -1424,6 +1438,11 @@ class Video extends CI_Controller {
 	 * @param int $category
 	 */
 	public function videos($user_id, $category = "all") {
+		if ($this->input->get("success")) {
+			$page["success"] = TRUE;
+			$page["message"] = $this->input->get("msg");
+			$page["type"] = $this->input->get("type");
+		}
 		$this->load->library('pagination');
 
 		$opcions = array();
