@@ -1362,9 +1362,13 @@ class Video extends CI_Controller {
 				$page["type"] = "success";
 			} else {
 				$page["success"] = TRUE;
-				$page["message"] = "Video Not was upload!";
+				$page["message"] = "Video Not was upload to Youtube!";
 				$page["type"] = "error";
 			}
+		} else {
+			$page["success"] = TRUE;
+			$page["message"] = "Video Not was upload to server!";
+			$page["type"] = "error";
 		}
 
 		if ($this->input->get("success")) {
