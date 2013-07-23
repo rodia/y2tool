@@ -22,7 +22,7 @@ if (!defined('BASEPATH'))
                 </tr>
                 <tr>
                     <td align="right">
-                        <h2>Title:</h2>
+                        <h2>Title: <span style="color:red;">*</span></h2>
                     </td>
                     <td>
 						<?php echo form_input(array("name" => "video_title", "id" => "video_title", "value" => $video_title, "class" => "inp-form", "size" => "60px")); ?>
@@ -51,15 +51,15 @@ if (!defined('BASEPATH'))
                 </tr>
                 <tr class="alternate-row">
                     <td align="right">
-                        <h2>Category:</h2>
+                        <h2>Category: <span style="color:red;">*</span></h2>
                     </td>
                     <td>
-						<?php echo form_dropdown('video_category', get_categories($this), array(), 'class="select_style" id="video_category"'); ?>
+						<?php echo form_dropdown('video_category', get_categories($this), $video_category, 'class="select_style" id="video_category"'); ?>
                     </td>
                 </tr>
                 <tr >
                     <td align="right">
-                        <h2>Choose a file to upload:</h2>
+                        <h2>Choose a file to upload: <span style="color:red;">*</span></h2>
                     </td>
                     <td>
 						<?php echo form_upload(array("name" => "video_file", "class" => "inp-form", "size" => "40", "value" => $video_file)); ?>

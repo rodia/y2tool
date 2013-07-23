@@ -1396,6 +1396,7 @@ class Video extends CI_Controller {
     	$page['video_description'] = "";
     	$page['video_tags'] = "";
     	$page['video_file'] = "";
+    	$page['video_category'] = "";
     	$page['page_name'] = 'upload_video';
     	$page['title'] = "Upload a new video";
     	$page['user_id'] = $user_id;
