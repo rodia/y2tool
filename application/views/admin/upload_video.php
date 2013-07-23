@@ -62,6 +62,8 @@ if (!defined('BASEPATH'))
                     </td>
                     <td>
 						<?php echo form_upload(array("name" => "video_file", "class" => "inp-form", "size" => "40", "value" => $video_file)); ?>
+						<br />
+						<span class="url-demo">Format file </span><b><i>mp4</i></b>
                     </td>
                 </tr>
 

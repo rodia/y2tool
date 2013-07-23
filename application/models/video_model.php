@@ -536,16 +536,14 @@ class Video_model extends CI_Model {
 	 * @return boolean
 	 */
 	public function load_video($file_video) {
-		$configVideo['upload_path'] = $this->config->item("upload_path");;
-//		$config['allowed_types'] = $this->config->item("allowed_types_video");
-//		$config['max_size']	= $this->config->item("max_size_video");
+		$configVideo['upload_path'] = $this->config->item("upload_path");
 
 		$date = date("ymdhi");
-		$configVideo['max_size'] = '10240';
-		$configVideo['allowed_types'] = 'avi|flv|wmv|mp4';
+		$configVideo['max_size'] = $this->config->item("max_size_video"); //'10240';
+		$configVideo['allowed_types'] = $this->config->item("allowed_types_video");
 		$configVideo['overwrite'] = FALSE;
 		$configVideo['remove_spaces'] = TRUE;
-		$configVideo['file_name'] = $date . $_FILES['video']['name'];
+		$configVideo['file_name'] = $date . $_FILES[$file_video]['name'];
 
 		$this->load->library('upload', $configVideo);
 		$this->upload->initialize($configVideo);
@@ -553,7 +551,7 @@ class Video_model extends CI_Model {
 		$file = $this->upload->do_upload($file_video);
 		$errors = $this->upload->display_errors();
 		if ("" != $errors) {
-			echo("Error upload video {" . $errors . "}");
+			error_log("Error upload video {" . $errors . "}");
 			return FALSE;
 		}
 		if (FALSE != $file) {

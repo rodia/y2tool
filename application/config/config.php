@@ -383,8 +383,8 @@ $config['max_size']	= '100';
 $config['max_width'] = '1024';
 $config['max_height'] = '768';
 
-$config["allowed_types_video"] = "mp4|wmv|flv|3gp";
-$config["max_size_video"] = "100";
+$config["allowed_types_video"] = "avi|flv|wmv|mp4";
+$config["max_size_video"] = "10240";
 
 /*
  * Variable for config app Google Youtube 2.0

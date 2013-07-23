@@ -1361,7 +1361,7 @@ class Video extends CI_Controller {
 			}
 		} else {
 			$page["success"] = TRUE;
-			$page["message"] = "Video Not was upload to server! Types allowed mp4, wmv, flv, 3gp.";
+			$page["message"] = "Video Not was upload to server! Types allowed mp4";
 			$page["type"] = "error";
 		}
 
