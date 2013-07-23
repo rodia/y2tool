@@ -536,6 +536,13 @@ class Video_model extends CI_Model {
 	 * @return boolean
 	 */
 	public function load_video($file_video) {
+		$config['upload_path'] = $this->config->item("upload_path");;
+		$config['allowed_types'] = $this->config->item("allowed_types_video");
+		$config['max_size']	= $this->config->item("max_size_video");
+
+		$this->load->library('upload', $config);
+		$this->upload->initialize($config);
+		
 		$file = $this->upload->do_upload($file_video);
 		$errors = $this->upload->display_errors();
 		if ("" != $errors) {

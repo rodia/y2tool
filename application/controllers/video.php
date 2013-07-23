@@ -1340,12 +1340,6 @@ class Video extends CI_Controller {
 	 * If the user enable your token auth, this task is possible.
 	 */
     function upload($user_id) {
-		$config['upload_path'] = $this->config->item("upload_path");;
-		$config['allowed_types'] = $this->config->item("allowed_types_video");
-		$config['max_size']	= $this->config->item("max_size_video");
-
-		$this->load->library('upload', $config);
-		$this->upload->initialize($config);
 		$res = "";
 		$path_video = $this->video_model->load_video("video_file");
 		if ($path_video && $this->input->post("submit")) {
