@@ -542,7 +542,7 @@ class Video_model extends CI_Model {
 
 		$date = date("ymdhi");
 		$configVideo['max_size'] = '10240';
-		$configVideo['allowed_types'] = 'avi|flv|wmv|mp3';
+		$configVideo['allowed_types'] = 'avi|flv|wmv|mp4';
 		$configVideo['overwrite'] = FALSE;
 		$configVideo['remove_spaces'] = TRUE;
 		$video_name = $date.$_FILES['video']['name'];
