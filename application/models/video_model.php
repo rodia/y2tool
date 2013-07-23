@@ -1551,8 +1551,9 @@ class Video_model extends CI_Model {
         $this->db_my_db->join('yt_admin_user a', 'a.id = h.admin_id');
         $this->db_my_db->join('yt_task t', 't.id = h.task_id', 't.description');
         $this->db_my_db->where('h.user_id', $user_id);
-		$this->db_my_db->where('h.registered_date >=', $startDate);
-		$this->db_my_db->where('h.registered_date <=', $endDate);
+//		$this->db_my_db->where('h.registered_date >=', $startDate);
+//		$this->db_my_db->where('h.registered_date <=', $endDate);
+		$this->db_my_db->where('h.registered_date BETWEEN "'. $startDate . '" and "'. $endDate .'"');
 		if ($admin != '') $this->db_my_db->where("a.name", $admin);
 		if ($video_id != '') $this->db_my_db->where("v.youtube_id", $video_id);
 		if ($action_taken != '') $this->db_my_db->where("t.description", $action_taken);
