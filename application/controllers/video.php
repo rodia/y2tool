@@ -600,7 +600,7 @@ class Video extends CI_Controller {
 	 * @param string $video_id Youtube ID
 	 * @param int $user_id User Id for wordpress system
 	 */
-    function like($video_id, $user_id) {
+    function like($user_id, $video_id) {
 		if ($this->video_model->like($video_id, $user_id)) {
 			redirect("video/videos/{$user_id}?success=true&msg=Action apply&type=success");
 		} else {
