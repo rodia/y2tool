@@ -212,30 +212,30 @@ class Admin extends CI_Controller {
 	/**
 	 * CONTROLLER
 	 *
-	 * Upload video
+	 * Upload video, redirect to video/upload
 	 *
-	 * @param type $user_id
+	 * @param int $user_id
 	 */
     function upload($user_id) {
-
-		if ($this->input->get("success")) {
-			$page["success"] = TRUE;
-			$page["message"] = $this->input->get("msg");
-			$page["type"] = $this->input->get("type");
-		}
-
-        $page['page_name'] = 'upload_video';
-        $page['title'] = "Upload a new video";
-        $page['user_id'] = $user_id;
-        $page['msg'] = $this->lang->line('form_msg');
-        $page['video_title'] = "";
-        $page['video_description'] = "";
-        $page['video_tags'] = "";
-        $page['video_file'] = "";
-        $page['page_name'] = 'upload_video';
-        $page['title'] = "Upload a new video";
-		$page["user_auth"] = $this->user_model->get_user_token($user_id) != "";
-        $this->load->view('admin/index', $page);
+		redirect("video/upload/{$user_id}");
+//		if ($this->input->get("success")) {
+//			$page["success"] = TRUE;
+//			$page["message"] = $this->input->get("msg");
+//			$page["type"] = $this->input->get("type");
+//		}
+//
+//        $page['page_name'] = 'upload_video';
+//        $page['title'] = "Upload a new video";
+//        $page['user_id'] = $user_id;
+//        $page['msg'] = $this->lang->line('form_msg');
+//        $page['video_title'] = "";
+//        $page['video_description'] = "";
+//        $page['video_tags'] = "";
+//        $page['video_file'] = "";
+//        $page['page_name'] = 'upload_video';
+//        $page['title'] = "Upload a new video";
+//		$page["user_auth"] = $this->user_model->get_user_token($user_id) != "";
+//        $this->load->view('admin/index', $page);
     }
 	/**
 	 * CONTROLLER
