@@ -536,7 +536,7 @@ class Video_model extends CI_Model {
 	 * @return boolean
 	 */
 	public function load_video($file_video) {
-		$config['upload_path'] = $this->config->item("upload_path");;
+		$configVideo['upload_path'] = $this->config->item("upload_path");;
 //		$config['allowed_types'] = $this->config->item("allowed_types_video");
 //		$config['max_size']	= $this->config->item("max_size_video");
 
@@ -545,11 +545,10 @@ class Video_model extends CI_Model {
 		$configVideo['allowed_types'] = 'avi|flv|wmv|mp4';
 		$configVideo['overwrite'] = FALSE;
 		$configVideo['remove_spaces'] = TRUE;
-		$video_name = $date.$_FILES['video']['name'];
-		$configVideo['file_name'] = $video_name;
+		$configVideo['file_name'] = $date . $_FILES['video']['name'];
 
 		$this->load->library('upload', $configVideo);
-		$this->upload->initialize($config);
+		$this->upload->initialize($configVideo);
 
 		$file = $this->upload->do_upload($file_video);
 		$errors = $this->upload->display_errors();
