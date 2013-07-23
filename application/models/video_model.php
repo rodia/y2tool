@@ -99,7 +99,19 @@ class Video_model extends CI_Model {
 				$video_snippet->setTags(split(",",$data["video_tags"]));
 
 				$video_objt->setSnippet($video_snippet);
-				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($data["video_path"]), "mimeType"=>"video/mp4"));
+				$result = $youtube->videos->insert(
+					"id, snippet, status",
+					$video_objt,
+					array(
+						'data' => file_get_contents($data["video_path"]),
+						"mimeType" => "video/mp4"
+					)
+				);
+
+				$this->set_history($result["id"], $user_id, array(
+					"channel" => $this->user_model->get_channel($user_id),
+					"task_id" => 2
+				));
 
 				return TRUE;
 
@@ -118,6 +130,8 @@ class Video_model extends CI_Model {
     	}
     }
 	/**
+	 * @deprecated since version 1.0
+	 *
 	 * Enable a object of upload video
 	 *
 	 * @param string $userName User name of youtube account.
@@ -129,6 +143,7 @@ class Video_model extends CI_Model {
         return $youtube->getUserUploads($userName);
     }
 	/**
+	 * @deprecated since version 1.0
 	 * Get all video of youtube channel for each user auth.
 	 *
 	 * Catch Exception Zend_Gdata_App_HttpException if user closed your account.
@@ -181,6 +196,7 @@ class Video_model extends CI_Model {
         return array_slice($videos, $start, $rp);
     }
 	/**
+	 * oauth
 	 *
 	 * @param Google_Client $client
 	 * @return Google_YoutubeService
@@ -192,6 +208,7 @@ class Video_model extends CI_Model {
 		return new Google_YoutubeService($client);
 	}
 	/**
+	 * Oauth
 	 * Get youtube client for app.
 	 * @return Google_Client
 	 */
@@ -208,7 +225,7 @@ class Video_model extends CI_Model {
 		return $client;
 	}
 	/**
-	 *
+	 * Oauth
 	 * @param string $q
 	 * @param int $maxResults
 	 * @return array
@@ -261,6 +278,8 @@ class Video_model extends CI_Model {
 		);
 	}
 	/**
+	 * Oauth
+	 *
 	 * @todo Esta función tiene un problema, que cuando se hace el llamado este solo retorna una parte de los videos obtenidos.
 	 *
 	 * @param type $channel_id ID CHANNEL for youtube
@@ -439,7 +458,7 @@ class Video_model extends CI_Model {
 		return $data[0];
 	}
 	/**
-	 *
+	 * Oauth
 	 * @param string $video_id Youtube ID
 	 * @param int $user_id ID for wordpress system
 	 * @param boolean True if edit video is success, False otherwise.
@@ -520,6 +539,11 @@ class Video_model extends CI_Model {
 				$youtube->videos->delete(
 					$video_id
 				);
+
+				$this->set_history($video_id, $user_id, array(
+					"channel" => $this->user_model->get_channel($user_id),
+					"task_id" => 10
+				));
 
 				return TRUE;
 			} catch (Google_ServiceException $e) {
