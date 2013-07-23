@@ -68,7 +68,7 @@ if (!defined('BASEPATH'))
                 <td class="">
                     <a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $owner; ?>?video_id=<?php echo $video["video_id"]; ?>" ><b>Report</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/edit_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" ><b>Edit video</b></a><br/>
-                    <a href="<?php echo base_url(); ?>video/delete_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" ><b>Edit video</b></a><br/>
+                    <a href="<?php echo base_url(); ?>video/delete_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" onclick="return confirm('Are you sure take this action?')"><b>Delete video</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/share/<?php echo $owner; ?>/<?php echo $video["video_id"]; ?>" ><b>Share</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/like/<?php echo $owner; ?>/<?php echo $video["video_id"]; ?>" ><b>Like</b></a><br/>
 
