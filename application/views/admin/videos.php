@@ -26,7 +26,6 @@ if (!defined('BASEPATH'))
         <tr>
             <th class="table-header-repeat line-left minwidth-1"><a href="<?php echo base_url(); ?>admin/channel_report/<?php echo $owner; ?>"><b>Report Current Channel</b></a></th>
             <th class="table-header-repeat line-left minwidth-1"><a href="<?php echo base_url(); ?>admin/upload/<?php echo $owner; ?>"><b>Upload video</b></a></th>
-            <th class="table-header-repeat line-left minwidth-1"><a href="<?php echo base_url(); ?>video/playlist/<?php echo $owner; ?>"><b>Show Playlists</b></a></th>
         </tr>
     </table>
     <table border="0" width="100%" cellpadding="0" cellspacing="0" id="product-table">
