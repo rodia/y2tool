@@ -1202,7 +1202,7 @@ class Video extends CI_Controller {
 	 * @param int $user_id user Id of wordpress installation
 	 */
 	public function delete_video($video_id, $user_id) {
-		if ($this->video_model->delete_video($user_id, $video_id)) {
+		if ($this->video_model->delete_video($video_id, $user_id)) {
 			redirect("video/videos/{$user_id}?success=true&msg=Video delete success!&type=success");
 		} else {
 			redirect("video/videos/{$user_id}?success=false&msg=The Video not was delete&type=error");
