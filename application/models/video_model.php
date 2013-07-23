@@ -1553,7 +1553,7 @@ class Video_model extends CI_Model {
         $this->db_my_db->where('h.user_id', $user_id);
 //		$this->db_my_db->where('h.registered_date >=', $startDate);
 //		$this->db_my_db->where('h.registered_date <=', $endDate);
-		$this->db_my_db->where('h.registered_date BETWEEN "'. date('Y-m-d', strtotime($startDate)) . '" and "'. date('Y-m-d', strtotime($endDate)) .'"');
+		$this->db_my_db->where('h.registered_date BETWEEN "'. date('Y-m-d', strtotime($startDate)) . '" AND "'. date('Y-m-d', strtotime($endDate)) .'"', NULL, FALSE);
 		if ($admin != '') $this->db_my_db->where("a.name", $admin);
 		if ($video_id != '') $this->db_my_db->where("v.youtube_id", $video_id);
 		if ($action_taken != '') $this->db_my_db->where("t.description", $action_taken);
