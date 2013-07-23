@@ -96,12 +96,12 @@ class Video_model extends CI_Model {
 				$video_snippet->setCategoryId($data["video_category"]);
 
 				$video_snippet->setTags(split(",",$data["video_tags"]));
-				
+
 				$video_path = "http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
 
 				$video_objt->setSnippet($video_snippet);
-//				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($data["video_path"]), "mimeType"=>"video/mp4"));
-				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($video_path), "mimeType"=>"video/mp4"));
+				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($data["video_path"]), "mimeType"=>"video/mp4"));
+//				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($video_path), "mimeType"=>"video/mp4"));
 
 				var_dump($result);
 
@@ -530,12 +530,16 @@ class Video_model extends CI_Model {
 			return base_url() . substr($this->config->item("upload_path"), 2) . $image["file_name"];
 		}
 	}
-
+	/**
+	 *
+	 * @param string $file_video
+	 * @return boolean
+	 */
 	public function load_video($file_video) {
 		$file = $this->upload->do_upload($file_video);
 		$errors = $this->upload->display_errors();
 		if ("" != $errors) {
-			error_log("Error upload video {" . __FILE__ . "}");
+			echo("Error upload video {" . $errors . "}");
 		}
 		if (FALSE != $file) {
 			$video = $this->upload->data();
