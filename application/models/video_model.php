@@ -67,6 +67,7 @@ class Video_model extends CI_Model {
     }
 
     /**
+	 * Oauth
      *
 	 * @param string $user_id
 	 * @param array $data
@@ -83,7 +84,7 @@ class Video_model extends CI_Model {
     	}
 
     	if ($client->getAccessToken()) {
-    			$_SESSION['token'] = $client->getAccessToken();
+    		$_SESSION['token'] = $client->getAccessToken();
 			try {
 				$video_objt = new Google_Video();
 				$video_snippet = new Google_VideoSnippet();
@@ -97,24 +98,21 @@ class Video_model extends CI_Model {
 
 				$video_snippet->setTags(split(",",$data["video_tags"]));
 
-				$video_path = "http://y2tool.buzzmyvideos.com/uploads/ES_262_05_00_00.mp4";
-
 				$video_objt->setSnippet($video_snippet);
 				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($data["video_path"]), "mimeType"=>"video/mp4"));
-//				$result = $youtube->videos->insert("snippet, status", $video_objt, array('data' => file_get_contents($video_path), "mimeType"=>"video/mp4"));
 
-				var_dump($result);
+				return TRUE;
 
 			} catch (Google_ServiceException $e) {
 				$log = sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage()));
 				error_log($log);
-				echo $log;
+				return FALSE;
 			} catch (Google_Exception $e) {
 				$log = sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage()));
 				error_log($log);
-				echo $log;
+				return FALSE;
 			}
 			return $result;
     	}

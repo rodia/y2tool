@@ -383,7 +383,7 @@ $config['max_size']	= '100';
 $config['max_width'] = '1024';
 $config['max_height'] = '768';
 
-$config["allowed_types_video"] = "avi|flv|wmv|mp4";
+$config["allowed_types_video"] = 'avi|flv|wmv|mp4|mov';
 $config["max_size_video"] = "10240";
 
 /*
