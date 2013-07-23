@@ -1337,32 +1337,38 @@ class Video extends CI_Controller {
         }
     }
 	/**
+	 * OAuth
+	 *
 	 * If the user enable your token auth, this task is possible.
+	 *
+	 * @param int $user_id
 	 */
     function upload($user_id) {
 		$res = "";
-		$path_video = $this->video_model->load_video("video_file");
-		if ($path_video && $this->input->post("submit")) {
+		$path_video = FALSE;
+		$load_video = TRUE;
+		if ($this->input->post("submit")) {
+			if ( ! ($path_video = $this->video_model->load_video("video_file"))) {
+				$page["success"] = TRUE;
+				$page["message"] = "Video Not was upload to server! Types allowed: mp4";
+				$page["type"] = "error";
+			}
 			$user_id = $this->input->post('user_id') ? $this->input->post("user_id") : $user_id;
-			if ($this->video_model->upload_video($user_id, array(
+			if ($path_video  && ($load_video = $this->video_model->upload_video($user_id, array(
 				"video_title" => $this->input->post("video_title"),
 				"video_description" => $this->input->post("video_description"),
 				"video_category" => $this->input->post("video_category"),
 				"video_tags" => $this->input->post("video_tags"),
 				"video_path" => $path_video
-			))) {
+			)))) {
 				$page["success"] = TRUE;
 				$page["message"] = "Video upload success!";
 				$page["type"] = "success";
-			} else {
+			} else if ( ! $load_video) {
 				$page["success"] = TRUE;
 				$page["message"] = "Video Not was upload to Youtube!";
 				$page["type"] = "error";
 			}
-		} else {
-			$page["success"] = TRUE;
-			$page["message"] = "Video Not was upload to server! Types allowed mp4";
-			$page["type"] = "error";
 		}
 
 		if ($this->input->get("success")) {
@@ -1380,107 +1386,6 @@ class Video extends CI_Controller {
     	$page['title'] = "Upload a new video";
     	$page['user_id'] = $user_id;
     	$this->load->view('admin/index', $page);
-
-    	/**************** OLD CODE
-        $user_id = $this->input->post('user_id');
-        $profile = $this->user_model->getUserProfile($user_id);
-        $subs = $profile['subs'];
-        $yt = $this->user_model->getHttpClient($user_id);
-        $yt->setMajorProtocolVersion(2);
-        $file_name = $_FILES['video_file']['name'];
-        $tmp_name = $_FILES['video_file']['tmp_name'];
-
-        $video_title = $this->input->post('video_title');
-        $video_description = $this->input->post('video_description');
-        $video_category = $this->input->post('video_category');
-        $video_tags = $this->input->post('video_tags');
-
-
-        $rules = $this->config->item('new_video_rules');
-        $page['msg'] = $this->lang->line('form_msg');
-
-        if (isset($_POST['submit'])) {
-
-            $this->form_validation->set_rules($rules); //check with the rules
-            if ($this->form_validation->run() == FALSE) {
-                //validation failed
-                $page['msg'] = $this->lang->line('form_error');
-                $page['video_title'] = $video_title;
-                $page['video_description'] = $video_description;
-                $page['video_tags'] = $video_tags;
-                $page['video_file'] = $tmp_name;
-                $page['page_name'] = 'upload_video';
-                $page['title'] = "Upload a new video";
-                $page['user_id'] = $user_id;
-
-                $this->load->view('admin/index', $page);
-            } else {
-
-                $myVideoEntry = new Zend_Gdata_YouTube_VideoEntry();
-
-                $filesource = $yt->newMediaFileSource($tmp_name);
-                $filesource->setContentType('video/quicktime');
-                // set slug header
-                $filesource->setSlug($tmp_name);
-
-                $myVideoEntry->setMediaSource($filesource);
-                $myVideoEntry->setVideoTitle($video_title);
-                $myVideoEntry->setVideoDescription($video_description);
-                $myVideoEntry->setVideoCategory(trim($video_category));
-                $myVideoEntry->SetVideoTags($video_tags);
-                // set some developer tags -- this is optional
-                $myVideoEntry->setVideoDeveloperTags(array('mydevtag', 'anotherdevtag'));
-
-                // set the video's location -- this is also optional
-                $yt->registerPackage('Zend_Gdata_Geo');
-                $yt->registerPackage('Zend_Gdata_Geo_Extension');
-                $where = $yt->newGeoRssWhere();
-                $position = $yt->newGmlPos('37.0 -122.0');
-                $where->point = $yt->newGmlPoint($position);
-                $myVideoEntry->setWhere($where);
-
-                // upload URI for the currently authenticated user
-                $uploadUrl = 'http://uploads.gdata.youtube.com/feeds/api/users/default/uploads';
-                // if available, or just a regular Zend_Gdata_App_Exception otherwise
-                try {
-                    $newEntry = $yt->insertEntry($myVideoEntry, $uploadUrl, 'Zend_Gdata_YouTube_VideoEntry');
-                    $newEntry->setMajorProtocolVersion(2);
-
-                    $data = array(
-                        "youtube_id" => $newEntry->getVideoId(),
-                        "channel" => $profile["username"],
-                        "title" => $video_title
-                    );
-                    $v_id = $this->video_model->insert_video($data);
-
-                    $dbdata = array(
-                        "registered_date" => date("Y-m-d H:i:s"),
-                        "admin_id" => $this->session->userdata('user_id'),
-                        "video_id" => $v_id,
-                        "video_likes" => 0,
-                        "video_views" => 0,
-                        "channel_subs" => $subs,
-                        "task_id" => 6,
-                        "who" => $this->session->userdata('name')
-                    );
-                    $this->video_model->insert_history($dbdata);
-                } catch (Zend_Gdata_App_HttpException $httpException) {
-                    echo $httpException->getRawResponseBody();
-                } catch (Zend_Gdata_App_Exception $e) {
-                    echo $e->getMessage();
-                }
-                $page['msg'] = $this->lang->line('form_new_video_success');
-                $page['video_title'] = $video_title;
-                $page['video_description'] = $video_description;
-                $page['video_tags'] = $video_tags;
-                $page['video_file'] = "";
-                $page['page_name'] = 'upload_video';
-                $page['title'] = "Upload a new video";
-                $page['user_id'] = $user_id;
-                $this->load->view('admin/index', $page);
-            }
-        }
-        ************************/
     }
 	/**
 	 * Controller
