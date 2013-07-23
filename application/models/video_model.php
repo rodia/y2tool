@@ -517,11 +517,10 @@ class Video_model extends CI_Model {
 			$_SESSION['token'] = $client->getAccessToken();
 
 			try {
-				$videoResponse = $youtube->videos->delete(
+				$youtube->videos->delete(
 					$video_id
 				);
 
-				var_dump($videoResponse);
 				return TRUE;
 			} catch (Google_ServiceException $e) {
 				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
