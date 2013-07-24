@@ -1283,6 +1283,9 @@ class Video_model extends CI_Model {
 				$snippet->setTitle($data["play_title"]);
 				$snippet->setDescription($data["play_description"]);
 				$postBody->setSnippet($snippet);
+				$status = new Google_PlaylistStatus;
+				$status->setPrivacyStatus("public");
+				$postBody->setStatus($status);
 
 				$playlist = $youtube->playlists->insert(
 					"id,snippet,status",
