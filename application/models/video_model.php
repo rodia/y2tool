@@ -1833,6 +1833,9 @@ class Video_model extends CI_Model {
 			$_SESSION['token_featured'] = $client_featured->getAccessToken();
 
 			try {
+				$youtube_base->channels->listChannels();
+				
+				/*
 				$video_id = $this->get_id_by_url($data["videoId"]);
 
 				$postBody = new Google_PlaylistItem();
@@ -1850,7 +1853,7 @@ class Video_model extends CI_Model {
 						'snippet',
 						$postBody
 				);
-				return TRUE;
+				return TRUE;*/
 			} catch (Google_ServiceException $e) {
 				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 						htmlspecialchars($e->getMessage())));
