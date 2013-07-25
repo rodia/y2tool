@@ -123,9 +123,10 @@ function print_desc($opt, $admin, $task, $video_id, $channel, $who) {
 }
 /**
  *
- * @param string $video_id ID Youtube
+ * @param string $video_id
+ * @param int $user_id
  * @param object $resource
- * @return int Count of like in the video
+ * @return int|boolean
  */
 function print_likes($video_id, $user_id, $resource) {
 	$resource->load->model("video_model");
@@ -163,10 +164,12 @@ function print_likes($video_id, $user_id, $resource) {
 	return $video_like;
 }
 /**
+ * Oauth
  *
  * @param string $video_id
+ * @param int $user_id
  * @param object $resource
- * @return string
+ * @return string|boolean
  */
 function print_current_views($video_id, $user_id, $resource) {
 	$resource->load->model("video_model");
