@@ -127,17 +127,38 @@ function print_desc($opt, $admin, $task, $video_id, $channel, $who) {
  * @param object $resource
  * @return int Count of like in the video
  */
-function print_likes($video_id, $resource) {
+function print_likes($video_id, $user_id, $resource) {
 	$resource->load->model("video_model");
-	$youtube = $resource->video_model->get_google_youtubeService();
-	$videoResponse = $youtube->videos->listVideos(
-		$video_id,
-		'statistics'
-	);
-	$video_like = "No data";
-	foreach($videoResponse['items'] as $video)
-	{
-		$video_like = $video['statistics']['likeCount'];
+	$token = $resource->user_model->get_user_meta($user_id, 'token', true);
+
+	$client = $resource->get_google_client();
+	$youtube = new Google_YoutubeService($client);
+
+	if (isset($token)) {
+		$client->setAccessToken($token);
+	}
+
+	if ($client->getAccessToken()) {
+
+		try {
+			$videoResponse = $youtube->videos->listVideos(
+				$video_id,
+				'statistics'
+			);
+			$video_like = "No data";
+			foreach($videoResponse['items'] as $video)
+			{
+				$video_like = $video['statistics']['likeCount'];
+			}
+		} catch (Google_ServiceException $e) {
+			error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage())));
+			return FALSE;
+		} catch (Google_Exception $e) {
+			error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage())));
+			return FALSE;
+		}
 	}
 	return $video_like;
 }
@@ -147,17 +168,38 @@ function print_likes($video_id, $resource) {
  * @param object $resource
  * @return string
  */
-function print_current_views($video_id, $resource) {
+function print_current_views($video_id, $user_id, $resource) {
 	$resource->load->model("video_model");
-	$youtube = $resource->video_model->get_google_youtubeService();
-	$videoResponse = $youtube->videos->listVideos(
-		$video_id,
-		'statistics'
-	);
-	$video_views = "No data";
-	foreach($videoResponse['items'] as $video)
-	{
-		$video_views = $video['statistics']['viewCount'];
+	$token = $resource->user_model->get_user_meta($user_id, 'token', true);
+
+	$client = $resource->get_google_client();
+	$youtube = new Google_YoutubeService($client);
+
+	if (isset($token)) {
+		$client->setAccessToken($token);
+	}
+
+	if ($client->getAccessToken()) {
+
+		try {
+			$videoResponse = $youtube->videos->listVideos(
+				$video_id,
+				'statistics'
+			);
+			$video_views = "No data";
+			foreach($videoResponse['items'] as $video)
+			{
+				$video_views = $video['statistics']['viewCount'];
+			}
+		} catch (Google_ServiceException $e) {
+			error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage())));
+			return FALSE;
+		} catch (Google_Exception $e) {
+			error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+			htmlspecialchars($e->getMessage())));
+			return FALSE;
+		}
 	}
 	return $video_views;
 }

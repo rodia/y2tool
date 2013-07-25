@@ -437,21 +437,30 @@ class Video_model extends CI_Model {
 
 		if ($client->getAccessToken()) {
 			$_SESSION['token'] = $client->getAccessToken();
+			try {
+				$videos = $youtube->videos->listVideos(
+					$video_id,
+					'snippet,contentDetails,status,statistics,player'
+				);
 
-			$videos = $youtube->videos->listVideos(
-				$video_id,
-				'snippet,contentDetails,status,statistics,player'
-			);
+				foreach ($videos['items'] as $video) {
+					if (isset($video['status']['uploadStatus']) &&
+						$video['status']['uploadStatus'] == 'rejected' &&
+						$video['status']['rejectionReason'] == 'copyright')
+					{
+						continue;
+					}
 
-			foreach ($videos['items'] as $video) {
-				if (isset($video['status']['uploadStatus']) &&
-					$video['status']['uploadStatus'] == 'rejected' &&
-					$video['status']['rejectionReason'] == 'copyright')
-				{
-					continue;
+					$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category);
 				}
-
-				$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category);
+			} catch (Google_ServiceException $e) {
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
+			} catch (Google_Exception $e) {
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				htmlspecialchars($e->getMessage())));
+				return FALSE;
 			}
 		}
 
