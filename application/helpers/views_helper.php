@@ -134,6 +134,7 @@ function print_likes($video_id, $resource) {
 		$video_id,
 		'statistics'
 	);
+	$video_like = "No data";
 	foreach($videoResponse['items'] as $video)
 	{
 		$video_like = $video['statistics']['likeCount'];
@@ -153,6 +154,7 @@ function print_current_views($video_id, $resource) {
 		$video_id,
 		'statistics'
 	);
+	$video_views = "No data";
 	foreach($videoResponse['items'] as $video)
 	{
 		$video_views = $video['statistics']['viewCount'];
