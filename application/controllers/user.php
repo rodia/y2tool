@@ -36,7 +36,7 @@ class User extends CI_Controller {
     function authsub($user_id) {
 		redirect("https://buzzmyvideos.com");
 		exit;
-		
+
         $token =  Zend_Gdata_AuthSub::getAuthSubSessionToken($_REQUEST["token"]);
         $tokens = array(
 			"token" => $_REQUEST["token"],
@@ -82,7 +82,7 @@ class User extends CI_Controller {
 //		$token = isset($_GET["t"]) ? $_GET["t"] : NULL;
 //		$this->user_model->admin_login($login, md5($token));
 //		redirect("admin/users");
-		redirect("video/bulk");
+		redirect("https://buzzmyvideos.com");
 	}
 
 }
