@@ -40,7 +40,7 @@ class User_model extends CI_Model {
 	}
 	/**
 	 * OAuth
-	 * 
+	 *
 	 * This funcion work in OAuth protocol.
 	 * The function return a array with information of user.
 	 *
@@ -226,7 +226,7 @@ class User_model extends CI_Model {
             return "";
     }
 	/**
-	 *
+	 * @deprecated since version 1.0
 	 * @param string $token Token auth for youtube manage
 	 * @param int $user_id User id of Wordpress Account
 	 * @return boolean
@@ -842,7 +842,7 @@ class User_model extends CI_Model {
         $this->db_my_db->where("username", $username);
         $this->db_my_db->where("password", $password);
 
-        $query = $this->db_my_db->get('user');
+        $query = $this->db_my_db->get('yt_user_admin');
 
         return $query->result();
     }

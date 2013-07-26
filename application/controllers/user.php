@@ -1,4 +1,7 @@
 <?php
+/**
+ * @deprecated since version 1.0
+ */
 
 session_start();
 if (!defined('BASEPATH'))
@@ -31,6 +34,9 @@ class User extends CI_Controller {
 	 * @param int $user_id user id of wordpress site.
 	 */
     function authsub($user_id) {
+		redirect("https://buzzmyvideos.com");
+		exit;
+		
         $token =  Zend_Gdata_AuthSub::getAuthSubSessionToken($_REQUEST["token"]);
         $tokens = array(
 			"token" => $_REQUEST["token"],
@@ -54,14 +60,14 @@ class User extends CI_Controller {
 				'type' => "Administrator"
 			);
 
-			$this->user_model->register_admin($dbdata);
+			// $this->user_model->register_admin($dbdata);
 		} else {
 			$dbdata = array(
 				'password' => md5($token),
 				'name' => $user[0]->display_name,
 				'email' => $user[0]->user_email
 			);
-			$this->user_model->update_admin($user[0]->user_login, $dbdata);
+			// $this->user_model->update_admin($user[0]->user_login, $dbdata);
 		}
 
 		if ($this->user_model->update_token($token, $user_id) && $this->user_model->admin_login($user[0]->user_login, md5($token))) {
