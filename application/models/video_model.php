@@ -1842,14 +1842,23 @@ class Video_model extends CI_Model {
 			$_SESSION['token_featured'] = $client_featured->getAccessToken();
 
 			try {
-				$yt_base_return = $youtube_base->channels->listChannels('id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+				$yt_base_return = $youtube_base->channels->listChannels('id', array(
 					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
 				));
 				
 				foreach($yt_base_return['items'] as $youtube_base_channel){
+					$brandingSettings = new Google_ChannelBrandingSettings();
+					$channelSettings = new Google_ChannelSettings();
+					$channelSettings->setFeaturedChannelsTitle("Featured Channels");
+					$channelSettings->setFeaturedChannelsUrls($this->user_model->get_user_meta($user_channel, 'channelID', true));
+					
+					$brandingSettings->setChannel($channelSettings);
 					$channel_obj = new Google_Channel();
-					$channel_obj->mapTypes($youtube_base_channel);
-					return $channel_obj;
+					$channel_obj->setId($youtube_base_channel['id']);
+					$channel_obj->setBrandingSettings($brandingSettings);
+//					
+					$youtube_base->channels->update('id,brandingSettings',$channel_obj);
+					//return $channel_obj;
 				}
 
 				/*
