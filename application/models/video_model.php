@@ -304,8 +304,8 @@ class Video_model extends CI_Model {
 
 				foreach ($playlistItemsResponse['items'] as $playlistItem) {
 					$videos = $youtube->videos->listVideos(
-						$playlistItem['contentDetails']['videoId'],
-						'snippet,contentDetails,status'
+						'snippet,contentDetails,status',
+						$playlistItem['contentDetails']['videoId']
 					);
 
 					foreach ($videos['items'] as $video) {
@@ -382,8 +382,8 @@ class Video_model extends CI_Model {
 						);
 						foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 							$videos = $youtube->videos->listVideos(
-								$playlistItem['contentDetails']['videoId'],
-								'snippet,contentDetails,status,statistics,player'
+								'snippet,contentDetails,status,statistics,player',
+								$playlistItem['contentDetails']['videoId']
 							);
 
 							foreach ($videos['items'] as $video) {
@@ -439,8 +439,8 @@ class Video_model extends CI_Model {
 			$_SESSION['token'] = $client->getAccessToken();
 			try {
 				$videos = $youtube->videos->listVideos(
-					$video_id,
-					'snippet,contentDetails,status,statistics,player'
+					'snippet,contentDetails,status,statistics,player',
+					$video_id
 				);
 
 				foreach ($videos['items'] as $video) {
@@ -656,8 +656,8 @@ class Video_model extends CI_Model {
 
 			foreach ($channelsResponse["items"] as $channel) {
 				$videos = $youtube->videos->listVideos(
-					$video_id,
-					'snippet,contentDetails,status,statistics'
+					'snippet,contentDetails,status,statistics',
+					$video_id
 				);
 
 				foreach ($videos['items'] as $video) {
@@ -774,8 +774,8 @@ class Video_model extends CI_Model {
 				$this->count_videos = $playlistItemsResponse["pageInfo"]["totalResults"];
 				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 					$videos = $youtube->videos->listVideos(
-						$playlistItem['contentDetails']['videoId'],
-						'snippet,contentDetails,status,statistics,player'
+						'snippet,contentDetails,status,statistics,player',
+						$playlistItem['contentDetails']['videoId']
 					);
 
 					foreach ($videos['items'] as $video) {
