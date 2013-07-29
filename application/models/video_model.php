@@ -1843,7 +1843,7 @@ class Video_model extends CI_Model {
 
 			try {
 				$youtube_base->channels->listChannels();
-				
+
 				/*
 				$video_id = $this->get_id_by_url($data["videoId"]);
 
