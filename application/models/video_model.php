@@ -1846,9 +1846,9 @@ class Video_model extends CI_Model {
 					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
 				));
 				
-				foreach($youtube_base['items'] as $youtube_base_channel){
+				foreach($yt_base_return['items'] as $youtube_base_channel){
 					$channel_obj = new Google_Channel();
-					$channel_obj ->mapTypes($youtube_base_channel);
+					$channel_obj->mapTypes($youtube_base_channel);
 					return $channel_obj;
 				}
 
