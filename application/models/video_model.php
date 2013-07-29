@@ -1842,7 +1842,13 @@ class Video_model extends CI_Model {
 			$_SESSION['token_featured'] = $client_featured->getAccessToken();
 
 			try {
-				$youtube_base->channels->listChannels();
+				$yt_base_return = $youtube_base->channels->listChannels('id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
+				));
+				return $yt_base_return;
+				/*foreach($youtube_base['items'] as $youtube_base_channel){
+					
+				}*/
 
 				/*
 				$video_id = $this->get_id_by_url($data["videoId"]);

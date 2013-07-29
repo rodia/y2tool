@@ -1754,7 +1754,8 @@ class Video extends CI_Controller {
 			$channels_usrs = $this->input->post("featured_ids");
 			foreach ($users as $user) {
 				foreach ($channels_usrs as $channel_usr) {
-					$this->video_model->featured_channel($channel_usr, $user);
+					$res = $this->video_model->featured_channel($channel_usr, $user);
+					$msg = var_dump($res,true);
 				}
 			}
 
