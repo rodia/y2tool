@@ -511,6 +511,7 @@ jQuery.extend(jQuery.validator.prototype, {
 				<?php foreach ($users as $key => $row) : ?>
 				<?php $checked = in_array($row->id, $hold_users); ?>
 				<?php $hold_username[$row->id] = $row->user_login; ?>
+				<?php $channel = get_url_for_channel($row->youtube_channels); ?>
 					<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
 						<td><input type="checkbox" name="ids[]" value="<?php echo $row->id ?>" title="<?php echo $row->id; ?>"<?php echo $checked ? " checked=\"checked\"" : ""; ?>></td>
 						<td>
@@ -518,7 +519,7 @@ jQuery.extend(jQuery.validator.prototype, {
 						<a href="<?php echo base_url(); ?>video/playlist/<?php echo $row->id; ?>" ><b>Show playlist</b></a><br/>
 						<a href="<?php echo base_url(); ?>admin/upload/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/></td>
 						<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
-						<td><?php echo get_url_for_channel($row->youtube_channels); ?></td>
+						<td><a href="<?php echo $channel; ?>"><?php echo $channel; ?></a></td>
 						<!--<td><?php  ?></td>-->
 						<td><?php echo $row->youtube_content_category; ?></td>
 						<td><?php echo $row->country; ?></td>
