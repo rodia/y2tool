@@ -1852,13 +1852,39 @@ class Video_model extends CI_Model {
 			$_SESSION['token_featured'] = $client_featured->getAccessToken();
 
 			try {
-				$yt_base_return = $youtube_base->channels->listChannels('id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
+				$yt_base_return = $youtube_base->channels->listChannels('id,brandingSettings', array(
 					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
 				));
 				return $yt_base_return;
 				/*foreach($youtube_base['items'] as $youtube_base_channel){
 
 				}*/
+
+				foreach($yt_base_return['items'] as $youtube_base_channel){
+					$featured_chanel_urls = split(',',$youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls']);
+					$featured_chanel_urls[] = $this->user_model->get_user_meta($user_channel, 'channelID', true);
+					$brandingSettings = new Google_ChannelBrandingSettings();
+					$channelSettings = new Google_ChannelSettings();
+					$channelSettings->setTitle($youtube_base_channel['brandingSettings']['channel']['title']);
+					$channelSettings->setDefaultTab($youtube_base_channel['brandingSettings']['channel']['defaultTab']);
+					$channelSettings->setShowRelatedChannels($youtube_base_channel['brandingSettings']['channel']['showRelatedChannels']);
+					$channelSettings->setShowBrowseView($youtube_base_channel['brandingSettings']['channel']['showBrowseView']);
+					$channelSettings->setProfileColor($youtube_base_channel['brandingSettings']['channel']['profileColor']);
+					$channelSettings->setDescription($youtube_base_channel['brandingSettings']['channel']['description']);
+					$channelSettings->setKeywords($youtube_base_channel['brandingSettings']['channel']['keywords']);
+					$channelSettings->setUnsubscribedTrailer($youtube_base_channel['brandingSettings']['channel']['unsubscribedTrailer']);
+					$channelSettings->setTrackingAnalyticsAccountId($youtube_base_channel['brandingSettings']['channel']['trackingAnalyticsAccountId']);
+					$channelSettings->setFeaturedChannelsTitle("Featured Channels");
+					$channelSettings->setFeaturedChannelsUrls($featured_chanel_urls);
+
+					$brandingSettings->setChannel($channelSettings);
+					$channel_obj = new Google_Channel();
+					$channel_obj->setId($youtube_base_channel['id']);
+					$channel_obj->setBrandingSettings($brandingSettings);
+//
+					$youtube_base->channels->update('brandingSettings',$channel_obj);
+					//return $channel_obj;
+				}
 
 				/*
 				$video_id = $this->get_id_by_url($data["videoId"]);
