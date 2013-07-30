@@ -177,10 +177,14 @@ function get_categories($resource) {
 function get_url_for_channel($channel) {
 	if ($channel == "")	return;
 
-	if (FALSE === strpos($channel, "http")) {
-		return "http://www.youtube.com/user/" . $channel;
-	} else {
+	if (FALSE !== strpos($channel, "http")) {
 		return $channel;
+	} else if (FALSE !== strpos($channel, "www.youtube.com")) {
+		if (is_string($channel) && $channel != "") {
+			return substr($channel, strripos($channel, "/")+1);
+		}
+	} else {
+		return "http://www.youtube.com/user/" . $channel;
 	}
 
 
