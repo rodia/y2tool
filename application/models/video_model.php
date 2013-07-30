@@ -1850,7 +1850,7 @@ class Video_model extends CI_Model {
 					$brandingSettings = new Google_ChannelBrandingSettings();
 					$channelSettings = new Google_ChannelSettings();
 					$channelSettings->setFeaturedChannelsTitle("Featured Channels");
-					$channelSettings->setFeaturedChannelsUrls($this->user_model->get_user_meta($user_channel, 'channelID', true));
+					$channelSettings->setFeaturedChannelsUrls(array($this->user_model->get_user_meta($user_channel, 'channelID', true)));
 					
 					$brandingSettings->setChannel($channelSettings);
 					$channel_obj = new Google_Channel();
