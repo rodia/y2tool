@@ -179,10 +179,8 @@ function get_url_for_channel($channel) {
 
 	if (FALSE !== strpos($channel, "http")) {
 		return $channel;
-	} else if (FALSE !== strpos($channel, "www.youtube.com")) {
-		if (is_string($channel) && $channel != "") {
-			return substr($channel, strripos($channel, "/")+1);
-		}
+	} else if (FALSE !== strpos($channel, "youtube.com")) {
+		return "http://www.youtube.com/user/" . substr($channel, strripos($channel, "/")+1);
 	} else {
 		return "http://www.youtube.com/user/" . $channel;
 	}
