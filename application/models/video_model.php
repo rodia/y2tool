@@ -305,7 +305,9 @@ class Video_model extends CI_Model {
 				foreach ($playlistItemsResponse['items'] as $playlistItem) {
 					$videos = $youtube->videos->listVideos(
 						'snippet,contentDetails,status',
-						$playlistItem['contentDetails']['videoId']
+						array(
+							"id" => $playlistItem['contentDetails']['videoId']
+						)
 					);
 
 					foreach ($videos['items'] as $video) {
@@ -383,7 +385,9 @@ class Video_model extends CI_Model {
 						foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 							$videos = $youtube->videos->listVideos(
 								'snippet,contentDetails,status,statistics,player',
-								$playlistItem['contentDetails']['videoId']
+								array(
+									"id" => $playlistItem['contentDetails']['videoId']
+								)
 							);
 
 							foreach ($videos['items'] as $video) {
@@ -440,7 +444,9 @@ class Video_model extends CI_Model {
 			try {
 				$videos = $youtube->videos->listVideos(
 					'snippet,contentDetails,status,statistics,player',
-					$video_id
+					array(
+						"id" => $video_id
+					)
 				);
 
 				foreach ($videos['items'] as $video) {
@@ -657,7 +663,9 @@ class Video_model extends CI_Model {
 			foreach ($channelsResponse["items"] as $channel) {
 				$videos = $youtube->videos->listVideos(
 					'snippet,contentDetails,status,statistics',
-					$video_id
+					array(
+						"id" => $video_id
+					)
 				);
 
 				foreach ($videos['items'] as $video) {
@@ -775,7 +783,9 @@ class Video_model extends CI_Model {
 				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 					$videos = $youtube->videos->listVideos(
 						'snippet,contentDetails,status,statistics,player',
-						$playlistItem['contentDetails']['videoId']
+						array(
+							"id" => $playlistItem['contentDetails']['videoId']
+						)
 					);
 
 					foreach ($videos['items'] as $video) {
@@ -1847,7 +1857,7 @@ class Video_model extends CI_Model {
 				));
 				return $yt_base_return;
 				/*foreach($youtube_base['items'] as $youtube_base_channel){
-					
+
 				}*/
 
 				/*

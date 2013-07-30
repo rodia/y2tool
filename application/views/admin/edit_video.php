@@ -24,9 +24,7 @@ if (!defined('BASEPATH'))
                         <h2>Video</h2>
                     </td>
                     <td>
-                        <p><a href="<?php echo base_url(); ?>video/view/<?php echo $videoEntry["video_id"]; ?>" >
-                            <img src="<?php echo $videoEntry["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;"  />
-							</a></p>
+                        <p><img src="<?php echo $videoEntry["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;"  /></p>
 							<p><?php echo form_input(array("name" => "thumbnail", "class" => "inp-form", "size" => "60px", "value" => $videoEntry["thumbnail"]["url"], "disabled" => "disabled")); ?> <?php echo form_upload("new-thumbnails"); ?></p>
                     </td>
                 </tr>

@@ -518,7 +518,7 @@ jQuery.extend(jQuery.validator.prototype, {
 						<a href="<?php echo base_url(); ?>video/playlist/<?php echo $row->id; ?>" ><b>Show playlist</b></a><br/>
 						<a href="<?php echo base_url(); ?>admin/upload/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/></td>
 						<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
-						<td><a href="http://www.youtube.com/<?php echo $row->youtube_channels; ?>" >http://www.youtube.com/<?php echo $row->youtube_channels; ?></a></td>
+						<td><?php echo $row->youtube_channels; ?></td>
 						<!--<td><?php  ?></td>-->
 						<td><?php echo $row->youtube_content_category; ?></td>
 						<td><?php echo $row->country; ?></td>
