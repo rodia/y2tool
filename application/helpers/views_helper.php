@@ -170,3 +170,18 @@ function get_categories($resource) {
 	$resource->load->model("user_model");
 	return $resource->user_model->get_youtube_categories();
 }
+/**
+ *
+ * @param string $channel
+ */
+function get_url_for_channel($channel) {
+	if ($channel == "")	return;
+
+	if (FALSE === strpos($channel, "http")) {
+		return "http://www.youtube.com/user/" . $channel;
+	} else {
+		return $channel;
+	}
+
+
+}
