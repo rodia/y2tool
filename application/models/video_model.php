@@ -1868,7 +1868,7 @@ class Video_model extends CI_Model {
 					$channel_obj->setId($youtube_base_channel['id']);
 					$channel_obj->setBrandingSettings($brandingSettings);
 //					
-					$youtube_base->channels->update('',$channel_obj);
+					$youtube_base->channels->update('brandingSettings',$channel_obj);
 					//return $channel_obj;
 				}
 
