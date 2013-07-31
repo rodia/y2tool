@@ -1863,8 +1863,9 @@ class Video_model extends CI_Model {
 				}*/
 
 				foreach($yt_base_return['items'] as $youtube_base_channel){
+					return $youtube_base_channel;
 //					$featured_chanel_urls = explode(',',$youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls']);
-					$featured_chanel_urls = $youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls'];
+//					$featured_chanel_urls = $youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls'];
 					$featured_chanel_urls[] = $this->user_model->get_user_meta($user_channel, 'channelID', true);
 					$brandingSettings = new Google_ChannelBrandingSettings();
 					$channelSettings = new Google_ChannelSettings();
@@ -1878,7 +1879,7 @@ class Video_model extends CI_Model {
 //					$channelSettings->setUnsubscribedTrailer($youtube_base_channel['brandingSettings']['channel']['unsubscribedTrailer']);
 //					$channelSettings->setTrackingAnalyticsAccountId($youtube_base_channel['brandingSettings']['channel']['trackingAnalyticsAccountId']);
 					$channelSettings->setFeaturedChannelsTitle("Featured Channels");
-					$channelSettings->setFeaturedChannelsUrls($featured_chanel_urls);
+//					$channelSettings->setFeaturedChannelsUrls($featured_chanel_urls);
 
 					$brandingSettings->setChannel($channelSettings);
 					$channel_obj = new Google_Channel();
