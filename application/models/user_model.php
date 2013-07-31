@@ -549,14 +549,11 @@ class User_model extends CI_Model {
 
 			$wsql = new htmlsql();
 
-			if ( ! $wsql->connect( 'string', $channel[0]->youtube_channels ) ) {
-				error_log('Error while connecting: ' . $wsql->error);
-				return FALSE;
-			}
-
-			if ($wsql->query( 'SELECT * FROM a')) {
-				foreach ($wsql->fetch_array() as $row) {
-					$channel = $row["href"];
+			if ($wsql->connect('string', $channel[0]->youtube_channels)) {
+				if ($wsql->query( 'SELECT * FROM a')) {
+					foreach ($wsql->fetch_array() as $row) {
+						$channel = $row["href"];
+					}
 				}
 			}
 
