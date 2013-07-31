@@ -557,9 +557,10 @@ class User_model extends CI_Model {
 				}
 			}
 
-			if (is_string($channel) && $channel != "") {
-				$channel = substr($channel, strripos($channel, "/")+1);
+			if ( ! is_string($channel)) {
+				$channel = $channel[0]->youtube_channels;
 			}
+			$channel = substr($channel, strripos($channel, "/")+1);
 		}
 
 		return is_string($channel) ? $channel : "";
