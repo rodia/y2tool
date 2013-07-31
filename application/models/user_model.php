@@ -554,13 +554,10 @@ class User_model extends CI_Model {
 				return FALSE;
 			}
 
-			if ( ! $wsql->query( 'SELECT * FROM a' ) ) {
-				error_log("Query error: " . $wsql->error);
-				return FALSE;
-			}
-
-			foreach ($wsql->fetch_array() as $row) {
-				$channel = $row["href"];
+			if ($wsql->query( 'SELECT * FROM a')) {
+				foreach ($wsql->fetch_array() as $row) {
+					$channel = $row["href"];
+				}
 			}
 
 			if (is_string($channel) && $channel != "") {
