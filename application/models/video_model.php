@@ -416,7 +416,7 @@ class Video_model extends CI_Model {
 
 		$this->categories = array_unique($categories);
 		$this->count_videos = count($data);
-		$this->current_channel = $current_channel;
+		$this->current_channel = isset($current_channel) ? $current_channel : "";
 		return array_slice($data, $start, $rp);
 	}
 	/**
