@@ -1852,6 +1852,8 @@ class Video_model extends CI_Model {
 			$_SESSION['token_featured'] = $client_featured->getAccessToken();
 
 			try {
+				
+				return $this->user_model->get_user_meta($user_id, 'channelID', true);
 				$yt_base_return = $youtube_base->channels->listChannels('id,brandingSettings', array(
 					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
 				));
