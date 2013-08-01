@@ -483,7 +483,7 @@ class Video extends CI_Controller {
 					"status" => $this->input->post("play_status")
 				))) {
 					$msg = "The playlist selected is update";
-					redirect("video/videolist/{$user_id}/{$playlistId}?success=true&msg=" . $msg . "&type=success");
+					redirect("video/playlist/{$user_id}?success=true&msg=" . $msg . "&type=success");
 				}
 			}
 		}
