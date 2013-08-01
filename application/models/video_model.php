@@ -1837,19 +1837,19 @@ class Video_model extends CI_Model {
 	public function featured_channel($user_channel,$user_id){
 
 		$token_base = $this->user_model->get_user_meta($user_id, 'token', true);
-		$token_featured = $this->user_model->get_user_meta($user_channel, 'token', true);
+		
 		$client_base = $this->get_google_client();
-		$client_featured = clone $client_base;
+		$client_base->setUseObjects(true);
 
 		$youtube_base = new Google_YoutubeService($client_base);
-		$youtube_featured = new Google_YoutubeService($client_featured);
-		if (isset($token_base) && isset($token_featured)) {
+		
+		if (isset($token_base)) {
 			$client_base->setAccessToken($token_base);
-			$client_featured->setAccessToken($token_featured);
+			
 		}
-		if ($client_base->getAccessToken() && $client_featured->getAccessToken()) {
+		if ($client_base->getAccessToken() ) {
 			$_SESSION['token_base'] = $client_base->getAccessToken();
-			$_SESSION['token_featured'] = $client_featured->getAccessToken();
+	
 
 			try {
 
@@ -1857,11 +1857,19 @@ class Video_model extends CI_Model {
 				$yt_base_return = $youtube_base->channels->listChannels('id,brandingSettings', array(
 					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
 				));
+<<<<<<< HEAD
 
 				/*foreach($youtube_base['items'] as $youtube_base_channel){
 
 				}*/
 
+=======
+				
+				$channelToUpdate = $yt_base_return->items[0];
+				$channelToUpdate->brandingSettings->channel->setFeaturedChannelsTitle("Featured Channels from code");
+				$youtube_base->channels->update('brandingSettings',$channelToUpdate);
+/*
+>>>>>>> d7839fd68aeaefb106243b9f9158a43d69eed37f
 				foreach($yt_base_return['items'] as $youtube_base_channel){
 
 					$tmp_ob = new Google_Channel();
@@ -1889,11 +1897,16 @@ class Video_model extends CI_Model {
 					$channel_obj->setId($youtube_base_channel['id']);
 					$channel_obj->setBrandingSettings($brandingSettings);
 //
+<<<<<<< HEAD
 
 					$youtube_base->channels->update('id,brandingSettings',$channel_obj,array('id'=>$youtube_base_channel['id']));
+=======
+					
+					$youtube_base->channels->update('brandingSettings',$channel_obj);
+>>>>>>> d7839fd68aeaefb106243b9f9158a43d69eed37f
 					//return $channel_obj;
 				}
-
+*/
 				/*
 				$video_id = $this->get_id_by_url($data["videoId"]);
 
