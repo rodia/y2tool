@@ -38,6 +38,15 @@ if (!defined('BASEPATH'))
                         <span><?php echo form_error('play_description'); ?></span>
                     </td>
                 </tr>
+				<tr>
+                    <td align="right">
+                        <h2>Status</h2>
+                    </td>
+                    <td>
+						<?php echo form_dropdown('play_status', get_status_options($this), array(), 'class="select_style"'); ?>
+                        <span><?php echo form_error('play_status'); ?></span>
+                    </td>
+                </tr>
                 <tr>
                     <td align="center" colspan="2">
 						<?php echo form_hidden("channel", $channel); ?>
