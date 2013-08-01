@@ -773,7 +773,7 @@ class Video_model extends CI_Model {
 				 * @todo In addition the retrieve data must be for pagination method.
 				 */
 				$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
-					'id,snippet,contentDetails,player',
+					'id,snippet,contentDetails',
 					array(
 						'playlistId' => $playlistId,
 						'maxResults' => $rp
@@ -781,9 +781,23 @@ class Video_model extends CI_Model {
 				);
 				$this->count_videos = $playlistItemsResponse["pageInfo"]["totalResults"];
 				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
-					var_dump($playlistItem);
-//					$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category);
-//					$categories[] = $current_category;
+					$videos = $youtube->videos->listVideos(
+						'snippet,contentDetails,status,statistics,player',
+						array(
+							"id" => $playlistItem['contentDetails']['videoId']
+						)
+					);
+
+					foreach ($videos['items'] as $video) {
+						if (isset($video['status']['uploadStatus']) &&
+							$video['status']['uploadStatus'] == 'rejected' &&
+							$video['status']['rejectionReason'] == 'copyright')
+						{
+							continue;
+						}
+						$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category);
+						$categories[] = $current_category;
+					}
 				}
 
 			} catch (Google_ServiceException $e) {
