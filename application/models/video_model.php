@@ -1438,10 +1438,7 @@ class Video_model extends CI_Model {
 
 			try {
 				$playlist = $youtube->playlistItems->delete(
-					$videoFeedID,
-					array(
-						"videoId" => $data["video_id"]
-					)
+					$data["video_id"]
 				);
 
 				return TRUE;
