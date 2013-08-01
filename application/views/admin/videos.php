@@ -2,6 +2,8 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 ?>
+<link rel="stylesheet" href="<?php echo base_url(); ?>css/admin/fancybox/fancybox.css" type="text/css" media="screen" title="default" />
+<script type='text/javascript' src='<?php echo base_url(); ?>css/admin/fancybox/fancybox.js'></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#myForm").submit(function(){
@@ -12,6 +14,14 @@ if (!defined('BASEPATH'))
                 return true; //submit the form
             }
         });
+
+		$("a.view").fancybox({
+			'frameWidth': 300,
+			'frameHeight': 300,
+			'callbackOnClose': function() {
+				$("#fancy_content").empty();
+			}
+		});
     });
 </script>
 <?php $this->load->helper("views_helper"); ?>
@@ -51,6 +61,7 @@ if (!defined('BASEPATH'))
                 <td><?php echo str_replace("<", "", substr($video["description"], 0, 100)); ?></td>
                 <td align="center"><?php echo $video["category"]; ?></td>
                 <td align="center">
+					<a href="<?php echo base_url(); ?>video/fancy_box_view/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" class="view iframe">view</a>
 					<a href="<?php echo base_url(); ?>video/view/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" >
                         <img src="<?php echo $video["thumbnail"]["url"]; ?>" class="borderPhoto" style="height:100px;width:150px;" />
                     </a>
