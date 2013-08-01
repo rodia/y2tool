@@ -717,7 +717,7 @@ class Video_model extends CI_Model {
 	 */
 	public function set_history_playlist($user_id, $playlist, $task = 8) {
 
-		if ( ! ($playlist_db = $this->exists_playlist($playlist["id"]))) {
+		if ( ! ($playlist_db = $this->exists_playlist($playlist["playlistId"]))) {
 			$play_id = $this->video_model->insert_playlist(array(
 				"channel" => $playlist["channel"],
 				"title" => $playlist["play_title"],
@@ -1303,7 +1303,7 @@ class Video_model extends CI_Model {
 				$snippet->setDescription($data["play_description"]);
 				$postBody->setSnippet($snippet);
 				$status = new Google_PlaylistStatus;
-				$status->setPrivacyStatus("public");
+				$status->setPrivacyStatus($data["status"]);
 				$postBody->setStatus($status);
 
 				$playlist = $youtube->playlists->insert(

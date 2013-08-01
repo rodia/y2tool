@@ -483,7 +483,7 @@ class Video extends CI_Controller {
 					"status" => $this->input->post("play_status")
 				))) {
 					$msg = "The playlist selected is update";
-					redirect("video/videolist/{$user_id}/{$playlistId}?success=true&msg=" . $msg . "&type=success");
+					redirect("video/playlist/{$user_id}?success=true&msg=" . $msg . "&type=success");
 				}
 			}
 		}
@@ -957,7 +957,8 @@ class Video extends CI_Controller {
 
 				if ( ! $this->video_model->oauth_insert_playlist($user_id, $channel, array(
 					"play_title" => $this->input->post('play_title'),
-					"play_description" => $this->input->post('play_description')
+					"play_description" => $this->input->post('play_description'),
+					"status" => $this->input->post('play_status')
 				))) {
 					$page['msg'] = $this->lang->line("error_playlist");
 				} else {
