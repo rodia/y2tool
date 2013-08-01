@@ -784,7 +784,8 @@ class Video_model extends CI_Model {
 					$videos = $youtube->videos->listVideos(
 						'snippet,contentDetails,status,statistics,player',
 						array(
-							"id" => $playlistItem['contentDetails']['videoId']
+							"id" => $playlistItem['contentDetails']['videoId'],
+							"playlistId" => $playlistId
 						)
 					);
 
