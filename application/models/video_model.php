@@ -773,7 +773,7 @@ class Video_model extends CI_Model {
 				 * @todo In addition the retrieve data must be for pagination method.
 				 */
 				$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
-					'id,snippet,contentDetails,player',
+					'id,snippet,contentDetails',
 					array(
 						'playlistId' => $playlistId,
 						'maxResults' => $rp
@@ -784,8 +784,7 @@ class Video_model extends CI_Model {
 					$videos = $youtube->videos->listVideos(
 						'snippet,contentDetails,status,statistics,player',
 						array(
-							"id" => $playlistItem['contentDetails']['videoId'],
-							"playlistId" => $playlistId
+							"id" => $playlistItem['contentDetails']['videoId']
 						)
 					);
 
