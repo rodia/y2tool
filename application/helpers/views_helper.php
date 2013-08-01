@@ -131,8 +131,10 @@ function print_likes($video_id, $resource) {
 	$resource->load->model("video_model");
 	$youtube = $resource->video_model->get_google_youtubeService();
 	$videoResponse = $youtube->videos->listVideos(
-		$video_id,
-		'statistics'
+		'statistics',
+		array(
+			"id" => $video_id
+		)
 	);
 	$video_like = "No data";
 	foreach($videoResponse['items'] as $video)
@@ -151,8 +153,10 @@ function print_current_views($video_id,  $resource) {
 	$resource->load->model("video_model");
 	$youtube = $resource->video_model->get_google_youtubeService();
 	$videoResponse = $youtube->videos->listVideos(
-		$video_id,
-		'statistics'
+		'statistics',
+		array(
+			"id" => $video_id
+		)
 	);
 	$video_views = "No data";
 	foreach($videoResponse['items'] as $video)
