@@ -1813,10 +1813,23 @@ class Video extends CI_Controller {
 		$videos = $this->video_model->get_videos_by_user($users_id, $category);
 		die(json_encode($videos));
 	}
-
-	public function path() {
-		echo __FILE__;
+	/**
+	 *
+	 * @param string $videoId
+	 * @param int $user_id
+	 */
+	public function fancy_box_view($videoId, $user_id) {
+		$page['users'] = $this->user_model->get_all_users();
+        $page['entry'] = $this->video_model->get_video($videoId, $user_id);
+        $page['channel'] = $this->user_model->get_channel($user_id);
+        $page['page_name'] = 'show_video';
+        $page['title'] = "Video";
+        $page['user_id'] = $user_id;
+        $this->load->view('admin/fancybox_view', $page);
 	}
+//	public function path() {
+//		echo __FILE__;
+//	}
 
 }
 
