@@ -1438,16 +1438,19 @@ class Video_model extends CI_Model {
 
 			try {
 				$playlist = $youtube->playlistItems->delete(
-					$data["video_id"]
+					$videoFeedID,
+					array(
+						"videoId" => $data["video_id"]
+					)
 				);
 
 				return TRUE;
 			} catch (Google_ServiceException $e) {
-				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			} catch (Google_Exception $e) {
-				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			}
