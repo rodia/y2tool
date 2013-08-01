@@ -1864,13 +1864,13 @@ class Video_model extends CI_Model {
 
 
 				$channelToUpdate = $yt_base_return->items[0];
-				$channelToUpdate->brandingSettings->channel->setFeaturedChannelsTitle("Featured Channels from code");
+				$channelToUpdate->brandingSettings->channel->setFeaturedChannelsTitle("Featured Channels");
 				$featuredUrls = $channelToUpdate->brandingSettings->channel->getFeaturedChannelsUrls();
-				if(is_array($featuredUrls))
-				{
+				/*if(is_array($featuredUrls))
+				{*/
 					$featuredUrls[] = $this->user_model->get_user_meta($user_channel, 'channelID', true);
 					$channelToUpdate->brandingSettings->channel->setFeaturedChannelsUrls($featuredUrls);
-				}
+				//}
 				$youtube_base->channels->update('brandingSettings',$channelToUpdate);
 /*
 >>>>>>> d7839fd68aeaefb106243b9f9158a43d69eed37f
