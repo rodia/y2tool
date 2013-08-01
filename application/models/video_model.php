@@ -1837,17 +1837,17 @@ class Video_model extends CI_Model {
 	public function featured_channel($user_channel,$user_id){
 
 		$token_base = $this->user_model->get_user_meta($user_id, 'token', true);
-		$token_featured = $this->user_model->get_user_meta($user_channel, 'token', true);
+		
 		$client_base = $this->get_google_client();
-		$client_featured = clone $client_base;
+		$client_base->setUseObjects(true);
 
 		$youtube_base = new Google_YoutubeService($client_base);
-		$youtube_featured = new Google_YoutubeService($client_featured);
-		if (isset($token_base) && isset($token_featured)) {
+		
+		if (isset($token_base)) {
 			$client_base->setAccessToken($token_base);
-			$client_featured->setAccessToken($token_featured);
+			
 		}
-		if ($client_base->getAccessToken() && $client_featured->getAccessToken()) {
+		if ($client_base->getAccessToken() ) {
 			$_SESSION['token_base'] = $client_base->getAccessToken();
 			$_SESSION['token_featured'] = $client_featured->getAccessToken();
 
@@ -1890,7 +1890,7 @@ class Video_model extends CI_Model {
 					$channel_obj->setBrandingSettings($brandingSettings);
 //
 					
-					$youtube_base->channels->update('id,brandingSettings',$channel_obj,array('id'=>$youtube_base_channel['id']));
+					$youtube_base->channels->update('brandingSettings',$channel_obj);
 					//return $channel_obj;
 				}
 
