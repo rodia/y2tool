@@ -2096,7 +2096,7 @@ class Video_model extends CI_Model {
 			try {
 
 				$playlistsResponse = $youtube->playlists->listPlaylists(
-					'id, snippet,contentDetails',
+					'id,snippet,contentDetails,status',
 					array(
 						'id' => $playlistId,
 						'maxResults' => $rp
@@ -2164,6 +2164,9 @@ class Video_model extends CI_Model {
 				$snippet->setTitle($data["title"]);
 				$snippet->setDescription($data["description"]);
 				$content->setSnippet($snippet);
+				$status = new Google_PlaylistStatus;
+				$status->setPrivacyStatus($data["status"]);
+				$content->setStatus($status);
 
 				$youtube->playlists->update(
 					'snippet,status',
