@@ -1863,10 +1863,13 @@ class Video_model extends CI_Model {
 				}*/
 
 				foreach($yt_base_return['items'] as $youtube_base_channel){
-					return $youtube_base_channel;
-//					$featured_chanel_urls = explode(',',$youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls']);
+				
+					$tmp_ob = new Google_Channel();
+					
+					
+					$featured_chanel_urls = $youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls'];
 //					$featured_chanel_urls = $youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls'];
-					$featured_chanel_urls[] = $this->user_model->get_user_meta($user_channel, 'channelID', true);
+//					$featured_chanel_urls[] = $this->user_model->get_user_meta($user_channel, 'channelID', true);
 					$brandingSettings = new Google_ChannelBrandingSettings();
 					$channelSettings = new Google_ChannelSettings();
 					$channelSettings->setTitle($youtube_base_channel['brandingSettings']['channel']['title']);
@@ -1879,14 +1882,15 @@ class Video_model extends CI_Model {
 //					$channelSettings->setUnsubscribedTrailer($youtube_base_channel['brandingSettings']['channel']['unsubscribedTrailer']);
 //					$channelSettings->setTrackingAnalyticsAccountId($youtube_base_channel['brandingSettings']['channel']['trackingAnalyticsAccountId']);
 					$channelSettings->setFeaturedChannelsTitle("Featured Channels");
-//					$channelSettings->setFeaturedChannelsUrls($featured_chanel_urls);
+					$channelSettings->setFeaturedChannelsUrls($featured_chanel_urls);
 
 					$brandingSettings->setChannel($channelSettings);
 					$channel_obj = new Google_Channel();
 					$channel_obj->setId($youtube_base_channel['id']);
 					$channel_obj->setBrandingSettings($brandingSettings);
 //
-					$youtube_base->channels->update('brandingSettings',$channel_obj);
+					
+					$youtube_base->channels->update('id,brandingSettings',$channel_obj,array('id'=>$youtube_base_channel['id']));
 					//return $channel_obj;
 				}
 
@@ -1910,13 +1914,17 @@ class Video_model extends CI_Model {
 				);
 				return TRUE;*/
 			} catch (Google_ServiceException $e) {
-				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				/*echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 						htmlspecialchars($e->getMessage())));
-				return FALSE;
+				return FALSE;*/
+				//return printf('<p>A service error occurred: <code>%s</code></p>',htmlspecialchars($e->getMessage()));
+				return $e->getErrors();
 			} catch (Google_Exception $e) {
-				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				/*echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
 						htmlspecialchars($e->getMessage())));
-				return FALSE;
+				return FALSE;*/
+				return sprintf('<p>An client error occurred: <code>%s</code></p>',
+						htmlspecialchars($e->getMessage()));
 			}
 		}
 		return FALSE;
