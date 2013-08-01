@@ -45,8 +45,8 @@ class Video_model extends CI_Model {
 		return $this->current_channel;
 	}
 	/**
-	 *
-	 * @param type $user_id
+	 * @deprecated since version 1.0
+	 * @param int $user_id
 	 */
 	function sync_videos($user_id) {
         $profile = $this->user_model->getUserProfile($user_id);
@@ -304,7 +304,7 @@ class Video_model extends CI_Model {
 
 				foreach ($playlistItemsResponse['items'] as $playlistItem) {
 					$videos = $youtube->videos->listVideos(
-						'snippet,contentDetails,status',
+						'snippet,contentDetails,status,player',
 						array(
 							"id" => $playlistItem['contentDetails']['videoId']
 						)
@@ -801,10 +801,10 @@ class Video_model extends CI_Model {
 				}
 
 			} catch (Google_ServiceException $e) {
-				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			} catch (Google_Exception $e) {
-				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			}
 		}
@@ -2135,6 +2135,7 @@ class Video_model extends CI_Model {
 		}
 	}
 	/**
+	 * Oauth
 	 *
 	 * @param int $user_id
 	 * @param string $playlistId
@@ -2170,11 +2171,11 @@ class Video_model extends CI_Model {
 				);
 				return TRUE;
 			} catch (Google_ServiceException $e) {
-				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			} catch (Google_Exception $e) {
-				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 				return FALSE;
 			}
