@@ -1857,8 +1857,9 @@ class Video_model extends CI_Model {
 				$yt_base_return = $youtube_base->channels->listChannels('id,brandingSettings', array(
 					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
 				));
+				
 				$channelToUpdate = $yt_base_return->items[0];
-				$channelToUpdate->brandingSettings->setFeaturedChannelsTitle("Featured Channels from code");
+				$channelToUpdate->brandingSettings->channel->setFeaturedChannelsTitle("Featured Channels from code");
 				$youtube_base->channels->update('brandingSettings',$channelToUpdate);
 /*
 				foreach($yt_base_return['items'] as $youtube_base_channel){
