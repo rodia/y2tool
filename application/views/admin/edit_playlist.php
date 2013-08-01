@@ -37,6 +37,15 @@ if (!defined('BASEPATH'))
 						<?php echo form_textarea(array("name" => "play_description", "value" => $playlistEntry["snippet"]["description"], "class" => "form-textarea")); ?>
                     </td>
                 </tr>
+				<tr>
+                    <td align="right">
+                        <h2>Status</h2>
+                    </td>
+                    <td>
+						<?php echo form_dropdown('play_status', get_status_options($this), $playlistEntry["status"]["privacyStatus"], 'class="select_style"'); ?>
+                        <span><?php echo form_error('play_status'); ?></span>
+                    </td>
+                </tr>
                 <tr>
                     <td align="center" colspan="2">
 						<?php echo form_submit(array("id" => "button", "name" => "submit", "class" => "form-submit"), "Update"); ?>

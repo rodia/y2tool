@@ -189,3 +189,10 @@ function get_url_for_channel($channel) {
 		return "http://www.youtube.com/user/" . $channel;
 	}
 }
+
+function get_status_options($resources) {
+	return array(
+		"public" => "Public",
+		"private" => "Private"
+	);
+}

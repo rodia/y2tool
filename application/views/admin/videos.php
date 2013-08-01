@@ -81,9 +81,7 @@ if (!defined('BASEPATH'))
                     <a href="<?php echo base_url(); ?>video/delete_video/<?php echo $video["video_id"]; ?>/<?php echo $owner; ?>" onclick="return confirm('Are you sure take this action?')"><b>Delete video</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/share/<?php echo $owner; ?>/<?php echo $video["video_id"]; ?>" ><b>Share</b></a><br/>
                     <a href="<?php echo base_url(); ?>video/like/<?php echo $owner; ?>/<?php echo $video["video_id"]; ?>" ><b>Like</b></a><br/>
-
                 </td>
-
             </tr>
             <?php endforeach; ?>
     </table>

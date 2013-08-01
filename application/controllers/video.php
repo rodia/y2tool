@@ -479,7 +479,8 @@ class Video extends CI_Controller {
             if ($this->form_validation->run() != FALSE) {
 				if ($this->video_model->saveplaylist($user_id, $playlistId, array(
 					"title" => $this->input->post("play_title"),
-					"description" => $this->input->post("play_description")
+					"description" => $this->input->post("play_description"),
+					"status" => $this->input->post("play_status")
 				))) {
 					$msg = "The playlist selected is update";
 					redirect("video/videolist/{$user_id}/{$playlistId}?success=true&msg=" . $msg . "&type=success");
