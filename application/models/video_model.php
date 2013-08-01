@@ -801,10 +801,10 @@ class Video_model extends CI_Model {
 				}
 
 			} catch (Google_ServiceException $e) {
-				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			} catch (Google_Exception $e) {
-				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
 				htmlspecialchars($e->getMessage())));
 			}
 		}
@@ -1837,19 +1837,19 @@ class Video_model extends CI_Model {
 	public function featured_channel($user_channel,$user_id){
 
 		$token_base = $this->user_model->get_user_meta($user_id, 'token', true);
-		
+
 		$client_base = $this->get_google_client();
 		$client_base->setUseObjects(true);
 
 		$youtube_base = new Google_YoutubeService($client_base);
-		
+
 		if (isset($token_base)) {
 			$client_base->setAccessToken($token_base);
-			
+
 		}
 		if ($client_base->getAccessToken() ) {
 			$_SESSION['token_base'] = $client_base->getAccessToken();
-	
+
 
 			try {
 
@@ -1857,14 +1857,12 @@ class Video_model extends CI_Model {
 				$yt_base_return = $youtube_base->channels->listChannels('id,brandingSettings', array(
 					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
 				));
-<<<<<<< HEAD
 
 				/*foreach($youtube_base['items'] as $youtube_base_channel){
 
 				}*/
 
-=======
-				
+
 				$channelToUpdate = $yt_base_return->items[0];
 				$channelToUpdate->brandingSettings->channel->setFeaturedChannelsTitle("Featured Channels from code");
 				$youtube_base->channels->update('brandingSettings',$channelToUpdate);
@@ -1901,7 +1899,7 @@ class Video_model extends CI_Model {
 
 					$youtube_base->channels->update('id,brandingSettings',$channel_obj,array('id'=>$youtube_base_channel['id']));
 =======
-					
+
 					$youtube_base->channels->update('brandingSettings',$channel_obj);
 >>>>>>> d7839fd68aeaefb106243b9f9158a43d69eed37f
 					//return $channel_obj;
