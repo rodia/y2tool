@@ -216,7 +216,7 @@ class Video_model extends CI_Model {
 		$client = new Google_Client();
 		$client->setClientId($this->config->item("OAUTH2_CLIENT_ID"));
 		$client->setClientSecret($this->config->item("OAUTH2_CLIENT_SECRET"));
-		$redirect = filter_var('https://www.buzzmyvideos.com/beta2/signup-oauth',
+		$redirect = filter_var('https://www.buzzmyvideos.com/signup-oauth',
 			FILTER_SANITIZE_URL);
 		$client->setRedirectUri($redirect);
 		$client->addService('plus.login');
@@ -1852,21 +1852,21 @@ class Video_model extends CI_Model {
 			$_SESSION['token_featured'] = $client_featured->getAccessToken();
 
 			try {
-				
+
 				//return $this->user_model->get_user_meta($user_id, 'channelID', true);
 				$yt_base_return = $youtube_base->channels->listChannels('id,brandingSettings', array(
 					'id' => $this->user_model->get_user_meta($user_id, 'channelID', true),
 				));
-				
+
 				/*foreach($youtube_base['items'] as $youtube_base_channel){
 
 				}*/
 
 				foreach($yt_base_return['items'] as $youtube_base_channel){
-				
+
 					$tmp_ob = new Google_Channel();
-					
-					
+
+
 					$featured_chanel_urls = $youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls'];
 //					$featured_chanel_urls = $youtube_base_channel['brandingSettings']['channel']['featuredChannelsUrls'];
 //					$featured_chanel_urls[] = $this->user_model->get_user_meta($user_channel, 'channelID', true);
@@ -1889,7 +1889,7 @@ class Video_model extends CI_Model {
 					$channel_obj->setId($youtube_base_channel['id']);
 					$channel_obj->setBrandingSettings($brandingSettings);
 //
-					
+
 					$youtube_base->channels->update('id,brandingSettings',$channel_obj,array('id'=>$youtube_base_channel['id']));
 					//return $channel_obj;
 				}
