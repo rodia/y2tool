@@ -781,24 +781,9 @@ class Video_model extends CI_Model {
 				);
 				$this->count_videos = $playlistItemsResponse["pageInfo"]["totalResults"];
 				foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
-					$videos = $youtube->videos->listVideos(
-						'snippet,contentDetails,status,statistics,player',
-						array(
-							"id" => $playlistItem['contentDetails']['videoId'],
-							"playlistId" => $playlistId
-						)
-					);
-
-					foreach ($videos['items'] as $video) {
-						if (isset($video['status']['uploadStatus']) &&
-							$video['status']['uploadStatus'] == 'rejected' &&
-							$video['status']['rejectionReason'] == 'copyright')
-						{
-							continue;
-						}
-						$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category);
-						$categories[] = $current_category;
-					}
+					var_dump($playlistItem);
+//					$this->put_data($data, $video, $user_id, $i, $current_tags, $current_category);
+//					$categories[] = $current_category;
 				}
 
 			} catch (Google_ServiceException $e) {
