@@ -717,7 +717,7 @@ class Video_model extends CI_Model {
 	 */
 	public function set_history_playlist($user_id, $playlist, $task = 8) {
 
-		if ( ! ($playlist_db = $this->exists_playlist($playlist["id"]))) {
+		if ( ! ($playlist_db = $this->exists_playlist($playlist["playlistId"]))) {
 			$play_id = $this->video_model->insert_playlist(array(
 				"channel" => $playlist["channel"],
 				"title" => $playlist["play_title"],
