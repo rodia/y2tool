@@ -137,6 +137,7 @@ $(document).ready(function(){
 
 		set_checked(obj);
 		set_username(obj, action);
+		$("#featured-channel tr."+title).remove();
 		return false;
 	});
 
@@ -701,7 +702,7 @@ jQuery.extend(jQuery.validator.prototype, {
 										if(in_array($row->id, $hold_users)) continue;
 								?>
 								<?php $hold_username[$row->id] = $row->user_login; ?>
-									<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
+									<tr<?php echo ($key % 2) ? " class=\"alternate-row $row->id\"" : " class=\"$row->id\""; ?>>
 										<td><input type="checkbox" name="featured_ids[]" value="<?php echo $row->id ?>" title="<?php echo $row->id; ?>"></td>
 										<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
 										<td><?php echo $row->youtube_channels; ?></td>
