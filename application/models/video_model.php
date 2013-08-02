@@ -379,7 +379,8 @@ class Video_model extends CI_Model {
 							'id, snippet,contentDetails',
 							array(
 								'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
-								'maxResults' => $rp
+								'maxResults' => $rp,
+								'pageToken' => "nextPageToken"
 							)
 						);
 						foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
