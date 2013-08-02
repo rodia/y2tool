@@ -379,11 +379,11 @@ class Video_model extends CI_Model {
 							'id, snippet,contentDetails',
 							array(
 								'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
-								'maxResults' => $rp,
-								'pageToken' => "nextPageToken"
+								'maxResults' => $rp
+								//'pageToken' => "nextPageToken"
 							)
 						);
-						var_dump($playlistItemsResponse);
+						$this->count_videos = $playlistItemsResponse["pageInfo"]["totalResults"];
 						foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 							$videos = $youtube->videos->listVideos(
 								'snippet,contentDetails,status,statistics,player',
@@ -417,7 +417,7 @@ class Video_model extends CI_Model {
 		}
 
 		$this->categories = array_unique($categories);
-		$this->count_videos = count($data);
+//		$this->count_videos = count($data);
 		$this->current_channel = isset($current_channel) ? $current_channel : "";
 		return array_slice($data, $start, $rp);
 	}
