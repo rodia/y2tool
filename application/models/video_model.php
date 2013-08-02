@@ -383,6 +383,7 @@ class Video_model extends CI_Model {
 								'pageToken' => "nextPageToken"
 							)
 						);
+						var_dump($playlistItemsResponse);
 						foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 							$videos = $youtube->videos->listVideos(
 								'snippet,contentDetails,status,statistics,player',
