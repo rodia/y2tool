@@ -837,7 +837,7 @@ class User_model extends CI_Model {
         $this->db_my_db->where("username", $username);
         $this->db_my_db->where("password", $password);
 
-        $query = $this->db_my_db->get('yt_user_admin');
+        $query = $this->db_my_db->get('yt_admin_user');
 
         return $query->result();
     }
