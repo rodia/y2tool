@@ -78,10 +78,12 @@ class User_model extends CI_Model {
 					$profile["subs"] = $channel["statistics"]["subscriberCount"];
 				}
 			} catch (Google_ServiceException $e) {
-				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				$show_error = $this->config->item("show_error") ? "echo" : "error_log";
+				$show_error(sprintf('<p>A service error occurred: <code>%s</code></p>',
 						htmlspecialchars($e->getMessage())));
 			} catch (Google_Exception $e) {
-				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				$show_error = $this->config->item("show_error") ? "echo" : "error_log";
+				$show_error(sprintf('<p>An client error occurred: <code>%s</code></p>',
 						htmlspecialchars($e->getMessage())));
 			}
 

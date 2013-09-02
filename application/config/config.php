@@ -430,5 +430,10 @@ $config["SERVICE_ACCOUNT_NAME"] = 'youtube';
  */
 $config["home"] = "video/bulk";
 
+/**
+ * @var string For show error by system. values 1, 0
+ */
+$config["show_error"] = 1;
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */
