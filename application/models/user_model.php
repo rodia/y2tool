@@ -59,6 +59,10 @@ class User_model extends CI_Model {
 
 		$youtube = new Google_YoutubeService($client);
 		$profile = array();
+		$profile["title"] = "";
+		$profile["channel_id"] = 0;
+		$profile["username"] = "";
+		$profile["subs"] = 0;
 		if (isset($token)) {
 			$client->setAccessToken($token);
 		}
@@ -78,12 +82,10 @@ class User_model extends CI_Model {
 					$profile["subs"] = $channel["statistics"]["subscriberCount"];
 				}
 			} catch (Google_ServiceException $e) {
-				$show_error = $this->config->item("show_error") ? "echo" : "error_log";
-				$show_error(sprintf('<p>A service error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
 						htmlspecialchars($e->getMessage())));
 			} catch (Google_Exception $e) {
-				$show_error = $this->config->item("show_error") ? "echo" : "error_log";
-				$show_error(sprintf('<p>An client error occurred: <code>%s</code></p>',
+				error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
 						htmlspecialchars($e->getMessage())));
 			}
 
