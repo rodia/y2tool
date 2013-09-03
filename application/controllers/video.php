@@ -1829,6 +1829,56 @@ class Video extends CI_Controller {
         $page['user_id'] = $user_id;
         $this->load->view('admin/fancybox_view', $page);
 	}
+	/**
+	 *
+	 * @param string $name
+	 * @param string $youtube
+	 * @param string $country
+	 * @param string $category
+	 * @param string $sex
+	 */
+	public function show_auth2_users($name = "all", $youtube = "all", $country = "all", $category = "all", $sex = "all") {
+		if ($this->input->get("success")) {
+			$page["success"] = TRUE;
+			$page["message"] = $this->input->get("msg");
+			$page["type"] = $this->input->get("type");
+		}
+		$search_name = ($name != "" && $name != "all" ) ? urldecode($name) : "";
+		$search_youtube = ($youtube != "" && $youtube != "all") ? urldecode($youtube) : "";
+		$search_country = ($country != "" && $country != "all") ? urldecode($country) : "";
+		$search_category = ($category != "" && $category != "all") ? urldecode($category) : "";
+		$search_sex = ($sex != "" && $sex != "all") ? urldecode($sex) : "";
+
+		$this->load->helper('cookie');
+		$this->load->library('pagination');
+
+		$opcions = array();
+		$start = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
+		$opcions['per_page'] = $this->config->item("rp");
+		$opcions['base_url'] = base_url() . "video/bulk/{$name}/{$youtube}/{$country}/{$category}/{$sex}";
+
+		$page["users"] = $this->user_model->get_all_users($start, $search_name, $search_youtube, $search_country, $search_category, $search_sex);
+		$opcions['total_rows'] = $this->user_model->count_rows_users($search_name, $search_youtube, $search_country, $search_category, $search_sex);
+		$opcions['uri_segment'] = 8;
+		$this->pagination->initialize($opcions);
+		$page['pagination'] = $this->pagination->create_links();
+		// delete_cookie("hold-users");
+
+		$temp_users = explode(",", $this->input->cookie("hold-users"));
+		$this->video_model->get_temp_users_id($page["hold_users"], $page["pair_user_login"], $temp_users);
+
+        // $page['videos'] = $this->video_model->all_videos();
+		$page['name'] = $search_name;
+		$page['youtube'] = $search_youtube;
+		$page['country'] = $search_country;
+		$page['category'] = $search_category;
+		$page['gender'] = $search_sex;
+		$page['country_list'] = $this->user_model->get_countries_for_select();
+		$page['category_options'] = $this->user_model->get_categories_for_select();
+        $page['page_name'] = 'oauht2_users';
+        $page['title'] = "Users";
+        $this->load->view('admin/index', $page);
+	}
 //	public function path() {
 //		echo __FILE__;
 //	}
