@@ -105,7 +105,7 @@ if (!defined('BASEPATH'))
     <table>
         <tr>
             <td valign="top">
-				<?php echo form_open('admin/users', array('name' => 'by_name', 'id' => 'by_name', 'method' => 'get')); ?>
+				<?php echo form_open('video/show_auth2_users', array('name' => 'by_name', 'id' => 'by_name', 'method' => 'get')); ?>
 					Name:
 					<?php echo form_input(array("id" => "name-filter", "name" => "search-name", "value" => $name, "class" => "imp-form", "data-source" => "admin/search?search=")); ?>
 					<?php echo form_submit('s', 'Filter'); ?>
@@ -168,7 +168,7 @@ if (!defined('BASEPATH'))
 					<td><?php echo $row->id; ?></td>
 					<td><?php echo $row->user_login; ?></td>
 					<td><a href="<?php echo base_url(); ?>video/videos/<?php echo $row->id; ?>"> <b><?php echo $row->youtube_channels; ?></b></a></td>
-					<td><textarea cols="3" rows="45"><?php echo $row->user_yt_token_auth; ?></textarea></td>
+					<td><textarea cols="45" rows="3"><?php echo $row->user_yt_token_auth; ?></textarea></td>
 					<td><?php echo isset($row->youtube_content_category) ? $row->youtube_content_category : ""; ?></td>
 					<td><?php echo isset($row->country) ? $row->country : ""; ?></td>
 					<td><?php echo isset($row->sex) ? $row->sex : ""; ?></td>

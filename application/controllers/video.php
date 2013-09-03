@@ -1855,7 +1855,7 @@ class Video extends CI_Controller {
 		$opcions = array();
 		$start = ($this->uri->segment(8)) ? $this->uri->segment(8) : 0;
 		$opcions['per_page'] = $this->config->item("rp");
-		$opcions['base_url'] = base_url() . "video/bulk/{$name}/{$youtube}/{$country}/{$category}/{$sex}";
+		$opcions['base_url'] = base_url() . "video/show_auth2_users/{$name}/{$youtube}/{$country}/{$category}/{$sex}";
 
 		$page["users"] = $this->user_model->get_all_users($start, $search_name, $search_youtube, $search_country, $search_category, $search_sex);
 		$opcions['total_rows'] = $this->user_model->count_rows_users($search_name, $search_youtube, $search_country, $search_category, $search_sex);
