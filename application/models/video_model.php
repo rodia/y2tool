@@ -1041,7 +1041,7 @@ class Video_model extends CI_Model {
 		$query = $this->db_my_db->get('yt_category');
 
 		$row = $query->first_row();
-		return $row->display_category;
+		return isset($row->display_category) ? $row->display_category : "";
 	}
 
 	/**

@@ -516,11 +516,17 @@ jQuery.extend(jQuery.validator.prototype, {
 					<tr<?php echo ($key % 2) ? " class=\"alternate-row\"" : ""; ?>>
 						<td><input type="checkbox" name="ids[]" value="<?php echo $row->id ?>" title="<?php echo $row->id; ?>"<?php echo $checked ? " checked=\"checked\"" : ""; ?>></td>
 						<td>
-						<a href="<?php echo base_url(); ?>video/videos/<?php echo $row->id; ?>" ><b>Show videos</b></a><br/>
-						<a href="<?php echo base_url(); ?>video/playlist/<?php echo $row->id; ?>" ><b>Show playlist</b></a><br/>
-						<a href="<?php echo base_url(); ?>admin/upload/<?php echo $row->id; ?>" ><b>Upload video</b></a><br/></td>
+						<a href="<?php echo base_url(); ?>video/videos/<?php echo $row->id; ?>">
+							<img src="<?php echo base_url(); ?>css/admin/images/icons/video.png" title="Show videos" />
+						</a><br/>
+						<a href="<?php echo base_url(); ?>video/playlist/<?php echo $row->id; ?>" >
+							<img src="<?php echo base_url(); ?>css/admin/images/icons/playlist.png" title="Show playlist" />
+						</a><br/>
+						<a href="<?php echo base_url(); ?>admin/upload/<?php echo $row->id; ?>" >
+							<img src="<?php echo base_url(); ?>css/admin/images/icons/upload.png" title="Upload video" />
+						</a><br/></td>
 						<td title="<?php echo $row->id; ?>"><?php echo $row->user_login; ?></td>
-						<td><a href="<?php echo $channel; ?>"><?php echo $channel; ?></a></td>
+						<td><a href="<?php echo base_url(); ?>video/videos/<?php echo $row->id; ?>" ><b><?php echo $channel; ?></b></a> <a href="<?php echo $channel; ?>" title="View channel in Youtube"><img src="<?php echo base_url(); ?>css/admin/images/icons/youtube.png" style="vertical-align: middle;" /></a></td>
 						<!--<td><?php  ?></td>-->
 						<td><?php echo $row->youtube_content_category; ?></td>
 						<td><?php echo $row->country; ?></td>
