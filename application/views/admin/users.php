@@ -137,7 +137,7 @@ if (!defined('BASEPATH'))
 			<td width="20"></td>
 			<td valign="top">
 				<?php echo form_open('admin/users', array('name' => 'users_by_sex', 'id' => 'users_by_sex', 'method' => 'get')); ?>
-                    Sec:
+                    Sex:
 					<?php echo form_dropdown('g', array("" => "-- Select --", "Male" => "Male", "Female" => "Female"), $gender, 'class="select_style" id="gender-filter"'); ?>
 					<?php echo form_submit('s', 'Filter'); ?>
                 <?php echo form_close(); ?>

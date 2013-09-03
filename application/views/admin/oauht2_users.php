@@ -115,7 +115,7 @@ if (!defined('BASEPATH'))
             <td width="20"></td>
             <td valign="top">
                 <?php
-                echo form_open('admin/users', array('name' => 'country', 'id' => 'country', 'method' => 'get'));
+                echo form_open('video/show_auth2_users', array('name' => 'country', 'id' => 'country', 'method' => 'get'));
 
                 echo "Country:";
                 echo form_dropdown('co', $country_list, $country, 'class="select_style" id="country-filter"');
@@ -127,7 +127,7 @@ if (!defined('BASEPATH'))
             <td width="20"></td>
 
             <td valign="top">
-				<?php echo form_open('admin/users', array("name" => "category", "id" => "category", "method" => "get")); ?>
+				<?php echo form_open('video/show_auth2_users', array("name" => "category", "id" => "category", "method" => "get")); ?>
                     Category:
                     <?php echo form_dropdown('c', $category_options, $category, 'class="select_style" id="category-filter"'); ?>
 					<?php echo form_submit("s", "Filter"); ?>
@@ -136,8 +136,8 @@ if (!defined('BASEPATH'))
 
 			<td width="20"></td>
 			<td valign="top">
-				<?php echo form_open('admin/users', array('name' => 'users_by_sex', 'id' => 'users_by_sex', 'method' => 'get')); ?>
-                    Sec:
+				<?php echo form_open('video/show_auth2_users', array('name' => 'users_by_sex', 'id' => 'users_by_sex', 'method' => 'get')); ?>
+                    Sex:
 					<?php echo form_dropdown('g', array("" => "-- Select --", "Male" => "Male", "Female" => "Female"), $gender, 'class="select_style" id="gender-filter"'); ?>
 					<?php echo form_submit('s', 'Filter'); ?>
                 <?php echo form_close(); ?>
