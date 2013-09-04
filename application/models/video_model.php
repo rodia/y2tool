@@ -221,6 +221,7 @@ class Video_model extends CI_Model {
 		$client->setRedirectUri($redirect);
 		$client->addService('plus.login');
 		$client->addService('plus.me');
+		$client->setAccessType('offline_access');
 
 		return $client;
 	}
