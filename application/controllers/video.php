@@ -1210,6 +1210,15 @@ class Video extends CI_Controller {
 			redirect("video/videos/{$user_id}?success=false&msg=The Video not was delete&type=error");
 		}
 	}
+
+	public function delete_token($user_id) {
+		if ($this->video_model->delete_token($user_id)) {
+			redirect("video/videos/{$user_id}?success=true&msg=Token was deleted success!&type=success");
+		} else {
+			redirect("video/videos/{$user_id}?success=false&msg=The Token not was delete&type=error");
+		}
+
+	}
 	/**
 	 * Oauth
 	 *

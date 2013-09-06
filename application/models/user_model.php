@@ -212,6 +212,7 @@ class User_model extends CI_Model {
         return false;
     }
 	/**
+	 * @deprecated since version 1.0
 	 * This function retrieve the token for database for this system,
 	 *
 	 * if The token is stored in database, return token, otherwise return string empty
@@ -257,6 +258,20 @@ class User_model extends CI_Model {
 		$sql = "DELETE FROM `54_yt_auth` WHERE `user_id` =$user_id";
 
         if ($this->db_my_db->query($sql))
+            return true;
+        else
+            return false;
+	}
+	/**
+	 *
+	 * @param type $user_id
+	 */
+	public function delete_oaut_token($user_id) {
+		$this->db = $this->load->database('default', TRUE);
+
+		$sql = "DELETE FROM `54_usermeta` WHERE `user_id` = $user_id AND `meta_key` = 'token'";
+
+		if ($this->db->query($sql))
             return true;
         else
             return false;

@@ -408,10 +408,10 @@ class Video_model extends CI_Model {
 					}
 
 				} catch (Google_ServiceException $e) {
-					error_log(sprintf('<p>A service error occurred: <code>%s</code></p>',
+					echo(sprintf('<p>A service error occurred: <code>%s</code></p>',
 					htmlspecialchars($e->getMessage())));
 				} catch (Google_Exception $e) {
-					error_log(sprintf('<p>An client error occurred: <code>%s</code></p>',
+					echo(sprintf('<p>An client error occurred: <code>%s</code></p>',
 					htmlspecialchars($e->getMessage())));
 				}
 			}
@@ -574,6 +574,14 @@ class Video_model extends CI_Model {
 				return FALSE;
 			}
 		}
+	}
+	/**
+	 * Delete token by database obiwan and cm wordpress install.
+	 *
+	 * @param type $user_id
+	 */
+	public function delete_token($user_id) {
+		return $this->user_model->delete_oaut_token($user_id) && $this->user_model->delete_token($user_id);
 	}
 	/**
 	 *
