@@ -216,11 +216,12 @@ class Video_model extends CI_Model {
 		$client = new Google_Client();
 		$client->setClientId($this->config->item("OAUTH2_CLIENT_ID"));
 		$client->setClientSecret($this->config->item("OAUTH2_CLIENT_SECRET"));
-		$redirect = filter_var('https://www.buzzmyvideos.com/signup-oauth',
+		$redirect = filter_var('https://www.buzzmyvideos.com/youtube-authorization',
 			FILTER_SANITIZE_URL);
 		$client->setRedirectUri($redirect);
-		$client->addService('plus.login');
-		$client->addService('plus.me');
+
+		$client->addService('yt-analytics-monetary.readonly');
+		$client->addService('yt-analytics.readonly');
 		$client->setAccessType('offline');
 
 		return $client;
@@ -359,6 +360,7 @@ class Video_model extends CI_Model {
 			$token = $this->user_model->get_user_meta($user_id, 'token', true);
 
 			$client = $this->get_google_client();
+			$oauth2 = new Google_Oauth2Service($client);
 			$youtube = new Google_YoutubeService($client);
 
 			if (isset($token)) {
@@ -366,7 +368,7 @@ class Video_model extends CI_Model {
 			}
 
 			if ($client->getAccessToken()) {
-				$_SESSION['token'] = $client->getAccessToken();
+				// $_SESSION['token'] = $client->getAccessToken();
 
 				try {
 					$channelsResponse = $youtube->channels->listChannels(

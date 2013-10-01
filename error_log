@@ -1,0 +1,55 @@
+[01-Oct-2013 15:24:16 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 15:41:47 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 15:41:53 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 15:42:04 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 15:42:34 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 15:43:57 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 15:44:43 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 15:45:09 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 15:45:17 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 15:45:24 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 15:59:03 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 15:59:15 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 16:26:25 Europe/London] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php:288
+Stack trace:
+#0 /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php(248): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/Google_Client.php(311): Google_OAuth2->refreshToken('refresh_token')
+#2 /home/buzzmy/public_html/y2tool/application/models/video_model.php(368): Google_Client->refreshToken('refresh_token')
+#3 /home/buzzmy/public_html/y2tool/application/controllers/video.php(1466): Video_model->get_videos_by_user('2047', NULL, 0)
+#4 [internal function]: Video->videos('2047')
+#5 /home/buzzmy/public_html/y2tool/system/core/CodeIgniter.php(359): call_user_func_array(Array, Array)
+#6 /home/buzzmy/public_html/y2tool/index.php(202): require_once('/home/buzzmy/pu...') in /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php on line 288
+[01-Oct-2013 16:27:12 Europe/London] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php:288
+Stack trace:
+#0 /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php(248): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/Google_Client.php(311): Google_OAuth2->refreshToken('refresh_token')
+#2 /home/buzzmy/public_html/y2tool/application/models/video_model.php(368): Google_Client->refreshToken('refresh_token')
+#3 /home/buzzmy/public_html/y2tool/application/controllers/video.php(1466): Video_model->get_videos_by_user('45', NULL, 0)
+#4 [internal function]: Video->videos('45')
+#5 /home/buzzmy/public_html/y2tool/system/core/CodeIgniter.php(359): call_user_func_array(Array, Array)
+#6 /home/buzzmy/public_html/y2tool/index.php(202): require_once('/home/buzzmy/pu...')
+#7  in /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php on line 288
+[01-Oct-2013 16:27:21 Europe/London] PHP Fatal error:  Uncaught exception 'Google_AuthException' with message 'Error refreshing the OAuth2 token, message: '{
+  "error" : "invalid_grant"
+}'' in /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php:288
+Stack trace:
+#0 /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php(248): Google_OAuth2->refreshTokenRequest(Array)
+#1 /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/Google_Client.php(311): Google_OAuth2->refreshToken('refresh_token')
+#2 /home/buzzmy/public_html/y2tool/application/models/video_model.php(368): Google_Client->refreshToken('refresh_token')
+#3 /home/buzzmy/public_html/y2tool/application/controllers/video.php(1466): Video_model->get_videos_by_user('129', NULL, 0)
+#4 [internal function]: Video->videos('129')
+#5 /home/buzzmy/public_html/y2tool/system/core/CodeIgniter.php(359): call_user_func_array(Array, Array)
+#6 /home/buzzmy/public_html/y2tool/index.php(202): require_once('/home/buzzmy/pu...')
+# in /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php on line 288
+[01-Oct-2013 16:30:04 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 16:39:39 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
