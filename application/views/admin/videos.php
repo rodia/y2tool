@@ -86,7 +86,15 @@ if (!defined('BASEPATH'))
             <?php endforeach; ?>
     </table>
 	<div class="pagination">
-	<?php echo $pagination; ?>
+	<?php //echo $pagination; ?>
+
+		<?php if (isset($prev) && $prev) : ?>
+		<a href="?prev=true"><< Prev Page</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<?php endif; ?>
+
+		<?php if (isset($next) && $next) : ?>
+		<a href="?next=true">Next Page >></a>
+		<?php endif; ?>
 	</div>
     <input type="hidden" id="channel" name="channel" value="<?php echo $channel; ?>" />
     <input type="hidden" id="owner" name="owner" value="<?php echo $owner; ?>" />

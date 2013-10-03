@@ -1469,6 +1469,8 @@ class Video extends CI_Controller {
 		$opcions['uri_segment'] = 5;
 		$this->pagination->initialize($opcions);
 		$page['pagination'] = $this->pagination->create_links();
+		$page['next'] = $this->video_model->have_next_page_token();
+		$page['prev'] = $this->video_model->have_prev_page_token();
         $page['users'] = $this->user_model->get_all_users();
         $page['msg'] = "";
         $page['page_name'] = 'videos';

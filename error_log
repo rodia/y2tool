@@ -53,3 +53,67 @@ Stack trace:
 # in /home/buzzmy/public_html/y2tool/system/contrib/google-api-php-client/src/auth/Google_OAuth2.php on line 288
 [01-Oct-2013 16:30:04 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
 [01-Oct-2013 16:39:39 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 16:53:23 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 18:24:35 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 20:34:27 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 20:35:57 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 20:36:10 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 20:47:25 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 20:47:33 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 20:48:57 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 20:52:50 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 21:10:25 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 22:02:54 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[01-Oct-2013 22:03:58 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 22:04:07 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 22:35:35 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 22:36:42 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 22:45:13 Europe/London] <p>An client error occurred: <code>(list) unknown parameter: 'ageToken'</code></p>
+[01-Oct-2013 22:46:43 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 22:49:15 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 22:50:44 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 22:50:56 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 22:53:17 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 22:53:18 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 22:53:21 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 23:19:58 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUkHxzOb3jj4Zj9oAoBkenBA&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 23:20:07 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 23:20:38 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[01-Oct-2013 23:21:08 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUiN3IRQ_YMm2NkJjL44OlQQ&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 23:22:55 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUiN3IRQ_YMm2NkJjL44OlQQ&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[01-Oct-2013 23:26:22 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUiN3IRQ_YMm2NkJjL44OlQQ&amp;maxResults=50&amp;pageToken=pageToken: (400) Bad Request</code></p>
+[01-Oct-2013 23:26:49 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUiN3IRQ_YMm2NkJjL44OlQQ&amp;maxResults=50&amp;pageToken=list: (400) Bad Request</code></p>
+[01-Oct-2013 23:33:24 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UUiN3IRQ_YMm2NkJjL44OlQQ&amp;maxResults=50&amp;pageToken=list: (400) Bad Request</code></p>
+[03-Oct-2013 12:57:02 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[03-Oct-2013 12:57:09 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2Csnippet%2CcontentDetails%2Cstatistics%2CtopicDetails%2CinvideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[03-Oct-2013 12:57:09 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[03-Oct-2013 12:57:15 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true: (401) Unauthorized</code></p>
+[03-Oct-2013 14:42:20 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[03-Oct-2013 14:42:29 Europe/London] <p>An client error occurred: <code>Error refreshing the OAuth2 token, message: '{
+  &quot;error&quot; : &quot;invalid_grant&quot;
+}'</code></p>
+[03-Oct-2013 14:48:13 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UU6w-yU0Oln2l0h2u-KooFgg&amp;maxResults=50&amp;pageToken=list: (400) Bad Request</code></p>
+[03-Oct-2013 14:50:26 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UU6w-yU0Oln2l0h2u-KooFgg&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[03-Oct-2013 15:41:03 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/channels?part=id%2C%20snippet%2C%20contentDetails%2C%20statistics%2C%20topicDetails%2C%20invideoPromotion&amp;mine=true&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[03-Oct-2013 15:42:38 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UU6w-yU0Oln2l0h2u-KooFgg&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[03-Oct-2013 15:47:22 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatus%2Cstatistics%2Cplayer&amp;id=KhCQ8wEh6pQ&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[03-Oct-2013 15:47:42 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatus%2Cstatistics%2Cplayer&amp;id=KhCQ8wEh6pQ&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[03-Oct-2013 17:26:17 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UU6w-yU0Oln2l0h2u-KooFgg&amp;maxResults=50&amp;pageToken=nextPageToken: (400) Bad Request</code></p>
+[03-Oct-2013 20:22:38 Europe/London] <p>An client error occurred: <code>(list) unknown parameter: 'nextPageToken'</code></p>
+[03-Oct-2013 20:26:22 Europe/London] <p>A service error occurred: <code>Error calling GET https://www.googleapis.com/youtube/v3/playlistItems?part=id%2C%20snippet%2CcontentDetails&amp;playlistId=UU6w-yU0Oln2l0h2u-KooFgg&amp;maxResults=50&amp;pageToken=next: (400) Bad Request</code></p>

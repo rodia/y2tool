@@ -8,6 +8,8 @@ if (!defined('BASEPATH'))
 class Video_model extends CI_Model {
 
 	private $count_videos;
+	private $next_page_token = FALSE;
+	private $prev_page_token = FALSE;
 	private $categories;
 	private $current_channel;
 
@@ -43,6 +45,49 @@ class Video_model extends CI_Model {
 	 */
 	public function get_current_channel() {
 		return $this->current_channel;
+	}
+	/**
+	 *
+	 * @return string|boolean Return nextPageToken
+	 */
+	public function get_next_page_token() {
+		$nextPageToken = isset($_SESSION["nextPageToken"]) ? $_SESSION["nextPageToken"] : $this->next_page_token;
+		unset($_SESSION["nextPageToken"]);
+		return $nextPageToken;
+	}
+	/**
+	 *
+	 * @return string|bool If next_page_token defined.
+	 */
+	public function have_next_page_token() {
+		return $this->next_page_token;
+	}
+	/**
+	 *
+	 * @param string $nextPageToken Page token for next result
+	 */
+	public function set_next_page_token($nextPageToken) {
+		$this->next_page_token = $_SESSION["nextPageToken"] = $nextPageToken;
+	}
+	/**
+	 *
+	 * @return string|boolean Return prevPageToken. False Otherwise.
+	 */
+	public function get_prev_page_token() {
+		$prevPageToken = isset($_SESSION["prevPageToken"]) ? $_SESSION["prevPageToken"] : $this->prev_page_token;
+		unset($_SESSION["prevPageToken"]);
+		return $prevPageToken;
+	}
+
+	public function have_prev_page_token() {
+		return $this->prev_page_token;
+	}
+	/**
+	 *
+	 * @param type $prevPageToken
+	 */
+	public function set_prev_page_token($prevPageToken) {
+		$this->prev_page_token = $_SESSION["prevPageToken"] = $prevPageToken;
 	}
 	/**
 	 * @deprecated since version 1.0
@@ -368,24 +413,40 @@ class Video_model extends CI_Model {
 			}
 
 			if ($client->getAccessToken()) {
-				// $_SESSION['token'] = $client->getAccessToken();
+				$_SESSION['token'] = $client->getAccessToken();
 
 				try {
 					$channelsResponse = $youtube->channels->listChannels(
 						'id, snippet, contentDetails, statistics, topicDetails, invideoPromotion', array(
 						'mine' => 'true',
+
 					));
 
 					foreach ($channelsResponse['items'] as $channel) {
 						$current_channel = $channel["snippet"]["title"];
+						$options = array(
+							'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
+							'maxResults' => $rp
+						);
+
+						if ($this->input->get("next")) {
+							$options['pageToken'] = $this->get_next_page_token(); // $this->next_page_token; // "nextPageToken";
+						} else if ($this->input->get("prev")) {
+							$options['pageToken'] = $this->get_prev_page_token(); // "prevPageToken";
+						}
+						// var_dump($options);
+
 						$playlistItemsResponse = $youtube->playlistItems->listPlaylistItems(
 							'id, snippet,contentDetails',
-							array(
-								'playlistId' => $channel['contentDetails']['relatedPlaylists']['uploads'],
-								'maxResults' => $rp
-								//'pageToken' => "nextPageToken"
-							)
+							$options
 						);
+
+						if (isset($playlistItemsResponse["nextPageToken"])) {
+							$this->set_next_page_token($playlistItemsResponse["nextPageToken"]);
+						}
+						if (isset($playlistItemsResponse["prevPageToken"])) {
+							$this->set_prev_page_token($playlistItemsResponse["prevPageToken"]);
+						}
 						$this->count_videos = $playlistItemsResponse["pageInfo"]["totalResults"];
 						foreach ($playlistItemsResponse['items'] as $key => $playlistItem) {
 							$videos = $youtube->videos->listVideos(
@@ -422,7 +483,8 @@ class Video_model extends CI_Model {
 		$this->categories = array_unique($categories);
 //		$this->count_videos = count($data);
 		$this->current_channel = isset($current_channel) ? $current_channel : "";
-		return array_slice($data, $start, $rp);
+		//return array_slice($data, $start, $rp);
+		return $data;
 	}
 	/**
 	 * Oauth
